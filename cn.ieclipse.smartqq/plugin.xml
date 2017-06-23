@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="SmartQQ"
+            id="cn.ieclipse.smartqq">
+      </category>
+      <view
+            allowMultiple="false"
+            category="cn.ieclipse.smartqq"
+            class="cn.ieclipse.smartqq.views.ContactView"
+            icon="icons/sample.gif"
+            id="cn.ieclipse.smartqq.views.ContactView"
+            name="Contacts">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.console.consolePageParticipants">
+      <consolePageParticipant
+            class="cn.ieclipse.smartqq.console.ChatConsolePageParticipant"
+            id="cn.ieclipse.smartqq.consolePageParticipant1">
+         <enablement>
+            <instanceof
+                  value="cn.ieclipse.smartqq.console.ChatConsole">
+            </instanceof></enablement>
+      </consolePageParticipant>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="cn.ieclipse.smartqq.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="cn.ieclipse.smartqq.preferences.SmartQQPreferencePage"
+            class="cn.ieclipse.smartqq.preferences.HotKeyPreferencePage"
+            id="cn.ieclipse.smartqq.preferences.HotKeyPreferencePage"
+            name="Hot keys">
+      </page>
+      <page
+            class="cn.ieclipse.smartqq.preferences.SmartQQPreferencePage"
+            id="cn.ieclipse.smartqq.preferences.SmartQQPreferencePage"
+            name="SmartQQ">
+      </page>
+      <page
+            category="cn.ieclipse.smartqq.preferences.SmartQQPreferencePage"
+            class="cn.ieclipse.smartqq.preferences.RobotPreferencePage"
+            id="cn.ieclipse.smartqq.preferences.RobotPreferencePage"
+            name="Robot">
+      </page>
+   </extension>
+
+</plugin>
