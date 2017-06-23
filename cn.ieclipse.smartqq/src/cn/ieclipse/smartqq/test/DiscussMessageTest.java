@@ -32,15 +32,15 @@ public class DiscussMessageTest {
      * @param args
      */
     public static void main(String[] args) throws Exception {
-        String msg = "{\"result\":[{\"poll_type\":\"discu_message\",\"value\":{\"content\":[[\"font\","
-                + "{\"color\":\"000000\",\"name\":\"微软雅黑\",\"size\":10,\"style\":[0,0,0]}],\"@明月\",\"\",\" 好\"],"
-                + "\"did\":1240987830,\"from_uin\":1240987830,\"msg_id\":156,\"msg_type\":5,\"send_uin\":1402134857,"
-                + "\"time\":1497860096,\"to_uin\":157250921}}],\"retcode\":0}";
-        JSONObject json = JSONObject.parseObject(msg);
-        JSONArray array = json.getJSONArray("result");
-        json = array.getJSONObject(0).getJSONObject("value");
-        DiscussMessage dm = new DiscussMessage(json);
-        System.out.println(dm.getFont());
+//        String msg = "{\"result\":[{\"poll_type\":\"discu_message\",\"value\":{\"content\":[[\"font\","
+//                + "{\"color\":\"000000\",\"name\":\"微软雅黑\",\"size\":10,\"style\":[0,0,0]}],\"@明月\",\"\",\" 好\"],"
+//                + "\"did\":1240987830,\"from_uin\":1240987830,\"msg_id\":156,\"msg_type\":5,\"send_uin\":1402134857,"
+//                + "\"time\":1497860096,\"to_uin\":157250921}}],\"retcode\":0}";
+//        JSONObject json = JSONObject.parseObject(msg);
+//        JSONArray array = json.getJSONArray("result");
+//        json = array.getJSONObject(0).getJSONObject("value");
+//        DiscussMessage dm = new DiscussMessage(json);
+//        System.out.println(dm.getFont());
     }
     
 }

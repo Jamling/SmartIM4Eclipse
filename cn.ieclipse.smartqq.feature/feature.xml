@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="cn.ieclipse.smartqq.feature"
+      label="SmartQQ Feature"
+      version="1.0.0"
+      provider-name="ieclipse.cn"
+      plugin="cn.ieclipse.smartqq">
+
+   <description>
+      %description
+   </description>
+
+   <copyright>
+      %copyright
+   </copyright>
+
+   <license url="license.html">
+      %license
+   </license>
+
+   <url>
+      <update label="%updateSiteName" url="http://dl.ieclipse.cn/updates/"/>
+      <discovery label="%updateSiteName" url="http://dl.ieclipse.cn/updates/"/>
+      <discovery label="jamling.github.io" url="https://jamling.github.io/PDESite/updates/"/>
+   </url>
+
+   <plugin
+         id="cn.ieclipse.smartqq"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>
