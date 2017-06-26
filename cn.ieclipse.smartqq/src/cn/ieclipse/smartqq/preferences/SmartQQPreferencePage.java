@@ -22,10 +22,12 @@ import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PartInitException;
@@ -35,7 +37,6 @@ import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 import org.osgi.framework.Bundle;
 
 import cn.ieclipse.smartqq.QQPlugin;
-import org.eclipse.swt.layout.GridLayout;
 
 /**
  * 类/接口描述
@@ -65,8 +66,8 @@ public class SmartQQPreferencePage extends PreferencePage
         Label lbl = new Label(comp, SWT.BOLD);
         lbl.setText("Installation"); //$NON-NLS-1$
         
-        lbl = new Label(comp, SWT.WRAP);
-        lbl.setText(getBundlesInfo());
+        Text text = new Text(comp, SWT.WRAP | SWT.READ_ONLY);
+        text.setText(getBundlesInfo());
         
         Link l = new Link(comp, SWT.ITALIC);
         l.setText(""); //$NON-NLS-1$

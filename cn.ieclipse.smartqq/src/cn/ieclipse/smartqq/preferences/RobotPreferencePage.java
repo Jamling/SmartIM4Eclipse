@@ -13,11 +13,15 @@ public class RobotPreferencePage extends FieldEditorPreferencePage
         
     public static final String ROBOT_ENABLE = QQPlugin.PLUGIN_ID
             + ".robot.enable";
+            
+    public static final String ROBOT_NAME = QQPlugin.PLUGIN_ID + ".robot.name";
     public static final String ROBOT_DEPLAY = QQPlugin.PLUGIN_ID
             + ".robot.deplay";
     public static final String TURING_KEY = QQPlugin.PLUGIN_ID + ".turing.key";
-    public static final String TURING_API = QQPlugin.PLUGIN_ID
-            + ".turing.api";
+    public static final String TURING_API = QQPlugin.PLUGIN_ID + ".turing.api";
+    
+    public static final String GROUP_WELCOME = QQPlugin.PLUGIN_ID
+            + ".group.welcome";
             
     public RobotPreferencePage() {
         super(FLAT);
@@ -30,9 +34,11 @@ public class RobotPreferencePage extends FieldEditorPreferencePage
     protected void createFieldEditors() {
         addField(new BooleanFieldEditor(ROBOT_ENABLE, "Enable the robot",
                 getFieldEditorParent()));
-        // addField(new BooleanFieldEditor(ROBOT_DEPLAY, "Enable the robot",
-        // getFieldEditorParent()));
+        addField(new StringFieldEditor(ROBOT_NAME, "Robot name",
+                getFieldEditorParent()));
         addField(new StringFieldEditor(TURING_KEY, "Turing Key",
+                getFieldEditorParent()));
+        addField(new StringFieldEditor(GROUP_WELCOME, "New member welcome",
                 getFieldEditorParent()));
     }
     

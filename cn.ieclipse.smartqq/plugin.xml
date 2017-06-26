@@ -12,9 +12,9 @@
             allowMultiple="false"
             category="cn.ieclipse.smartqq"
             class="cn.ieclipse.smartqq.views.ContactView"
-            icon="icons/sample.gif"
+            icon="icons/editor_area.png"
             id="cn.ieclipse.smartqq.views.ContactView"
-            name="Contacts">
+            name="Smart">
       </view>
    </extension>
    <extension

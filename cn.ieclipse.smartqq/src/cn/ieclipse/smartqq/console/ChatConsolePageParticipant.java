@@ -26,7 +26,6 @@ import org.eclipse.ui.part.IPageBookViewPage;
 import cn.ieclipse.smartqq.actions.NextChatAction;
 import cn.ieclipse.smartqq.actions.PrevChatAction;
 import cn.ieclipse.smartqq.actions.SendAction;
-import cn.ieclipse.smartqq.actions.SettingAction;
 
 /**
  * 类/接口描述

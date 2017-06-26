@@ -34,8 +34,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
     public void initializeDefaultPreferences() {
         IPreferenceStore store = QQPlugin.getDefault().getPreferenceStore();
         
-        store.setDefault(HotKeyPreferencePage.KEY_SEND, "Ctrl + CR");
-        store.setDefault(HotKeyPreferencePage.KEY_INPUT, "Alt + S");
+        store.setDefault(HotKeyPreferencePage.KEY_SEND, "CR");
+        store.setDefault(HotKeyPreferencePage.KEY_INPUT, "CR");
         store.setDefault(HotKeyPreferencePage.KEY_INPUT_ESC, "ESC");
         store.setDefault(HotKeyPreferencePage.KEY_NEXT, "ARROW_RIGHT");
         store.setDefault(HotKeyPreferencePage.KEY_PREV, "ARROW_LEFT");
@@ -43,9 +43,11 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
         store.setDefault(HotKeyPreferencePage.KEY_HIDE_CLOSE, "Alt + C");
         
         store.setDefault(RobotPreferencePage.ROBOT_ENABLE, false);
+        store.setDefault(RobotPreferencePage.ROBOT_NAME, "[我的小秘]");
         store.setDefault(RobotPreferencePage.TURING_API,
                 "http://www.tuling123.com/openapi/api");
         store.setDefault(RobotPreferencePage.TURING_KEY, "");
+        store.setDefault(RobotPreferencePage.GROUP_WELCOME, "欢迎{user} {memo}");
     }
     
 }

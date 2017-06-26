@@ -2,7 +2,7 @@
 <feature
       id="cn.ieclipse.smartqq.feature"
       label="SmartQQ Feature"
-      version="1.0.0"
+      version="1.0.1"
       provider-name="ieclipse.cn"
       plugin="cn.ieclipse.smartqq">
 

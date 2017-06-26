@@ -29,7 +29,6 @@ import com.scienjus.smartqq.model.DiscussMessage;
 import com.scienjus.smartqq.model.Friend;
 import com.scienjus.smartqq.model.Group;
 import com.scienjus.smartqq.model.GroupMessage;
-import com.scienjus.smartqq.model.IContact;
 import com.scienjus.smartqq.model.Message;
 
 import cn.ieclipse.smartqq.QQPlugin;
@@ -195,7 +194,7 @@ public class ChatConsole extends IOConsole {
         mineStream.setColor(SWTResourceManager.getColor(SWT.COLOR_DARK_BLUE));
         errorStream.setColor(SWTResourceManager.getColor(SWT.COLOR_RED));
         
-        new Thread(inputRunnable).start();
+        // new Thread(inputRunnable).start();
     }
     
     private Runnable inputRunnable = new Runnable() {
@@ -289,6 +288,8 @@ public class ChatConsole extends IOConsole {
                 page.showView(ContactView.ID);
             } catch (PartInitException e) {
                 write(e.getMessage());
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             return;
         }

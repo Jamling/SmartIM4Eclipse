@@ -9,26 +9,39 @@ Eclipse上的SmartQQ插件，防Boss利器，让你可以在eclipse中使用QQ�
 
 ## 安装
 
-1. 点击Eclipse->Help->Marketplace打开eclipse插件市场
+### Eclipse Marketplace
+
+1. 点击Eclipse->Help->Eclipse Marketplace...打开eclipse插件市场
 2. 输入SmartQQ搜索
 3. 点击Install安装
 
+### Install New Software
+
+1. 点击Eclipse->Help->Install New Software...搜索插件
+2. 在Work with后面的输入框中输入http://dl.ieclipse.cn/updates/并回车
+3. 选中SmartQQ
+4. 点击底部Next按钮继续安装
+
+推荐使用Eclipse Martplace安装
+
 ## 使用
 
-1. 点击Windows->Show view，找到SmartQQ下的Contact双击打开
+1. 点击Windows->Show view，找到SmartQQ下的Smart双击打开
 2. 点击视图工具栏或菜单栏中的同步图标进行登录
 3. 使用手机QQ扫描二维码
 4. 验证成功后，等待拉取最近消息，好友及群组列表
-5. 双击Contact视图中的好友或群，打开聊天窗口（聊天窗口为Console）
+5. 双击Smart视图中的好友或群，打开聊天窗口（聊天窗口为Console）
 6. 使用快捷键或点击I图标，激活输入窗口（不建议直接在console中输入，会导致同步时间）
-7. 输入聊天内容，并按快捷键（Ctrl + Enter）发送聊天信息
+7. 输入聊天内容，并按快捷键（默认为Enter）发送聊天信息
 
 ## 快捷键
 
-- 激活输入，默认Alt + S，在console下面打开一个小窗口进行输入
-- 发送，默认Ctrl + CR (Enter键)，发送消息
+注：在eclipse中，CR表示Enter键
+
+- 激活输入，默认CR，在console下面打开一个小窗口进行输入
+- 发送，默认CR (Enter键)，发送消息
 - 上/下一个聊天, 默认左/右箭头，也可以在console工具栏使用鼠标切换
-- 隐藏聊天，默认Alt + H，隐藏Contact视图，清空当前聊天内容
+- 隐藏聊天，默认Alt + M，隐藏Contact视图，清空当前聊天内容
 - 关闭聊天，默认Alt + C，关闭Contact视图和所有的聊天窗口
 - 退出输入，默认ESC
 
@@ -37,3 +50,10 @@ Eclipse上的SmartQQ插件，防Boss利器，让你可以在eclipse中使用QQ�
 ## 感谢
 
 SmartQQ Java API: https://github.com/ScienJus/smartqq
+
+
+## 问题提交
+
+任何问题包括建议均可以在[Issue](https://github.com/Jamling/SmartQQ4Eclipse/issues)中提交
+
+如果为Issue，建议带上eclipse版本及本插件版本信息（可以在Preference->SmartQQ中查看并复制版本信息）

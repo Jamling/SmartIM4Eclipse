@@ -18,28 +18,16 @@ import org.eclipse.ui.PlatformUI;
 import com.scienjus.smartqq.model.Category;
 import com.scienjus.smartqq.model.Discuss;
 import com.scienjus.smartqq.model.DiscussInfo;
-import com.scienjus.smartqq.model.DiscussMessage;
-import com.scienjus.smartqq.model.DiscussUser;
 import com.scienjus.smartqq.model.Friend;
 import com.scienjus.smartqq.model.Group;
 import com.scienjus.smartqq.model.GroupInfo;
-import com.scienjus.smartqq.model.GroupMessage;
-import com.scienjus.smartqq.model.GroupUser;
 import com.scienjus.smartqq.model.Recent;
-import com.scienjus.smartqq.model.UserInfo;
 
 import cn.ieclipse.smartqq.QQPlugin;
 import cn.ieclipse.smartqq.views.LetterImageFactory;
 
 public class FriendAdapter {
     public TreeViewer viewer;
-    public static UserInfo my;
-    public static List<Group> groups;
-    public static List<Friend> friends;
-    public static List<Discuss> discusses;
-    public static List<Category> categories;
-    public static List<GroupInfo> ginfos;
-    public static List<DiscussInfo> dinfos;
     
     public FriendAdapter(TreeViewer viewer) {
         this.viewer = viewer;
@@ -96,142 +84,27 @@ public class FriendAdapter {
     }
     
     public static Friend getFriend(long uin) {
-        if (categories != null) {
-            for (Category c : categories) {
-                List<Friend> list = c.getFriends();
-                for (Friend f : list) {
-                    if (f.getUserId() == uin) {
-                        return f;
-                    }
-                }
-            }
-        }
-        return null;
+        return QQPlugin.getDefault().getClient().getFriend(uin);
     }
     
     public static Group getGroup(long uin) {
-        if (groups != null) {
-            for (Group g : groups) {
-                if (g.getId() == uin) {
-                    return g;
-                }
-            }
-        }
-        return null;
+        return QQPlugin.getDefault().getClient().getGroup(uin);
     }
     
     public static Discuss getDiscuss(long uin) {
-        if (discusses != null) {
-            for (Discuss g : discusses) {
-                if (g.getId() == uin) {
-                    return g;
-                }
-            }
-        }
-        return null;
+        return QQPlugin.getDefault().getClient().getDiscuss(uin);
     }
     
     public static GroupInfo getGroupInfo(Group group) {
-        GroupInfo info = null;
-        if (ginfos != null) {
-            for (GroupInfo g : ginfos) {
-                if (group.getId() == g.getGid()) {
-                    info = g;
-                    break;
-                }
-            }
-        }
-        if (info == null) {
-            info = QQPlugin.getDefault().getClient()
-                    .getGroupInfo(group.getCode());
-        }
-        return info;
-    }
-    
-    public static GroupUser getGroupUser(GroupMessage m) {
-        Group g = getGroup(m.getGroupId());
-        GroupInfo info = getGroupInfo(g);
-        if (info != null && info.getUsers() != null) {
-            for (GroupUser u : info.getUsers()) {
-                if (u.getUin() == m.getUserId()) {
-                    return u;
-                }
-            }
-        }
-        return null;
+        return QQPlugin.getDefault().getClient().getGroupInfo(group);
     }
     
     public static DiscussInfo getDiscussInfo(Discuss discuss) {
-        DiscussInfo info = null;
-        if (dinfos != null) {
-            for (DiscussInfo d : dinfos) {
-                if (d.getId() == discuss.getId()) {
-                    info = d;
-                    break;
-                }
-            }
-        }
-        if (info != null) {
-            info = QQPlugin.getDefault().getClient()
-                    .getDiscussInfo(discuss.getId());
-        }
-        return info;
-    }
-    
-    public static DiscussUser getDiscussUser(DiscussMessage m) {
-        Discuss g = getDiscuss(m.getDiscussId());
-        DiscussInfo info = getDiscussInfo(g);
-        if (info != null && info.getUsers() != null) {
-            for (DiscussUser u : info.getUsers()) {
-                if (u.getUin() == m.getUserId()) {
-                    return u;
-                }
-            }
-        }
-        return null;
+        return QQPlugin.getDefault().getClient().getDiscussInfo(discuss);
     }
     
     public static String getName(Object obj) {
-        String name = null;
-        if (obj == null) {
-            return "null";
-        }
-        if (obj instanceof Friend) {
-            Friend f = (Friend) obj;
-            name = f.getMarkname();
-            if (name == null || name.isEmpty()) {
-                name = f.getNickname();
-            }
-            if (name == null || name.isEmpty()) {
-                name = String.valueOf(f.getUserId());
-            }
-        }
-        else if (obj instanceof Group) {
-            Group g = ((Group) obj);
-            name = g.getName();
-        }
-        else if (obj instanceof Discuss) {
-            Discuss d = (Discuss) obj;
-            name = d.getName();
-        }
-        else if (obj instanceof GroupUser) {
-            GroupUser gu = (GroupUser) obj;
-            name = gu.getCard();
-            if (name == null || name.isEmpty()) {
-                name = gu.getNick();
-            }
-            if (name == null || name.isEmpty()) {
-                name = String.valueOf(gu.getUin());
-            }
-        }
-        else if (obj instanceof DiscussUser) {
-            DiscussUser gu = (DiscussUser) obj;
-            name = gu.getNick();
-            if (name == null || name.isEmpty()) {
-                name = String.valueOf(gu.getUin());
-            }
-        }
-        return name;
+        return QQPlugin.getDefault().getClient().getName(obj);
     }
 }
 
@@ -287,18 +160,15 @@ class FriendContentProvider
         else if ("group".equals(inputElement)) {
             List<Group> groups = QQPlugin.getDefault().getClient()
                     .getGroupList();
-            adapter.groups = groups;
             return groups == null ? null : groups.toArray();
         }
         else if ("discuss".equals(inputElement)) {
             List<Discuss> groups = QQPlugin.getDefault().getClient()
                     .getDiscussList();
-            adapter.discusses = groups;
             return groups == null ? null : groups.toArray();
         }
         List<Category> categories = QQPlugin.getDefault().getClient()
                 .getFriendListWithCategory();
-        adapter.categories = categories;
         return categories == null ? null : categories.toArray();
     }
 }

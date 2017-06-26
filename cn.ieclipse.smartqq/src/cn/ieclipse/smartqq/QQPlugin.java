@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IViewPart;
@@ -15,22 +14,19 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import com.scienjus.smartqq.callback.LoginCallback;
-import com.scienjus.smartqq.callback.MessageCallback;
-import com.scienjus.smartqq.client.SmartQQClient;
+import com.scienjus.smartqq.callback.MessageCallback2;
+import com.scienjus.smartqq.client.SmartClient;
 import com.scienjus.smartqq.model.Discuss;
+import com.scienjus.smartqq.model.DiscussFrom;
 import com.scienjus.smartqq.model.DiscussMessage;
-import com.scienjus.smartqq.model.DiscussUser;
-import com.scienjus.smartqq.model.Friend;
+import com.scienjus.smartqq.model.FriendFrom;
 import com.scienjus.smartqq.model.Group;
+import com.scienjus.smartqq.model.GroupFrom;
 import com.scienjus.smartqq.model.GroupMessage;
-import com.scienjus.smartqq.model.GroupUser;
-import com.scienjus.smartqq.model.IContact;
 import com.scienjus.smartqq.model.Message;
-import com.scienjus.smartqq.model.UserInfo;
+import com.scienjus.smartqq.model.Recent;
 
-import cn.ieclipse.smartqq.adapter.FriendAdapter;
 import cn.ieclipse.smartqq.console.ChatConsole;
-import cn.ieclipse.smartqq.preferences.RobotPreferencePage;
 import cn.ieclipse.smartqq.views.ContactView;
 
 /**
@@ -97,11 +93,11 @@ public class QQPlugin extends AbstractUIPlugin {
     }
     
     // -------->
-    private SmartQQClient client;
+    private SmartClient client;
     
-    public SmartQQClient getClient() {
+    public SmartClient getClient() {
         if (client == null) {
-            client = new SmartQQClient();
+            client = new SmartClient();
         }
         return client;
     }
@@ -111,33 +107,32 @@ public class QQPlugin extends AbstractUIPlugin {
     }
     
     public void login(LoginCallback callback) {
-        SmartQQClient client = getClient();
-        client.login(callback);
+        getClient().login(callback);
     }
     
     public void start() {
-        getClient().start(new MessageCallback() {
+        MessageCallback2 callback = new MessageCallback2() {
             
             @Override
-            public void onMessage(final Message message) {
-                Friend f = FriendAdapter.getFriend(message.getUserId());
-                ChatConsole console = QQPlugin.getDefault().findConsole(f,
-                        false);
+            public void onMessage(final Message message,
+                    final FriendFrom from) {
+                ChatConsole console = QQPlugin.getDefault()
+                        .findConsole(from.getFriend(), false);
+                Recent r = getClient().getRecent(0, message.getUserId());
+                
                 if (console != null) {
                     console.write(String.format("%s %s: %s",
                             new SimpleDateFormat("HH:mm:ss")
                                     .format(message.getTime()),
-                            FriendAdapter.getName(f), message.getContent()));
+                            from.getName(), message.getContent()));
                 }
             }
             
             @Override
-            public void onGroupMessage(final GroupMessage message) {
-                Friend f = FriendAdapter.getFriend(message.getUserId());
-                Group g = FriendAdapter.getGroup(message.getGroupId());
-                long qq = message.getUserId();
-                final GroupUser gu = FriendAdapter.getGroupUser(message);
-                String name = FriendAdapter.getName(gu);
+            public void onGroupMessage(final GroupMessage message,
+                    final GroupFrom from) {
+                Group g = getClient().getGroup(message.getGroupId());
+                String name = from.getName();
                 
                 ChatConsole console = QQPlugin.getDefault().findConsole(g,
                         false);
@@ -146,24 +141,15 @@ public class QQPlugin extends AbstractUIPlugin {
                             new SimpleDateFormat("HH:mm:ss")
                                     .format(message.getTime()),
                             name, message.getContent()));
-                            
-                    if (message.at != null && !message.at.isEmpty()) {
-                        UserInfo my = FriendAdapter.my;
-                        if (my != null
-                                && message.at.equals("@" + my.getNick())) {
-                            Robot.answer(gu, message, console);
-                        }
-                    }
+                    Robot.answer(from, message, console);
                 }
             }
             
             @Override
-            public void onDiscussMessage(final DiscussMessage message) {
-                Friend f = FriendAdapter.getFriend(message.getUserId());
-                Discuss g = FriendAdapter.getDiscuss(message.getDiscussId());
-                long qq = message.getUserId();
-                DiscussUser gu = FriendAdapter.getDiscussUser(message);
-                String name = FriendAdapter.getName(gu);
+            public void onDiscussMessage(final DiscussMessage message,
+                    final DiscussFrom from) {
+                Discuss g = getClient().getDiscuss(message.getDiscussId());
+                String name = from.getName();
                 
                 ChatConsole console = QQPlugin.getDefault().findConsole(g,
                         false);
@@ -174,7 +160,9 @@ public class QQPlugin extends AbstractUIPlugin {
                             name, message.getContent()));
                 }
             }
-        });
+        };
+        getClient().setCallback(callback);
+        getClient().start();
     }
     
     public ContactView getContactView() {

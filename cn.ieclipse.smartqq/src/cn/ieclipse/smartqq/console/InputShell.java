@@ -1,25 +1,18 @@
 package cn.ieclipse.smartqq.console;
 
-import java.io.File;
-
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.wb.swt.ResourceManager;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import cn.ieclipse.smartqq.QQPlugin;
@@ -29,6 +22,7 @@ import cn.ieclipse.smartqq.preferences.HotKeyPreferencePage;
 public class InputShell extends Shell {
     
     private Text text;
+    private Label tipLabel;
     
     /**
      * Create the shell.
@@ -84,10 +78,10 @@ public class InputShell extends Shell {
         tbClose.setToolTipText("Close");
         new Label(this, SWT.NONE);
         
-        Label label = new Label(this, SWT.NONE);
-        label.setLayoutData(
+        tipLabel = new Label(this, SWT.NONE);
+        tipLabel.setLayoutData(
                 new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-        label.setText("Press 'Ctrl + Enter ' to send");
+        tipLabel.setText("Press 'Enter' to send");
         
         text.addKeyListener(inputListener);
     }
@@ -95,6 +89,14 @@ public class InputShell extends Shell {
     @Override
     protected void checkSubclass() {
         // Disable the check that prevents subclassing of SWT components
+    }
+    
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        IPreferenceStore store = QQPlugin.getDefault().getPreferenceStore();
+        String key = store.getString(HotKeyPreferencePage.KEY_SEND);
+        tipLabel.setText("Press '" + key + "' to send");
     }
     
     private String input;

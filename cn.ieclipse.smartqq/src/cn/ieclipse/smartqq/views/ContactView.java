@@ -1,7 +1,5 @@
 package cn.ieclipse.smartqq.views;
 
-import java.util.Date;
-
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -15,19 +13,14 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.ViewPart;
-
-import com.scienjus.smartqq.model.Friend;
 
 import cn.ieclipse.smartqq.QQPlugin;
 import cn.ieclipse.smartqq.actions.LoginAction;
 import cn.ieclipse.smartqq.actions.SettingAction;
 import cn.ieclipse.smartqq.adapter.FriendAdapter;
-import cn.ieclipse.smartqq.console.ChatConsole;
 
 public class ContactView extends ViewPart {
     
@@ -101,7 +94,7 @@ public class ContactView extends ViewPart {
     
     public void initFriends() {
         if (QQPlugin.getDefault().isLogin()) {
-            FriendAdapter.my = QQPlugin.getDefault().getClient().getAccountInfo();
+            QQPlugin.getDefault().getClient().reload();
             ftvFriend.setInput("friend");
             ftvGroup.setInput("group");
             ftvDiscuss.setInput("discuss");

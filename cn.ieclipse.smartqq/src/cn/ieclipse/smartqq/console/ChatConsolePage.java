@@ -1,20 +1,12 @@
 package cn.ieclipse.smartqq.console;
 
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.custom.VerifyKeyListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
-import org.eclipse.swt.events.VerifyEvent;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.console.IConsoleView;
 import org.eclipse.ui.console.TextConsolePage;
-import org.eclipse.ui.dialogs.PreferencesUtil;
 
 import cn.ieclipse.smartqq.QQPlugin;
 import cn.ieclipse.smartqq.preferences.HotKeyFieldEditor;
@@ -37,9 +29,15 @@ public class ChatConsolePage extends TextConsolePage {
             
             @Override
             public void keyReleased(KeyEvent e) {
+            }
+            
+            @Override
+            public void keyPressed(KeyEvent e) {
+                
                 String key = HotKeyFieldEditor.keyEvent2String(e);
                 IPreferenceStore store = QQPlugin.getDefault()
                         .getPreferenceStore();
+                System.out.println(key);
                 if (key.equals(
                         store.getString(HotKeyPreferencePage.KEY_INPUT))) {
                     fConsole.activeInput();
@@ -61,11 +59,6 @@ public class ChatConsolePage extends TextConsolePage {
                     fConsole.toggleClose();
                 }
                 e.doit = false;
-            }
-            
-            @Override
-            public void keyPressed(KeyEvent e) {
-            
             }
         });
     }
