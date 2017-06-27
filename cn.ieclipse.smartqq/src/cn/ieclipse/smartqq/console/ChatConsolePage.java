@@ -2,8 +2,10 @@ package cn.ieclipse.smartqq.console;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.custom.VerifyKeyListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.console.IConsoleView;
 import org.eclipse.ui.console.TextConsolePage;
@@ -25,41 +27,50 @@ public class ChatConsolePage extends TextConsolePage {
         super.createControl(parent);
         
         final StyledText text = getViewer().getTextWidget();
-        text.addKeyListener(new KeyListener() {
-            
-            @Override
-            public void keyReleased(KeyEvent e) {
+        InputListener listener = new InputListener();
+        text.addKeyListener(listener);
+        text.addVerifyKeyListener(listener);
+    }
+    
+    private class InputListener implements KeyListener, VerifyKeyListener {
+        
+        IPreferenceStore store = QQPlugin.getDefault().getPreferenceStore();
+        
+        @Override
+        public void keyReleased(KeyEvent e) {
+            e.doit = false;
+        }
+        
+        @Override
+        public void keyPressed(KeyEvent e) {
+            String key = HotKeyFieldEditor.keyEvent2String(e);
+            System.out.println("input " + key);
+        }
+        
+        @Override
+        public void verifyKey(VerifyEvent e) {
+            String key = HotKeyFieldEditor.keyEvent2String(e);
+            System.out.println("verify " + key);
+            if (key.equals(store.getString(HotKeyPreferencePage.KEY_INPUT))) {
+                fConsole.activeInput();
             }
-            
-            @Override
-            public void keyPressed(KeyEvent e) {
-                
-                String key = HotKeyFieldEditor.keyEvent2String(e);
-                IPreferenceStore store = QQPlugin.getDefault()
-                        .getPreferenceStore();
-                System.out.println(key);
-                if (key.equals(
-                        store.getString(HotKeyPreferencePage.KEY_INPUT))) {
-                    fConsole.activeInput();
-                }
-                else if (key.equals(
-                        store.getString(HotKeyPreferencePage.KEY_NEXT))) {
-                    QQPlugin.getDefault().nextConsole(fConsole, true);
-                }
-                else if (key.equals(
-                        store.getString(HotKeyPreferencePage.KEY_PREV))) {
-                    QQPlugin.getDefault().nextConsole(fConsole, false);
-                }
-                else if (key.equals(
-                        store.getString(HotKeyPreferencePage.KEY_HIDE))) {
-                    fConsole.toggleHide();
-                }
-                else if (key.equals(
-                        store.getString(HotKeyPreferencePage.KEY_HIDE_CLOSE))) {
-                    fConsole.toggleClose();
-                }
-                e.doit = false;
+            else if (key
+                    .equals(store.getString(HotKeyPreferencePage.KEY_NEXT))) {
+                QQPlugin.getDefault().nextConsole(fConsole, true);
             }
-        });
+            else if (key
+                    .equals(store.getString(HotKeyPreferencePage.KEY_PREV))) {
+                QQPlugin.getDefault().nextConsole(fConsole, false);
+            }
+            else if (key
+                    .equals(store.getString(HotKeyPreferencePage.KEY_HIDE))) {
+                fConsole.toggleHide();
+            }
+            else if (key.equals(
+                    store.getString(HotKeyPreferencePage.KEY_HIDE_CLOSE))) {
+                fConsole.toggleClose();
+            }
+            e.doit = false;
+        }
     }
 }
