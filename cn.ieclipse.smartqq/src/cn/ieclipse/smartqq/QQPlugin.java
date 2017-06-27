@@ -142,7 +142,7 @@ public class QQPlugin extends AbstractUIPlugin {
                                     .format(message.getTime()),
                             name, message.getContent()));
                 }
-                //Robot.answer(from, message, console);
+                Robot.answer(from, message, console);
             }
             
             @Override
