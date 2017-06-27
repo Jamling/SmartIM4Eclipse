@@ -17,6 +17,8 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.ViewPart;
 
+import com.scienjus.smartqq.model.Friend;
+
 import cn.ieclipse.smartqq.QQPlugin;
 import cn.ieclipse.smartqq.actions.LoginAction;
 import cn.ieclipse.smartqq.actions.SettingAction;
@@ -138,6 +140,7 @@ public class ContactView extends ViewPart {
         manager.add(action1);
         manager.add(action2);
         manager.add(new Separator());
+        // manager.add(doubleClickAction);
         // drillDownAdapter.addNavigationActions(manager);
     }
     
@@ -146,9 +149,12 @@ public class ContactView extends ViewPart {
         action2 = new SettingAction();
         doubleClickAction = new Action() {
             public void run() {
-            
+                Friend f = new Friend();
+                f.setMarkname("Test" + System.currentTimeMillis());
+                QQPlugin.getDefault().findConsole(f, true);
             }
         };
+        doubleClickAction.setText("Test");
     }
     
     private void hookDoubleClickAction() {

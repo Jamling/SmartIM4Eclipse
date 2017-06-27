@@ -141,8 +141,8 @@ public class QQPlugin extends AbstractUIPlugin {
                             new SimpleDateFormat("HH:mm:ss")
                                     .format(message.getTime()),
                             name, message.getContent()));
-                    Robot.answer(from, message, console);
                 }
+                //Robot.answer(from, message, console);
             }
             
             @Override
@@ -159,6 +159,7 @@ public class QQPlugin extends AbstractUIPlugin {
                                     .format(message.getTime()),
                             name, message.getContent()));
                 }
+                Robot.answer(from, message, console);
             }
         };
         getClient().setCallback(callback);

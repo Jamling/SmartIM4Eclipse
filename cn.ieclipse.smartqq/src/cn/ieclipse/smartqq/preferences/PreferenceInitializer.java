@@ -48,6 +48,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
                 "http://www.tuling123.com/openapi/api");
         store.setDefault(RobotPreferencePage.TURING_KEY, "");
         store.setDefault(RobotPreferencePage.GROUP_WELCOME, "欢迎{user} {memo}");
+        store.setDefault(RobotPreferencePage.GROUP_REPLY_ANY, false);
     }
     
 }

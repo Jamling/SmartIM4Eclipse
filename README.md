@@ -18,7 +18,7 @@ Eclipse上的SmartQQ插件，防Boss利器，让你可以在eclipse中使用QQ�
 ### Install New Software
 
 1. 点击Eclipse->Help->Install New Software...搜索插件
-2. 在Work with后面的输入框中输入http://dl.ieclipse.cn/updates/并回车
+2. 在Work with后面的输入框中输入http://dl.ieclipse.cn/updates/ 并回车
 3. 选中SmartQQ，并取消勾选"Contact all update site during install to find required software"
 4. 点击底部Next按钮继续安装
 

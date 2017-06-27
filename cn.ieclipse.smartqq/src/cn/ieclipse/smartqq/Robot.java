@@ -1,10 +1,13 @@
 package cn.ieclipse.smartqq;
 
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import com.alibaba.fastjson.JSONObject;
+import com.scienjus.smartqq.model.DiscussFrom;
+import com.scienjus.smartqq.model.DiscussMessage;
 import com.scienjus.smartqq.model.Group;
 import com.scienjus.smartqq.model.GroupFrom;
 import com.scienjus.smartqq.model.GroupInfo;
@@ -58,6 +61,7 @@ public class Robot {
         if (!isEnable()) {
             return;
         }
+        
         IPreferenceStore store = QQPlugin.getDefault().getPreferenceStore();
         String robotName = store.getString(RobotPreferencePage.ROBOT_NAME);
         if (from.isNewbie()) {
@@ -78,26 +82,79 @@ public class Robot {
                 }
                 console.post(robotName + input);
             }
+            return;
         }
-        if (!atMe(m)) {
+        if (atMe(m)) {
+            String msg = m.getContent().replace(m.at, "");
+            reply(store, console, String.valueOf(m.getUserId()), msg,
+                    robotName + "@" + from.getName());
+            return;
+        }
+        if (store.getBoolean(RobotPreferencePage.GROUP_REPLY_ANY)) {
+            if (from.isNewbie() || from.isUnknow() || isMySend(m.getUserId())) {
+                return;
+            }
+            reply(store, console, String.valueOf(m.getUserId()), m.getContent(),
+                    robotName + "@" + from.getName());
+        }
+    }
+    
+    public static void answer(DiscussFrom from, DiscussMessage m,
+            ChatConsole console) {
+        if (!isEnable()) {
             return;
         }
         
+        IPreferenceStore store = QQPlugin.getDefault().getPreferenceStore();
+        String robotName = store.getString(RobotPreferencePage.ROBOT_NAME);
+        // if (atMe(m)) {
+        // String msg = m.getContent().replace(m.at, "");
+        // reply(store, console, String.valueOf(m.getUserId()), msg,
+        // robotName + "@" + from.getName());
+        // return;
+        // }
+        if (store.getBoolean(RobotPreferencePage.GROUP_REPLY_ANY)) {
+            if (from.isNewbie() || from.isUnknow() || isMySend(m.getUserId())) {
+                return;
+            }
+            
+            reply(store, console, String.valueOf(m.getUserId()), m.getContent(),
+                    robotName + "@" + from.getName());
+        }
+    }
+    
+    private static boolean isMySend(long uin) {
+        UserInfo me = QQPlugin.getDefault().getClient().getAccountInfo();
+        if (me != null && me.getUin().equals(String.valueOf(uin))) {
+            return true;
+        }
+        return false;
+    }
+    
+    private static void reply(IPreferenceStore store, ChatConsole console,
+            String userId, String message, String prefix) {
         String key = store.getString(RobotPreferencePage.TURING_KEY);
         if (key != null && !key.isEmpty()) {
             String url = store.getString(RobotPreferencePage.TURING_API);
             try {
-                String info = URLEncoder
-                        .encode(m.getContent().replace(m.at, ""), "UTF-8");
+                String info = URLEncoder.encode(message, "UTF-8");
                 String param = String.format("?key=%s&userid=%s&info=%s", key,
-                        m.getUserId(), info);
-                String json = Requests.get(url + param).text().getBody();
+                        userId, info);
+                JSONObject body = new JSONObject();
+                body.put("key", key);
+                body.put("userid", userId);
+                body.put("info", info);
+                String json = Requests.post(url).data(body.toJSONString())
+                        .text(Charset.forName("utf-8")).getBody();
                 JSONObject obj = JSONObject.parseObject(json);
                 if (obj != null && obj.containsKey("text")) {
                     // if (100000 == obj.getIntValue("code")) {
                     String input = obj.getString("text");
                     if (input != null && !input.isEmpty()) {
-                        console.post(robotName + "@" + from.getName() + input);
+                        if (prefix != null) {
+                            input = prefix + input;
+                        }
+                        console.post(input);
                     }
                     // }
                 }
@@ -106,5 +163,4 @@ public class Robot {
             }
         }
     }
-    
 }

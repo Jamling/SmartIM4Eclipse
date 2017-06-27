@@ -23,6 +23,9 @@ public class RobotPreferencePage extends FieldEditorPreferencePage
     public static final String GROUP_WELCOME = QQPlugin.PLUGIN_ID
             + ".group.welcome";
             
+    public static final String GROUP_REPLY_ANY = QQPlugin.PLUGIN_ID
+            + ".group.apply.any";
+            
     public RobotPreferencePage() {
         super(FLAT);
         setPreferenceStore(QQPlugin.getDefault().getPreferenceStore());
@@ -39,6 +42,8 @@ public class RobotPreferencePage extends FieldEditorPreferencePage
         addField(new StringFieldEditor(TURING_KEY, "Turing Key",
                 getFieldEditorParent()));
         addField(new StringFieldEditor(GROUP_WELCOME, "New member welcome",
+                getFieldEditorParent()));
+        addField(new BooleanFieldEditor(GROUP_REPLY_ANY, "Reply any member",
                 getFieldEditorParent()));
     }
     
