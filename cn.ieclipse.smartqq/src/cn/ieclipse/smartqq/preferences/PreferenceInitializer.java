@@ -49,6 +49,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
         store.setDefault(RobotPreferencePage.TURING_KEY, "");
         store.setDefault(RobotPreferencePage.GROUP_WELCOME, "欢迎{user} {memo}");
         store.setDefault(RobotPreferencePage.GROUP_REPLY_ANY, false);
+        store.setDefault(RobotPreferencePage.FRIEND_REPLY_ANY, false);
     }
     
 }

@@ -24,7 +24,10 @@ public class RobotPreferencePage extends FieldEditorPreferencePage
             + ".group.welcome";
             
     public static final String GROUP_REPLY_ANY = QQPlugin.PLUGIN_ID
-            + ".group.apply.any";
+            + ".group.reply.any";
+            
+    public static final String FRIEND_REPLY_ANY = QQPlugin.PLUGIN_ID
+            + ".friend.reply.any";
             
     public RobotPreferencePage() {
         super(FLAT);
@@ -43,7 +46,10 @@ public class RobotPreferencePage extends FieldEditorPreferencePage
                 getFieldEditorParent()));
         addField(new StringFieldEditor(GROUP_WELCOME, "New member welcome",
                 getFieldEditorParent()));
-        addField(new BooleanFieldEditor(GROUP_REPLY_ANY, "Reply any member",
+        addField(new BooleanFieldEditor(GROUP_REPLY_ANY,
+                "Reply any group or discuss member (enable when chat session is open)",
+                getFieldEditorParent()));
+        addField(new BooleanFieldEditor(FRIEND_REPLY_ANY, "Reply any friend",
                 getFieldEditorParent()));
     }
     
