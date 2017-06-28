@@ -34,20 +34,20 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
     public void initializeDefaultPreferences() {
         IPreferenceStore store = QQPlugin.getDefault().getPreferenceStore();
         
-        store.setDefault(HotKeyPreferencePage.KEY_SEND, "CR");
-        store.setDefault(HotKeyPreferencePage.KEY_INPUT, "CR");
-        store.setDefault(HotKeyPreferencePage.KEY_INPUT_ESC, "ESC");
-        store.setDefault(HotKeyPreferencePage.KEY_NEXT, "ARROW_RIGHT");
-        store.setDefault(HotKeyPreferencePage.KEY_PREV, "ARROW_LEFT");
-        store.setDefault(HotKeyPreferencePage.KEY_HIDE, "Alt + H");
-        store.setDefault(HotKeyPreferencePage.KEY_HIDE_CLOSE, "Alt + C");
+        store.setDefault(HotKeyPreferencePage.KEY_SEND, "CR"); //$NON-NLS-1$
+        store.setDefault(HotKeyPreferencePage.KEY_INPUT, "CR"); //$NON-NLS-1$
+        store.setDefault(HotKeyPreferencePage.KEY_INPUT_ESC, "ESC"); //$NON-NLS-1$
+        store.setDefault(HotKeyPreferencePage.KEY_NEXT, "ARROW_RIGHT"); //$NON-NLS-1$
+        store.setDefault(HotKeyPreferencePage.KEY_PREV, "ARROW_LEFT"); //$NON-NLS-1$
+        store.setDefault(HotKeyPreferencePage.KEY_HIDE, "Alt + H"); //$NON-NLS-1$
+        store.setDefault(HotKeyPreferencePage.KEY_HIDE_CLOSE, "Alt + C"); //$NON-NLS-1$
         
         store.setDefault(RobotPreferencePage.ROBOT_ENABLE, false);
-        store.setDefault(RobotPreferencePage.ROBOT_NAME, "[我的小秘]");
+        store.setDefault(RobotPreferencePage.ROBOT_NAME, Messages.PreferenceInitializer_robot_name);
         store.setDefault(RobotPreferencePage.TURING_API,
-                "http://www.tuling123.com/openapi/api");
-        store.setDefault(RobotPreferencePage.TURING_KEY, "");
-        store.setDefault(RobotPreferencePage.GROUP_WELCOME, "欢迎{user} {memo}");
+                "http://www.tuling123.com/openapi/api"); //$NON-NLS-1$
+        store.setDefault(RobotPreferencePage.TURING_KEY, ""); //$NON-NLS-1$
+        store.setDefault(RobotPreferencePage.GROUP_WELCOME, Messages.PreferenceInitializer_robot_group_welcome);
         store.setDefault(RobotPreferencePage.GROUP_REPLY_ANY, false);
         store.setDefault(RobotPreferencePage.FRIEND_REPLY_ANY, false);
     }

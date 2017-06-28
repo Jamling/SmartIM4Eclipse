@@ -70,7 +70,7 @@ public class SmartQQPreferencePage extends PreferencePage
         text.setText(getBundlesInfo());
         
         Link l = new Link(comp, SWT.ITALIC);
-        l.setText(""); //$NON-NLS-1$
+        l.setText(Messages.SmartQQPreferencePage_github);
         l.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {

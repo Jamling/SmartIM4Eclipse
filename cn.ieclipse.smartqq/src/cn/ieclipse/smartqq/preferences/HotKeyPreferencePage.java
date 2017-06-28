@@ -24,15 +24,15 @@ import cn.ieclipse.smartqq.QQPlugin;
 public class HotKeyPreferencePage extends FieldEditorPreferencePage
         implements IWorkbenchPreferencePage {
         
-    public static final String KEY_SEND = QQPlugin.PLUGIN_ID + ".key.send";
-    public static final String KEY_INPUT = QQPlugin.PLUGIN_ID + ".key.input";
-    public static final String KEY_NEXT = QQPlugin.PLUGIN_ID + ".key.next";
-    public static final String KEY_PREV = QQPlugin.PLUGIN_ID + ".key.prev";
+    public static final String KEY_SEND = QQPlugin.PLUGIN_ID + ".key.send"; //$NON-NLS-1$
+    public static final String KEY_INPUT = QQPlugin.PLUGIN_ID + ".key.input"; //$NON-NLS-1$
+    public static final String KEY_NEXT = QQPlugin.PLUGIN_ID + ".key.next"; //$NON-NLS-1$
+    public static final String KEY_PREV = QQPlugin.PLUGIN_ID + ".key.prev"; //$NON-NLS-1$
     public static final String KEY_INPUT_ESC = QQPlugin.PLUGIN_ID
-            + ".key.input.esc";
-    public static final String KEY_HIDE = QQPlugin.PLUGIN_ID + ".key.hide";
+            + ".key.input.esc"; //$NON-NLS-1$
+    public static final String KEY_HIDE = QQPlugin.PLUGIN_ID + ".key.hide"; //$NON-NLS-1$
     public static final String KEY_HIDE_CLOSE = QQPlugin.PLUGIN_ID
-            + ".key.hide_close";
+            + ".key.hide_close"; //$NON-NLS-1$
             
     public HotKeyPreferencePage() {
         super(FLAT);
@@ -46,21 +46,26 @@ public class HotKeyPreferencePage extends FieldEditorPreferencePage
      * editor knows how to save and restore itself.
      */
     public void createFieldEditors() {
-        HotKeyFieldEditor send = new HotKeyFieldEditor(KEY_SEND, "Send message",
-                getFieldEditorParent());
+        HotKeyFieldEditor send = new HotKeyFieldEditor(KEY_SEND,
+                Messages.HotKeyPreferencePage_send, getFieldEditorParent());
         addField(send);
         
-        addField(new HotKeyFieldEditor(KEY_INPUT, "Active input",
+        addField(new HotKeyFieldEditor(KEY_INPUT,
+                Messages.HotKeyPreferencePage_input, getFieldEditorParent()));
+        addField(new HotKeyFieldEditor(KEY_INPUT_ESC,
+                Messages.HotKeyPreferencePage_hide_input,
                 getFieldEditorParent()));
-        addField(new HotKeyFieldEditor(KEY_INPUT_ESC, "Hide input",
+        addField(new HotKeyFieldEditor(KEY_NEXT,
+                Messages.HotKeyPreferencePage_next_chat,
                 getFieldEditorParent()));
-        addField(new HotKeyFieldEditor(KEY_NEXT, "Next chat",
+        addField(new HotKeyFieldEditor(KEY_PREV,
+                Messages.HotKeyPreferencePage_prev_chat,
                 getFieldEditorParent()));
-        addField(new HotKeyFieldEditor(KEY_PREV, "Previous chat",
+        addField(new HotKeyFieldEditor(KEY_HIDE,
+                Messages.HotKeyPreferencePage_hide_chat,
                 getFieldEditorParent()));
-        addField(new HotKeyFieldEditor(KEY_HIDE, "Hide chat",
-                getFieldEditorParent()));
-        addField(new HotKeyFieldEditor(KEY_HIDE_CLOSE, "Hide & close chat",
+        addField(new HotKeyFieldEditor(KEY_HIDE_CLOSE,
+                Messages.HotKeyPreferencePage_close_chat,
                 getFieldEditorParent()));
     }
     
