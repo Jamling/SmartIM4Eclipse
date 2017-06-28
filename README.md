@@ -1,3 +1,5 @@
+[![GitHub release](https://img.shields.io/github/release/jamling/SmartQQ4Eclipse.svg?maxAge=3600)](https://github.com/Jamling/SmartQQ4Eclipse)
+
 ## SmartQQ4Eclipse
 Eclipse上的SmartQQ插件，防Boss利器，让你可以在eclipse中使用QQ进行聊天
 
