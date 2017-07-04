@@ -1,5 +1,7 @@
 package cn.ieclipse.smartqq.views;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -20,6 +22,7 @@ import org.eclipse.ui.part.ViewPart;
 import com.scienjus.smartqq.model.Friend;
 
 import cn.ieclipse.smartqq.QQPlugin;
+import cn.ieclipse.smartqq.actions.DisconnectAction;
 import cn.ieclipse.smartqq.actions.LoginAction;
 import cn.ieclipse.smartqq.actions.SettingAction;
 import cn.ieclipse.smartqq.adapter.FriendAdapter;
@@ -33,6 +36,7 @@ public class ContactView extends ViewPart {
     private DrillDownAdapter drillDownAdapter;
     private Action action1;
     private Action action2;
+    private Action exit;
     private Action doubleClickAction;
     
     private TreeViewer ftvFriend;
@@ -96,12 +100,19 @@ public class ContactView extends ViewPart {
     
     public void initFriends() {
         if (QQPlugin.getDefault().isLogin()) {
-            QQPlugin.getDefault().getClient().reload();
-            ftvFriend.setInput("friend");
-            ftvGroup.setInput("group");
-            ftvDiscuss.setInput("discuss");
-            ftvRecent.setInput("recent");
-            QQPlugin.getDefault().start();
+            try {
+                QQPlugin.getDefault().getClient().reload();
+                ftvFriend.setInput("friend");
+                ftvGroup.setInput("group");
+                ftvDiscuss.setInput("discuss");
+                ftvRecent.setInput("recent");
+                QQPlugin.getDefault().start();
+            } catch (Exception e) {
+                ftvRecent.getTree().setHeaderVisible(true);
+                IStatus info = new Status(IStatus.ERROR, QQPlugin.PLUGIN_ID,
+                        "初始化失败" + e.toString());
+                QQPlugin.getDefault().getLog().log(info);
+            }
         }
     }
     
@@ -140,6 +151,7 @@ public class ContactView extends ViewPart {
         manager.add(action1);
         manager.add(action2);
         manager.add(new Separator());
+        manager.add(exit);
         // manager.add(doubleClickAction);
         // drillDownAdapter.addNavigationActions(manager);
     }
@@ -147,6 +159,7 @@ public class ContactView extends ViewPart {
     private void makeActions() {
         action1 = new LoginAction(this);
         action2 = new SettingAction();
+        exit = new DisconnectAction();
         doubleClickAction = new Action() {
             public void run() {
                 Friend f = new Friend();

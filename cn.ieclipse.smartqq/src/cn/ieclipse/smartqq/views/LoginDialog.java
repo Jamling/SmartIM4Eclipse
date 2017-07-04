@@ -3,6 +3,8 @@ package cn.ieclipse.smartqq.views;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
@@ -22,8 +24,10 @@ import com.scienjus.smartqq.callback.LoginCallback;
 import com.scienjus.smartqq.model.UserInfo;
 
 import cn.ieclipse.smartqq.QQPlugin;
+import org.eclipse.swt.widgets.Text;
 
 public class LoginDialog extends Dialog {
+    private Text text;
     
     /**
      * Create the dialog.
@@ -51,49 +55,66 @@ public class LoginDialog extends Dialog {
         qrcode.setLayoutData(
                 new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1));
                 
-        QQPlugin.getDefault().login(new LoginCallback() {
-            
-            @Override
-            public void onQrcode(final String path) {
-                Display.getDefault().asyncExec(new Runnable() {
+        text = new Text(container, SWT.READ_ONLY | SWT.WRAP);
+        text.setForeground(SWTResourceManager.getColor(SWT.COLOR_RED));
+        text.setLayoutData(
+                new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+        new Thread() {
+            public void run() {
+                QQPlugin.getDefault().login(new LoginCallback() {
                     
                     @Override
-                    public void run() {
-                        if (qrcode.isDisposed()) {
-                            return;
-                        }
-                        Image image;
-                        try {
-                            image = new Image(Display.getDefault(),
-                                    new FileInputStream(path));
-                            Point p = qrcode.getParent().getSize();
-                            Rectangle p2 = image.getBounds();
-                            int x = (p.x - p2.width) >> 1;
-                            int y = (p.y - p2.height) >> 1;
+                    public void onQrcode(final String path) {
+                        Display.getDefault().asyncExec(new Runnable() {
                             
-                            Rectangle p3 = new Rectangle(x, y, p2.width,
-                                    p2.height);
-                            qrcode.setBounds(p3);
-                            qrcode.setImage(image);
-                        } catch (FileNotFoundException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        }
+                            @Override
+                            public void run() {
+                                if (qrcode.isDisposed()) {
+                                    return;
+                                }
+                                Image image;
+                                try {
+                                    image = new Image(Display.getDefault(),
+                                            new FileInputStream(path));
+                                    Point p = qrcode.getParent().getSize();
+                                    Rectangle p2 = image.getBounds();
+                                    int x = (p.x - p2.width) >> 1;
+                                    int y = (p.y - p2.height) >> 1;
+                                    
+                                    Rectangle p3 = new Rectangle(x, y, p2.width,
+                                            p2.height);
+                                    qrcode.setBounds(p3);
+                                    qrcode.setImage(image);
+                                } catch (FileNotFoundException e) {
+                                    // TODO Auto-generated catch block
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
                     }
-                });
-            }
-            
-            @Override
-            public void onLogin(UserInfo user) {
-                Display.getDefault().asyncExec(new Runnable() {
                     
                     @Override
-                    public void run() {
-                        close();
+                    public void onLogin(final boolean ok, final Exception e) {
+                        Display.getDefault().asyncExec(new Runnable() {
+                            
+                            @Override
+                            public void run() {
+                                if (ok) {
+                                    close();
+                                }
+                                else {
+                                    text.setText(e.toString());
+                                    IStatus info = new Status(IStatus.ERROR,
+                                            QQPlugin.PLUGIN_ID,
+                                            "登录失败" + e.toString());
+                                    QQPlugin.getDefault().getLog().log(info);
+                                }
+                            }
+                        });
                     }
                 });
-            }
-        });
+            };
+        }.start();
         
         return container;
     }

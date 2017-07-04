@@ -6,15 +6,17 @@ import java.nio.charset.Charset;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import com.alibaba.fastjson.JSONObject;
+import com.scienjus.smartqq.model.DefaultMessage;
 import com.scienjus.smartqq.model.DiscussFrom;
+import com.scienjus.smartqq.model.DiscussInfo;
 import com.scienjus.smartqq.model.DiscussMessage;
+import com.scienjus.smartqq.model.DiscussUser;
 import com.scienjus.smartqq.model.FriendFrom;
-import com.scienjus.smartqq.model.Group;
 import com.scienjus.smartqq.model.GroupFrom;
 import com.scienjus.smartqq.model.GroupInfo;
 import com.scienjus.smartqq.model.GroupMessage;
 import com.scienjus.smartqq.model.GroupUser;
-import com.scienjus.smartqq.model.Message;
+import com.scienjus.smartqq.model.MessageFrom;
 import com.scienjus.smartqq.model.UserInfo;
 
 import cn.ieclipse.smartqq.console.ChatConsole;
@@ -29,48 +31,47 @@ public class Robot {
         return (store.getBoolean(RobotPreferencePage.ROBOT_ENABLE));
     }
     
-    public static boolean atMe(GroupMessage m) {
-        if (m.at != null && !m.at.isEmpty()) {
-            try {
-                Group g = QQPlugin.getDefault().getClient()
-                        .getGroup(m.getGroupId());
-                GroupInfo info = QQPlugin.getDefault().getClient()
-                        .getGroupInfo(g);
+    public static boolean atMe(MessageFrom from, DefaultMessage m) {
+        if (m.getAts() != null) {
+            if (m instanceof GroupMessage) {
+                GroupInfo info = ((GroupFrom) from).getGroup();
                 UserInfo me = QQPlugin.getDefault().getClient()
                         .getAccountInfo();
-                if (info != null && me != null) {
-                    long uin = Long.parseLong(me.getUin());
-                    GroupUser me2 = info.getGroupUser(uin);
-                    if (me2 != null) {
-                        if (m.at.equals("@" + me2.getName())) {
-                            return true;
-                        }
-                    }
+                long uin = Long.parseLong(me.getUin());
+                GroupUser me2 = info.getGroupUser(uin);
+                if (m.hasAt(me2.getName()) || m.hasAt(me.getNick())) {
+                    return true;
                 }
-                
-                else if (me != null) {
-                    if (m.at.equals("@" + me.getNick())) {
-                        return true;
-                    }
+            }
+            
+            else if (m instanceof DiscussMessage) {
+                DiscussInfo info = ((DiscussFrom) from).getDiscuss();
+                UserInfo me = QQPlugin.getDefault().getClient()
+                        .getAccountInfo();
+                long uin = Long.parseLong(me.getUin());
+                DiscussUser me2 = info.getDiscussUser(uin);
+                if (m.hasAt(me2.getName()) || m.hasAt(me.getNick())) {
+                    return true;
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         }
         return false;
     }
     
-    public static void answer(FriendFrom from, Message m, ChatConsole console) {
+    public static void answer(MessageFrom from, DefaultMessage m,
+            ChatConsole console) {
         if (!isEnable()) {
             return;
         }
+        
         IPreferenceStore store = QQPlugin.getDefault().getPreferenceStore();
-        if (store.getBoolean(RobotPreferencePage.FRIEND_REPLY_ANY)) {
+        String robotName = store.getString(RobotPreferencePage.ROBOT_NAME);
+        // auto reply friend
+        if (from instanceof FriendFrom
+                && store.getBoolean(RobotPreferencePage.FRIEND_REPLY_ANY)) {
             String reply = getTuringReply(String.valueOf(m.getUserId()),
                     m.getContent());
             if (reply != null) {
-                String robotName = store
-                        .getString(RobotPreferencePage.ROBOT_NAME);
                 String input = robotName + reply;
                 if (console == null) {
                     QQPlugin.getDefault().getClient()
@@ -81,25 +82,14 @@ public class Robot {
                 }
             }
         }
-    }
-    
-    public static void answer(GroupFrom from, GroupMessage m,
-            ChatConsole console) {
-        if (!isEnable()) {
-            return;
-        }
         
-        IPreferenceStore store = QQPlugin.getDefault().getPreferenceStore();
-        String robotName = store.getString(RobotPreferencePage.ROBOT_NAME);
-        if (from.isNewbie()) {
+        // newbie
+        if (from.isNewbie() && from instanceof GroupFrom) {
+            GroupFrom gf = (GroupFrom) from;
             String welcome = store.getString(RobotPreferencePage.GROUP_WELCOME);
             if (welcome != null && !welcome.isEmpty()) {
-                Group g = QQPlugin.getDefault().getClient()
-                        .getGroup(m.getGroupId());
-                GroupInfo info = QQPlugin.getDefault().getClient()
-                        .getGroupInfo(g);
-                GroupUser gu = QQPlugin.getDefault().getClient()
-                        .getGroupUser(m);
+                GroupInfo info = gf.getGroup();
+                GroupUser gu = gf.getGroupUser();
                 String input = welcome;
                 if (gu != null) {
                     input = input.replaceAll("{user}", gu.getName());
@@ -112,13 +102,14 @@ public class Robot {
                 }
                 else {
                     QQPlugin.getDefault().getClient().sendMessageToGroup(
-                            m.getGroupId(), robotName + input);
+                            gf.getGroup().getGid(), robotName + input);
                 }
             }
             return;
         }
-        if (atMe(m)) {
-            String msg = m.getContent().replace(m.at, "");
+        // @
+        if (atMe(from, m)) {
+            String msg = m.getContent(true);
             String reply = getTuringReply(String.valueOf(m.getUserId()), msg);
             if (reply != null) {
                 String input = robotName + "@" + from.getName() + SEP + reply;
@@ -126,51 +117,41 @@ public class Robot {
                     console.post(input);
                 }
                 else {
-                    QQPlugin.getDefault().getClient()
-                            .sendMessageToGroup(m.getGroupId(), input);
+                    if (m instanceof GroupMessage) {
+                        QQPlugin.getDefault().getClient().sendMessageToGroup(
+                                ((GroupMessage) m).getGroupId(), input);
+                    }
+                    else if (m instanceof DiscussMessage) {
+                        QQPlugin.getDefault().getClient().sendMessageToDiscuss(
+                                ((DiscussMessage) m).getDiscussId(), input);
+                    }
                 }
             }
             return;
         }
+        // replay any
         if (store.getBoolean(RobotPreferencePage.GROUP_REPLY_ANY)) {
-            if (from.isNewbie() || from.isUnknow() || isMySend(m.getUserId())) {
+            if (from.isNewbie() || isMySend(m.getUserId())) {
                 return;
             }
             if (console == null) {
                 return;
             }
-            String reply = getTuringReply(String.valueOf(m.getUserId()),
-                    m.getContent());
-            if (reply != null) {
-                String input = robotName + "@" + from.getName() + SEP + reply;
-                if (console != null) {
-                    console.post(input);
+            
+            if (from instanceof FriendFrom) {
+                return;
+            }
+            else if (from instanceof GroupFrom) {
+                if (((GroupFrom) from).getGroupUser().isUnknown()) {
+                    return;
                 }
             }
-        }
-    }
-    
-    public static void answer(DiscussFrom from, DiscussMessage m,
-            ChatConsole console) {
-        if (!isEnable()) {
-            return;
-        }
-        
-        IPreferenceStore store = QQPlugin.getDefault().getPreferenceStore();
-        String robotName = store.getString(RobotPreferencePage.ROBOT_NAME);
-        // if (atMe(m)) {
-        // String msg = m.getContent().replace(m.at, "");
-        // reply(store, console, String.valueOf(m.getUserId()), msg,
-        // robotName + "@" + from.getName());
-        // return;
-        // }
-        if (store.getBoolean(RobotPreferencePage.GROUP_REPLY_ANY)) {
-            if (from.isNewbie() || from.isUnknow() || isMySend(m.getUserId())) {
-                return;
+            else if (from instanceof DiscussFrom) {
+                if (((DiscussFrom) from).getDiscussUser().isUnknown()) {
+                    return;
+                }
             }
-            if (console == null) {
-                return;
-            }
+            
             String reply = getTuringReply(String.valueOf(m.getUserId()),
                     m.getContent());
             if (reply != null) {

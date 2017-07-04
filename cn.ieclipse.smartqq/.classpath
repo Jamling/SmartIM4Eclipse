@@ -6,6 +6,6 @@
 	<classpathentry kind="src" path="test"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/smartqq"/>
 	<classpathentry kind="lib" path="libs/fastjson-1.2.7.jar" sourcepath="C:/Users/Jamling/.m2/repository/com/alibaba/fastjson/1.2.7/fastjson-1.2.7-sources.jar"/>
-	<classpathentry kind="lib" path="libs/requests-2.1.5.jar"/>
+	<classpathentry kind="lib" path="libs/requests-2.1.5.jar" sourcepath="C:/Users/Jamling/.m2/repository/net/dongliu/requests/2.1.5/requests-2.1.5-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

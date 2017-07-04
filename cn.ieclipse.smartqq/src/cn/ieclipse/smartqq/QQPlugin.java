@@ -16,6 +16,7 @@ import org.osgi.framework.BundleContext;
 import com.scienjus.smartqq.callback.LoginCallback;
 import com.scienjus.smartqq.callback.MessageCallback2;
 import com.scienjus.smartqq.client.SmartClient;
+import com.scienjus.smartqq.model.DefaultMessage;
 import com.scienjus.smartqq.model.Discuss;
 import com.scienjus.smartqq.model.DiscussFrom;
 import com.scienjus.smartqq.model.DiscussMessage;
@@ -24,6 +25,7 @@ import com.scienjus.smartqq.model.Group;
 import com.scienjus.smartqq.model.GroupFrom;
 import com.scienjus.smartqq.model.GroupMessage;
 import com.scienjus.smartqq.model.Message;
+import com.scienjus.smartqq.model.MessageFrom;
 import com.scienjus.smartqq.model.Recent;
 
 import cn.ieclipse.smartqq.console.ChatConsole;
@@ -96,7 +98,7 @@ public class QQPlugin extends AbstractUIPlugin {
     private SmartClient client;
     
     public SmartClient getClient() {
-        if (client == null) {
+        if (client == null || client.isClose()) {
             client = new SmartClient();
         }
         return client;
@@ -113,54 +115,29 @@ public class QQPlugin extends AbstractUIPlugin {
     public void start() {
         MessageCallback2 callback = new MessageCallback2() {
             
+            private ChatConsole lastConsole;
             @Override
-            public void onMessage(final Message message,
-                    final FriendFrom from) {
+            public void onReceiveMessage(DefaultMessage message,
+                    MessageFrom from) {
                 ChatConsole console = QQPlugin.getDefault()
-                        .findConsole(from.getFriend(), false);
-                Recent r = getClient().getRecent(0, message.getUserId());
-                
+                        .findConsole(from.getFrom(), false);
                 if (console != null) {
-                    console.write(String.format("%s %s: %s",
-                            new SimpleDateFormat("HH:mm:ss")
-                                    .format(message.getTime()),
-                            from.getName(), message.getContent()));
+                    String time = new SimpleDateFormat("HH:mm:ss")
+                            .format(message.getTime());
+                    String name = from.getName();
+                    String msg = String.format("%s %s: %s", time, name,
+                            message.getContent());
+                    console.write(msg);
+                    lastConsole = console;
                 }
                 Robot.answer(from, message, console);
             }
             
             @Override
-            public void onGroupMessage(final GroupMessage message,
-                    final GroupFrom from) {
-                Group g = getClient().getGroup(message.getGroupId());
-                String name = from.getName();
-                
-                ChatConsole console = QQPlugin.getDefault().findConsole(g,
-                        false);
-                if (console != null) {
-                    console.write(String.format("%s %s: %s",
-                            new SimpleDateFormat("HH:mm:ss")
-                                    .format(message.getTime()),
-                            name, message.getContent()));
+            public void onReceiveError(Throwable e) {
+                if (lastConsole != null){
+                    lastConsole.error(e);
                 }
-                Robot.answer(from, message, console);
-            }
-            
-            @Override
-            public void onDiscussMessage(final DiscussMessage message,
-                    final DiscussFrom from) {
-                Discuss g = getClient().getDiscuss(message.getDiscussId());
-                String name = from.getName();
-                
-                ChatConsole console = QQPlugin.getDefault().findConsole(g,
-                        false);
-                if (console != null) {
-                    console.write(String.format("%s %s: %s",
-                            new SimpleDateFormat("HH:mm:ss")
-                                    .format(message.getTime()),
-                            name, message.getContent()));
-                }
-                Robot.answer(from, message, console);
             }
         };
         getClient().setCallback(callback);
@@ -171,6 +148,25 @@ public class QQPlugin extends AbstractUIPlugin {
         IViewPart view = getWorkbench().getActiveWorkbenchWindow()
                 .getActivePage().findView(ContactView.ID);
         return (ContactView) view;
+    }
+    
+    public ChatConsole getChatConsole(boolean show) {
+        IConsoleManager manager = ConsolePlugin.getDefault()
+                .getConsoleManager();
+                
+        IConsole[] existing = manager.getConsoles();
+        
+        ChatConsole console = null;
+        for (int i = 0; i < existing.length; i++) {
+            if (existing[i] instanceof ChatConsole) {
+                console = (ChatConsole) existing[i];
+                break;
+            }
+        }
+        if (console != null && show) {
+            manager.showConsoleView(console);
+        }
+        return console;
     }
     
     public ChatConsole findConsole(Object obj, boolean add) {

@@ -1,6 +1,7 @@
 package cn.ieclipse.smartqq.console;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.NoSuchElementException;
@@ -320,5 +321,9 @@ public class ChatConsole extends IOConsole {
     
     public TextConsolePage getPage() {
         return page;
+    }
+    
+    public void error(Throwable e) {
+        e.printStackTrace(new PrintStream(errorStream));
     }
 }
