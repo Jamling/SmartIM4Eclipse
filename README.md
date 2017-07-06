@@ -1,8 +1,13 @@
 [![GitHub release](https://img.shields.io/github/release/jamling/SmartQQ4Eclipse.svg?maxAge=3600)](https://github.com/Jamling/SmartQQ4Eclipse)
 
 ## SmartQQ4Eclipse
+
+![screenshot](https://raw.githubusercontent.com/Jamling/SmartQQ4Eclipse/master/main.png)
+![screenshot](https://raw.githubusercontent.com/Jamling/SmartQQ4Eclipse/master/chat.png)
+
 Eclipse上的SmartQQ插件，防Boss利器，让你可以在eclipse中使用QQ进行聊天
-Intellij IDEA上的插件请稳步这里: https://github.com/Jamling/SmartQQ4Intellij
+
+Intellij IDEA上的插件请移步这里: https://github.com/Jamling/SmartQQ4, 支持所有的Intellij IDE哦，包含Android Studio, WebStrom等
 
 ## 功能
 - 收发文本消息
@@ -18,6 +23,8 @@ Intellij IDEA上的插件请稳步这里: https://github.com/Jamling/SmartQQ4Int
 2. 输入SmartQQ搜索
 3. 点击Install安装
 
+**推荐使用Eclipse Martplace安装**
+
 ### Install New Software
 
 1. 点击Eclipse->Help->Install New Software...搜索插件
@@ -25,11 +32,9 @@ Intellij IDEA上的插件请稳步这里: https://github.com/Jamling/SmartQQ4Int
 3. 选中SmartQQ，并取消勾选"Contact all update site during install to find required software"
 4. 点击底部Next按钮继续安装
 
-**推荐使用Eclipse Martplace安装**
-
 ## 使用
 
-1. 点击Windows->Show view，找到SmartQQ下的Smart双击打开
+1. 点击Windows->Show view，找到SmartQQ下的Smart双击打开Smart视图
 2. 点击视图工具栏或菜单栏中的同步图标进行登录
 3. 使用手机QQ扫描二维码
 4. 验证成功后，等待拉取最近消息，好友及群组列表
