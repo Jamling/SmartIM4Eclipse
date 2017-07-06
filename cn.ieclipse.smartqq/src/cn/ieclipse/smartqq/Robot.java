@@ -2,6 +2,7 @@ package cn.ieclipse.smartqq;
 
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.util.concurrent.TimeUnit;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 
@@ -21,7 +22,10 @@ import com.scienjus.smartqq.model.UserInfo;
 
 import cn.ieclipse.smartqq.console.ChatConsole;
 import cn.ieclipse.smartqq.preferences.RobotPreferencePage;
-import net.dongliu.requests.Requests;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 
 public class Robot {
     private static final String SEP = " ";
@@ -184,8 +188,16 @@ public class Robot {
                 body.put("key", key);
                 body.put("userid", userId);
                 body.put("info", info);
-                String json = Requests.post(url).data(body.toJSONString())
-                        .timeout(3000).text(Charset.forName("utf-8")).getBody();
+                OkHttpClient client = new OkHttpClient.Builder()
+                        .connectTimeout(3, TimeUnit.SECONDS).build();
+                Request request = new Request.Builder().url(url)
+                        .post(RequestBody.create(
+                                MediaType.parse("application/json"),
+                                body.toJSONString()))
+                        .build();
+                String json = client.newCall(request).execute().body().string();
+                // String json = Requests.post(url).data(body.toJSONString())
+                // .timeout(3000).text(Charset.forName("utf-8")).getBody();
                 JSONObject obj = JSONObject.parseObject(json);
                 if (obj != null && obj.containsKey("text")) {
                     // if (100000 == obj.getIntValue("code")) {

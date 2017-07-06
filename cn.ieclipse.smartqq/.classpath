@@ -5,7 +5,9 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/smartqq"/>
-	<classpathentry kind="lib" path="libs/fastjson-1.2.7.jar" sourcepath="C:/Users/Jamling/.m2/repository/com/alibaba/fastjson/1.2.7/fastjson-1.2.7-sources.jar"/>
-	<classpathentry kind="lib" path="libs/requests-2.1.5.jar" sourcepath="C:/Users/Jamling/.m2/repository/net/dongliu/requests/2.1.5/requests-2.1.5-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/fastjson-1.2.7.jar" sourcepath="C:/Users/Jamling/.m2/repository/com/alibaba/fastjson/1.2.7/fastjson-1.2.7-sources.jar"/>
+	<classpathentry kind="lib" path="libs/okhttp-3.8.1.jar" sourcepath="C:/Users/Jamling/.m2/repository/com/squareup/okhttp3/okhttp/3.8.1/okhttp-3.8.1-sources.jar"/>
+	<classpathentry kind="lib" path="libs/okio-1.13.0.jar"/>
+	<classpathentry kind="lib" path="libs/smartqq.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

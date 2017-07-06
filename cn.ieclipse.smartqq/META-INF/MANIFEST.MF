@@ -14,12 +14,6 @@ Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
  libs/smartqq.jar,
  libs/fastjson-1.2.7.jar,
- libs/httpmime-4.5.1.jar,
- libs/jcl-over-slf4j-1.7.7.jar,
- libs/requests-2.1.5.jar,
- libs/commons-codec-1.9.jar,
- libs/httpclient-4.5.1.jar,
- libs/httpcore-4.4.3.jar,
  libs/log4j-1.2.17.jar,
- libs/slf4j-api-1.7.7.jar,
- swing2swt.jar
+ libs/okhttp-3.8.1.jar,
+ libs/okio-1.13.0.jar
