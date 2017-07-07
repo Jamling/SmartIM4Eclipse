@@ -7,7 +7,7 @@
 
 Eclipse上的SmartQQ插件，防Boss利器，让你可以在eclipse中使用QQ进行聊天
 
-Intellij IDEA上的插件请移步这里: https://github.com/Jamling/SmartQQ4, 支持所有的Intellij IDE哦，包含Android Studio, WebStrom等
+Intellij IDEA上的插件请移步这里: https://github.com/Jamling/SmartQQ4IntelliJ, 支持所有的Intellij IDE哦，包含Android Studio, WebStrom等
 
 ## 功能
 - 收发文本消息
