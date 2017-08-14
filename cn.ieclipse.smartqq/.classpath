@@ -9,5 +9,6 @@
 	<classpathentry kind="lib" path="libs/okhttp-3.8.1.jar" sourcepath="C:/Users/Jamling/.m2/repository/com/squareup/okhttp3/okhttp/3.8.1/okhttp-3.8.1-sources.jar"/>
 	<classpathentry kind="lib" path="libs/okio-1.13.0.jar"/>
 	<classpathentry kind="lib" path="libs/smartqq.jar"/>
+	<classpathentry kind="lib" path="libs/qiniu-java-sdk-7.2.7.jar" sourcepath="C:/Users/Jamling/.m2/repository/com/qiniu/qiniu-java-sdk/7.2.7/qiniu-java-sdk-7.2.7-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

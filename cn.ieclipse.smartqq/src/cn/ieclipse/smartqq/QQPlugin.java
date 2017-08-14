@@ -13,6 +13,7 @@ import org.eclipse.ui.console.IConsoleManager;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import com.scienjus.smartqq.QNUploader;
 import com.scienjus.smartqq.callback.LoginCallback;
 import com.scienjus.smartqq.callback.MessageCallback2;
 import com.scienjus.smartqq.client.SmartClient;
@@ -96,12 +97,20 @@ public class QQPlugin extends AbstractUIPlugin {
     
     // -------->
     private SmartClient client;
+    private QNUploader uploader;
     
     public SmartClient getClient() {
         if (client == null || client.isClose()) {
             client = new SmartClient();
         }
         return client;
+    }
+    
+    public QNUploader getUploader() {
+        if (uploader == null) {
+            uploader = new QNUploader();
+        }
+        return uploader;
     }
     
     public boolean isLogin() {
@@ -135,7 +144,7 @@ public class QQPlugin extends AbstractUIPlugin {
             
             @Override
             public void onReceiveError(Throwable e) {
-                if (lastConsole != null){
+                if (lastConsole != null && e != null){
                     lastConsole.error(e);
                 }
             }

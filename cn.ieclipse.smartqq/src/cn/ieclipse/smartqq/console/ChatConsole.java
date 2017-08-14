@@ -1,5 +1,6 @@
 package cn.ieclipse.smartqq.console;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
@@ -7,6 +8,7 @@ import java.util.Date;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
@@ -25,6 +27,9 @@ import org.eclipse.ui.console.TextConsolePage;
 import org.eclipse.ui.part.IPageBookViewPage;
 import org.eclipse.wb.swt.SWTResourceManager;
 
+import com.scienjus.smartqq.QNUploader;
+import com.scienjus.smartqq.QNUploader.AuthInfo;
+import com.scienjus.smartqq.QNUploader.UploadInfo;
 import com.scienjus.smartqq.model.Discuss;
 import com.scienjus.smartqq.model.DiscussMessage;
 import com.scienjus.smartqq.model.Friend;
@@ -33,6 +38,8 @@ import com.scienjus.smartqq.model.GroupMessage;
 import com.scienjus.smartqq.model.Message;
 
 import cn.ieclipse.smartqq.QQPlugin;
+import cn.ieclipse.smartqq.Utils;
+import cn.ieclipse.smartqq.preferences.QiniuPerferencePage;
 import cn.ieclipse.smartqq.views.ContactView;
 
 public class ChatConsole extends IOConsole {
@@ -127,7 +134,6 @@ public class ChatConsole extends IOConsole {
     }
     
     public void write(String msg) {
-        
         try {
             outputStream.write(msg + "\n");
         } catch (Exception e) {
@@ -160,6 +166,45 @@ public class ChatConsole extends IOConsole {
             QQPlugin.getDefault().getClient().sendMessageToDiscuss(d.getId(),
                     msg);
         }
+    }
+    
+    public void sendFile(final String file) {
+        final File f = new File(file);
+        new Thread() {
+            public void run() {
+                try {
+                    QNUploader uploader = QQPlugin.getDefault().getUploader();
+                    IPreferenceStore store = QQPlugin.getDefault()
+                            .getPreferenceStore();
+                    String ak = store.getString(QiniuPerferencePage.AK);
+                    String sk = store.getString(QiniuPerferencePage.SK);
+                    String bucket = store.getString(QiniuPerferencePage.BUCKET);
+                    String domain = store.getString(QiniuPerferencePage.DOMAIN);
+                    String qq = QQPlugin.getDefault().getClient()
+                            .getAccountInfo().getAccount();
+                    boolean enable = store
+                            .getBoolean(QiniuPerferencePage.ENABLE);
+                    boolean ts = store.getBoolean(QiniuPerferencePage.TS);
+                    if (!enable) {
+                        ak = "";
+                        sk = "";
+                    }
+                    UploadInfo info = uploader.upload(qq, f, ak, sk, bucket,
+                            null);
+                    String url = info.getUrl(domain, ts);
+                    
+                    String msg = String.format(
+                            "来自SmartQQ的文件: %s (大小%s), 点击链接%s查看",
+                            Utils.getName(file),
+                            Utils.formatFileSize(info.fsize), url);
+                    writeMine(msg);
+                    post(msg);
+                } catch (Exception e) {
+                    error("发送失败：" + e.getMessage());
+                }
+            };
+        }.start();
+        
     }
     
     public String readLine() {
@@ -325,5 +370,14 @@ public class ChatConsole extends IOConsole {
     
     public void error(Throwable e) {
         e.printStackTrace(new PrintStream(errorStream));
+    }
+    
+    public void error(String msg) {
+        try {
+            errorStream.write(msg);
+            errorStream.write('\n');
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -22,6 +22,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.PreferencesUtil;
 
 import cn.ieclipse.smartqq.preferences.HotKeyPreferencePage;
+import cn.ieclipse.smartqq.preferences.QiniuPerferencePage;
 import cn.ieclipse.smartqq.preferences.RobotPreferencePage;
 import cn.ieclipse.smartqq.preferences.SmartQQPreferencePage;
 
@@ -45,9 +46,11 @@ public class SettingAction extends Action {
         Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
                 .getShell();
         String pageId = SmartQQPreferencePage.class.getName();
-        String[] ids = { pageId, HotKeyPreferencePage.class.getName(),
+        String[] ids = { pageId, 
                 SmartQQPreferencePage.class.getName(),
-                RobotPreferencePage.class.getName() };
+                HotKeyPreferencePage.class.getName(),
+                RobotPreferencePage.class.getName(),
+                QiniuPerferencePage.class.getName() };
         PreferencesUtil.createPreferenceDialogOn(shell, pageId, ids, null)
                 .open();
     }

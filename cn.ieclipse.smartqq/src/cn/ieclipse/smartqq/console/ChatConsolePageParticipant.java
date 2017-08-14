@@ -23,6 +23,7 @@ import org.eclipse.ui.console.IConsolePageParticipant;
 import org.eclipse.ui.console.actions.CloseConsoleAction;
 import org.eclipse.ui.part.IPageBookViewPage;
 
+import cn.ieclipse.smartqq.actions.FileAction;
 import cn.ieclipse.smartqq.actions.NextChatAction;
 import cn.ieclipse.smartqq.actions.PrevChatAction;
 import cn.ieclipse.smartqq.actions.SendAction;
@@ -53,6 +54,8 @@ public class ChatConsolePageParticipant implements IConsolePageParticipant {
         action = new PrevChatAction((ChatConsole) console);
         actionBars.getToolBarManager().appendToGroup(group, action);
         action = new NextChatAction((ChatConsole) console);
+        actionBars.getToolBarManager().appendToGroup(group, action);
+        action = new FileAction((ChatConsole) console);
         actionBars.getToolBarManager().appendToGroup(group, action);
     }
     

@@ -50,6 +50,14 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
         store.setDefault(RobotPreferencePage.GROUP_WELCOME, Messages.PreferenceInitializer_robot_group_welcome);
         store.setDefault(RobotPreferencePage.GROUP_REPLY_ANY, false);
         store.setDefault(RobotPreferencePage.FRIEND_REPLY_ANY, false);
+        
+        store.setDefault(QiniuPerferencePage.ENABLE, false);
+        store.setDefault(QiniuPerferencePage.TS, false);
+        store.setDefault(QiniuPerferencePage.AK, "");
+        store.setDefault(QiniuPerferencePage.SK, "");
+        store.setDefault(QiniuPerferencePage.ZONE, "autoZone");
+        store.setDefault(QiniuPerferencePage.BUCKET, "");
+        store.setDefault(QiniuPerferencePage.DOMAIN, "");
     }
     
 }

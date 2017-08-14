@@ -37,21 +37,27 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            category="cn.ieclipse.smartqq.preferences.SmartQQPreferencePage"
-            class="cn.ieclipse.smartqq.preferences.HotKeyPreferencePage"
-            id="cn.ieclipse.smartqq.preferences.HotKeyPreferencePage"
-            name="Hot keys">
-      </page>
-      <page
             class="cn.ieclipse.smartqq.preferences.SmartQQPreferencePage"
             id="cn.ieclipse.smartqq.preferences.SmartQQPreferencePage"
             name="SmartQQ">
       </page>
       <page
             category="cn.ieclipse.smartqq.preferences.SmartQQPreferencePage"
+            class="cn.ieclipse.smartqq.preferences.HotKeyPreferencePage"
+            id="cn.ieclipse.smartqq.preferences.HotKeyPreferencePage"
+            name="Hot keys">
+      </page>
+      <page
+            category="cn.ieclipse.smartqq.preferences.SmartQQPreferencePage"
             class="cn.ieclipse.smartqq.preferences.RobotPreferencePage"
             id="cn.ieclipse.smartqq.preferences.RobotPreferencePage"
             name="Robot">
+      </page>
+      <page
+            category="cn.ieclipse.smartqq.preferences.SmartQQPreferencePage"
+            class="cn.ieclipse.smartqq.preferences.QiniuPerferencePage"
+            id="cn.ieclipse.smartqq.preferences.QiniuPerferencePage"
+            name="File Upload">
       </page>
    </extension>
 

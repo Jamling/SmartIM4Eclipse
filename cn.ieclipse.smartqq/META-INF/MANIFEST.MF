@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: SmartQQ
 Bundle-SymbolicName: cn.ieclipse.smartqq;singleton:=true
-Bundle-Version: 1.0.4
+Bundle-Version: 1.0.6
 Bundle-Activator: cn.ieclipse.smartqq.QQPlugin
 Bundle-Vendor: ieclipse.cn
 Require-Bundle: org.eclipse.ui,
@@ -16,4 +16,7 @@ Bundle-ClassPath: .,
  libs/fastjson-1.2.7.jar,
  libs/log4j-1.2.17.jar,
  libs/okhttp-3.8.1.jar,
- libs/okio-1.13.0.jar
+ libs/okio-1.13.0.jar,
+ libs/gson-2.6.2.jar,
+ libs/happy-dns-java-0.1.4.jar,
+ libs/qiniu-java-sdk-7.2.7.jar
