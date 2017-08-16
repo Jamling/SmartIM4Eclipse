@@ -14,7 +14,7 @@ Intellij IDEA上的插件请移步这里: https://github.com/Jamling/SmartQQ4Int
 - 热键设定
 - 一键关闭
 - 支持图灵机器人接入
-- 支持发送文件（v1.0.6）
+- [支持发送文件](http://api.ieclipse.cn/smartqq/)（v1.0.6）
 
 ## 安装
 
