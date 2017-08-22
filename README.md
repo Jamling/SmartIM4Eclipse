@@ -10,11 +10,21 @@ Eclipse上的SmartQQ插件，防Boss利器，让你可以在eclipse中使用QQ�
 Intellij IDEA上的插件请移步这里: https://github.com/Jamling/SmartQQ4IntelliJ, 支持所有的Intellij IDE哦，包含Android Studio, WebStrom等
 
 ## 功能
-- 收发文本消息
+
+特色功能
+
 - 热键设定
 - 一键关闭
 - 支持图灵机器人接入
-- [支持发送文件](http://api.ieclipse.cn/smartqq/)（v1.0.6）
+
+|Feature           |Origin     | Eclipse    | IntelliJ    |
+| ---------------- |:---------:|:----------:|:-----------:|
+| 文本消息          | yes       |          X | X         |
+| 表情              | yes (系统表情)|   X| X |
+| 图灵QQ机器人        | X       |          yes | X|
+| [发送文件](http://api.ieclipse.cn/smartqq/)        | X       |          yes | O 不支工程文件快捷发送|
+| 消息群发        | X       |          yes | X|
+| 代码评审        | X       |          yes | X|
 
 ## 安装
 
