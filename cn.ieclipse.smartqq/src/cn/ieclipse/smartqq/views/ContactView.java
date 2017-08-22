@@ -9,6 +9,8 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.layout.TreeColumnLayout;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -17,17 +19,22 @@ import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.part.DrillDownAdapter;
+import org.eclipse.ui.part.IShowInTarget;
+import org.eclipse.ui.part.ShowInContext;
 import org.eclipse.ui.part.ViewPart;
 
 import com.scienjus.smartqq.model.Friend;
 
 import cn.ieclipse.smartqq.QQPlugin;
+import cn.ieclipse.smartqq.Utils;
+import cn.ieclipse.smartqq.actions.BroadcastAction;
 import cn.ieclipse.smartqq.actions.DisconnectAction;
 import cn.ieclipse.smartqq.actions.LoginAction;
 import cn.ieclipse.smartqq.actions.SettingAction;
 import cn.ieclipse.smartqq.adapter.FriendAdapter;
+import cn.ieclipse.smartqq.console.ChatConsole;
 
-public class ContactView extends ViewPart {
+public class ContactView extends ViewPart implements IShowInTarget {
     
     /**
      * The ID of the view as specified by the extension.
@@ -37,6 +44,7 @@ public class ContactView extends ViewPart {
     private Action action1;
     private Action action2;
     private Action exit;
+    private Action broadcast;
     private Action doubleClickAction;
     
     private TreeViewer ftvFriend;
@@ -63,7 +71,7 @@ public class ContactView extends ViewPart {
         Composite composite1 = new Composite(tabFolder, SWT.NONE);
         tiRecents.setControl(composite1);
         composite1.setLayout(new TreeColumnLayout());
-        ftvRecent = new TreeViewer(composite1);
+        ftvRecent = new TreeViewer(composite1, SWT.NONE);
         new FriendAdapter(ftvRecent);
         
         TabItem tiFriends = new TabItem(tabFolder, SWT.NONE);
@@ -79,7 +87,7 @@ public class ContactView extends ViewPart {
         Composite composite3 = new Composite(tabFolder, SWT.NONE);
         tiGroups.setControl(composite3);
         composite3.setLayout(new TreeColumnLayout());
-        ftvGroup = new TreeViewer(composite3);
+        ftvGroup = new TreeViewer(composite3, SWT.NONE);
         new FriendAdapter(ftvGroup);
         
         TabItem tiDiscuss = new TabItem(tabFolder, SWT.NONE);
@@ -87,7 +95,7 @@ public class ContactView extends ViewPart {
         Composite composite4 = new Composite(tabFolder, SWT.NONE);
         tiDiscuss.setControl(composite4);
         composite4.setLayout(new TreeColumnLayout());
-        ftvDiscuss = new TreeViewer(composite4);
+        ftvDiscuss = new TreeViewer(composite4, SWT.NONE);
         new FriendAdapter(ftvDiscuss);
         
         makeActions();
@@ -140,8 +148,10 @@ public class ContactView extends ViewPart {
     
     private void fillContextMenu(IMenuManager manager) {
         manager.add(action1);
-        manager.add(action2);
+        manager.add(exit);
         manager.add(new Separator());
+        manager.add(broadcast);
+        manager.add(action2);
         // drillDownAdapter.addNavigationActions(manager);
         // Other plug-ins can contribute there actions here
         manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
@@ -149,9 +159,10 @@ public class ContactView extends ViewPart {
     
     private void fillLocalToolBar(IToolBarManager manager) {
         manager.add(action1);
-        manager.add(action2);
-        manager.add(new Separator());
         manager.add(exit);
+        manager.add(new Separator());
+        manager.add(broadcast);
+        manager.add(action2);
         // manager.add(doubleClickAction);
         // drillDownAdapter.addNavigationActions(manager);
     }
@@ -160,11 +171,14 @@ public class ContactView extends ViewPart {
         action1 = new LoginAction(this);
         action2 = new SettingAction();
         exit = new DisconnectAction();
+        broadcast = new BroadcastAction();
         doubleClickAction = new Action() {
             public void run() {
                 Friend f = new Friend();
+                f.setUserId(System.currentTimeMillis());
                 f.setMarkname("Test" + System.currentTimeMillis());
-                QQPlugin.getDefault().findConsole(f, true);
+                ChatConsole console = QQPlugin.getDefault().findConsole(f, true);
+                console.write(Utils.formatMsg(System.currentTimeMillis(), "明月", "我的未来不是梦http://www.baidu.com咕咕"));
             }
         };
         doubleClickAction.setText("Test");
@@ -182,5 +196,15 @@ public class ContactView extends ViewPart {
      */
     public void setFocus() {
     
+    }
+
+    @Override
+    public boolean show(ShowInContext context) {
+        ISelection sel = context.getSelection();
+        if (sel instanceof IStructuredSelection) {
+            Object obj = ((IStructuredSelection) sel).getFirstElement();
+            return true;
+        }
+        return false;
     }
 }

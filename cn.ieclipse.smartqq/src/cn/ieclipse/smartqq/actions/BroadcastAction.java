@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2015 ieclipse.cn.
+ * Copyright 2014-2017 ieclipse.cn.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,38 +16,32 @@
 package cn.ieclipse.smartqq.actions;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.swt.widgets.Shell;
 
 import cn.ieclipse.smartqq.QQPlugin;
-import cn.ieclipse.smartqq.views.ContactView;
-import cn.ieclipse.smartqq.views.LoginDialog;
+import cn.ieclipse.smartqq.views.BroadcastDialog;
 
 /**
  * 类/接口描述
  * 
  * @author Jamling
- * @date 2017年6月20日
+ * @date 2017年8月22日
  *       
  */
-public class LoginAction extends Action {
-    ContactView fView;
+public class BroadcastAction extends Action {
     
-    public LoginAction(ContactView view) {
-        super();
-        setText("Login");
-        setToolTipText("Click to show qrcode");
-        // setImageDescriptor(PlatformUI.getWorkbench().getSharedImages()
-        // .getImageDescriptor(ISharedImages.IMG_ELCL_SYNCED));
-        setImageDescriptor(
-                QQPlugin.getImageDescriptor("icons/qrcode.png"));
-        this.fView = view;
+    public BroadcastAction() {
+        setText("&BroadCast");
+        setToolTipText("Broadcast message to SmartQQ group/discuss/friends");
+        setImageDescriptor(QQPlugin.getImageDescriptor("icons/broadcast.png"));
     }
     
     @Override
     public void run() {
-        if (fView != null) {
-            LoginDialog dialog = new LoginDialog(fView.getSite().getShell());
+        if (QQPlugin.getDefault().getClient().isLogin()) {
+            BroadcastDialog dialog = new BroadcastDialog(new Shell());
             dialog.open();
-            fView.initFriends();
         }
     }
+    
 }

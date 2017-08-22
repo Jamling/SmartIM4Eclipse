@@ -3,8 +3,6 @@ package cn.ieclipse.smartqq.console;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -28,7 +26,6 @@ import org.eclipse.ui.part.IPageBookViewPage;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.scienjus.smartqq.QNUploader;
-import com.scienjus.smartqq.QNUploader.AuthInfo;
 import com.scienjus.smartqq.QNUploader.UploadInfo;
 import com.scienjus.smartqq.model.Discuss;
 import com.scienjus.smartqq.model.DiscussMessage;
@@ -135,19 +132,18 @@ public class ChatConsole extends IOConsole {
     
     public void write(String msg) {
         try {
-            outputStream.write(msg + "\n");
+            outputStream.write(msg);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
     
     public void writeMine(String input) {
-        String msg = String.format("%s %s: %s",
-                new SimpleDateFormat("HH:mm:ss").format(new Date()), "me",
-                input);
+        String name = QQPlugin.getDefault().getClient().getAccountInfo()
+                .getAccount();
+        String msg = Utils.formatMsg(System.currentTimeMillis(), name, input);
         try {
             mineStream.write(msg);
-            mineStream.write('\n');
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -344,6 +340,7 @@ public class ChatConsole extends IOConsole {
             page.hideView(view);
         }
     }
+    
     
     public void activeInput() {
         final StyledText text = getPage().getViewer().getTextWidget();

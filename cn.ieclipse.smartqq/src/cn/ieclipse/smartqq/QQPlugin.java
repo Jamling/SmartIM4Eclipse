@@ -1,6 +1,5 @@
 package cn.ieclipse.smartqq;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,16 +17,7 @@ import com.scienjus.smartqq.callback.LoginCallback;
 import com.scienjus.smartqq.callback.MessageCallback2;
 import com.scienjus.smartqq.client.SmartClient;
 import com.scienjus.smartqq.model.DefaultMessage;
-import com.scienjus.smartqq.model.Discuss;
-import com.scienjus.smartqq.model.DiscussFrom;
-import com.scienjus.smartqq.model.DiscussMessage;
-import com.scienjus.smartqq.model.FriendFrom;
-import com.scienjus.smartqq.model.Group;
-import com.scienjus.smartqq.model.GroupFrom;
-import com.scienjus.smartqq.model.GroupMessage;
-import com.scienjus.smartqq.model.Message;
 import com.scienjus.smartqq.model.MessageFrom;
-import com.scienjus.smartqq.model.Recent;
 
 import cn.ieclipse.smartqq.console.ChatConsole;
 import cn.ieclipse.smartqq.views.ContactView;
@@ -98,6 +88,7 @@ public class QQPlugin extends AbstractUIPlugin {
     // -------->
     private SmartClient client;
     private QNUploader uploader;
+    public IConsole console;
     
     public SmartClient getClient() {
         if (client == null || client.isClose()) {
@@ -125,16 +116,15 @@ public class QQPlugin extends AbstractUIPlugin {
         MessageCallback2 callback = new MessageCallback2() {
             
             private ChatConsole lastConsole;
+            
             @Override
             public void onReceiveMessage(DefaultMessage message,
                     MessageFrom from) {
                 ChatConsole console = QQPlugin.getDefault()
                         .findConsole(from.getFrom(), false);
                 if (console != null) {
-                    String time = new SimpleDateFormat("HH:mm:ss")
-                            .format(message.getTime());
                     String name = from.getName();
-                    String msg = String.format("%s %s: %s", time, name,
+                    String msg = Utils.formatMsg(message.getTime(), name,
                             message.getContent());
                     console.write(msg);
                     lastConsole = console;
@@ -144,7 +134,7 @@ public class QQPlugin extends AbstractUIPlugin {
             
             @Override
             public void onReceiveError(Throwable e) {
-                if (lastConsole != null && e != null){
+                if (lastConsole != null && e != null) {
                     lastConsole.error(e);
                 }
             }
@@ -174,6 +164,7 @@ public class QQPlugin extends AbstractUIPlugin {
         }
         if (console != null && show) {
             manager.showConsoleView(console);
+            this.console = console;
         }
         return console;
     }
@@ -197,6 +188,7 @@ public class QQPlugin extends AbstractUIPlugin {
         }
         if (console != null && enable) {
             manager.showConsoleView(console);
+            this.console = console;
         }
         return console;
     }
@@ -233,6 +225,7 @@ public class QQPlugin extends AbstractUIPlugin {
         }
         if (console != null) {
             manager.showConsoleView(console);
+            this.console = console;
         }
         return console;
     }
@@ -251,6 +244,7 @@ public class QQPlugin extends AbstractUIPlugin {
         if (!list.isEmpty()) {
             manager.removeConsoles(list.toArray(new IConsole[list.size()]));
         }
+        this.console = null;
     }
     
     public static void runOnUI(Runnable runnable) {

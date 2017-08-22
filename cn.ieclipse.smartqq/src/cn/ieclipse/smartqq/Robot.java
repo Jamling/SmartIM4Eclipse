@@ -1,7 +1,6 @@
 package cn.ieclipse.smartqq;
 
 import java.net.URLEncoder;
-import java.nio.charset.Charset;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.jface.preference.IPreferenceStore;

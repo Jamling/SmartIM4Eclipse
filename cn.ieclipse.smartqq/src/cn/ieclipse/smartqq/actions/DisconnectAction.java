@@ -16,15 +16,10 @@
 package cn.ieclipse.smartqq.actions;
 
 import org.eclipse.jface.action.Action;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.dialogs.PreferencesUtil;
 
 import cn.ieclipse.smartqq.QQPlugin;
-import cn.ieclipse.smartqq.preferences.HotKeyPreferencePage;
-import cn.ieclipse.smartqq.preferences.RobotPreferencePage;
-import cn.ieclipse.smartqq.preferences.SmartQQPreferencePage;
 
 /**
  * 类/接口描述

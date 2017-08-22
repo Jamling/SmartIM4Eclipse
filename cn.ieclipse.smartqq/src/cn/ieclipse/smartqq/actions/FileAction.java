@@ -16,15 +16,12 @@
 package cn.ieclipse.smartqq.actions;
 
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.wb.swt.ResourceManager;
 
 import cn.ieclipse.smartqq.console.ChatConsole;
-import cn.ieclipse.smartqq.views.LetterImageFactory;
 
 /**
  * 类/接口描述

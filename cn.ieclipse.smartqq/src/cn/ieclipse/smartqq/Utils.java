@@ -16,13 +16,14 @@
 package cn.ieclipse.smartqq;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 
 /**
  * 类/接口描述
  * 
  * @author Jamling
  * @date 2017年8月14日
- *      
+ *       
  */
 public class Utils {
     
@@ -31,7 +32,7 @@ public class Utils {
      *
      * @param path
      *            file path
-     *           
+     *            
      * @return file name
      */
     public static String getName(String path) {
@@ -52,5 +53,10 @@ public class Utils {
     
     public static boolean isEmpty(CharSequence text) {
         return text == null || text.length() == 0;
+    }
+    
+    public static String formatMsg(long time, String name, String msg) {
+        String s1 = new SimpleDateFormat("HH:mm:ss").format(time);
+        return String.format("%s %s: %s\n", s1, name, msg);
     }
 }

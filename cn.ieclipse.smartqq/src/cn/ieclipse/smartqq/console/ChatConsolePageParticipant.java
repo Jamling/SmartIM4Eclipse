@@ -26,6 +26,7 @@ import org.eclipse.ui.part.IPageBookViewPage;
 import cn.ieclipse.smartqq.actions.FileAction;
 import cn.ieclipse.smartqq.actions.NextChatAction;
 import cn.ieclipse.smartqq.actions.PrevChatAction;
+import cn.ieclipse.smartqq.actions.ProjectFileAction;
 import cn.ieclipse.smartqq.actions.SendAction;
 
 /**
@@ -56,6 +57,8 @@ public class ChatConsolePageParticipant implements IConsolePageParticipant {
         action = new NextChatAction((ChatConsole) console);
         actionBars.getToolBarManager().appendToGroup(group, action);
         action = new FileAction((ChatConsole) console);
+        actionBars.getToolBarManager().appendToGroup(group, action);
+        action = new ProjectFileAction((ChatConsole) console);
         actionBars.getToolBarManager().appendToGroup(group, action);
     }
     

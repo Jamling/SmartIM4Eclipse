@@ -29,6 +29,35 @@
       </consolePageParticipant>
    </extension>
    <extension
+         point="org.eclipse.ui.console.consolePatternMatchListeners">
+      <consolePatternMatchListener
+            class="cn.ieclipse.smartqq.console.SenderMatchDelegate"
+            id="cn.ieclipse.smartqq.consolePatternMatchListener1"
+            regex="\d{2}:\d{2}:\d{2} \S+: ">
+         <enablement>
+            <instanceof
+                  value="cn.ieclipse.smartqq.console.ChatConsole">
+            </instanceof></enablement>
+      </consolePatternMatchListener>
+      <consolePatternMatchListener
+            class="cn.ieclipse.smartqq.console.UrlMatchDelegate"
+            id="cn.ieclipse.smartqq.consolePatternMatchListener2"
+            regex="(https?|ftp|file)://[-a-zA-Z0-9+&amp;@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&amp;@#/%=~_|]">
+         <enablement>
+             <instanceof
+                  value="cn.ieclipse.smartqq.console.ChatConsole">
+            </instanceof>
+         </enablement>
+      </consolePatternMatchListener>
+      <consolePatternMatchListener
+            class="cn.ieclipse.smartqq.console.ReviewMatchDelegate"
+            id="cn.ieclipse.smartqq.consolePatternMatchListener3"
+            qualifier="Code: "
+            regex="Code: [\S]+:[\d]+ ">
+         <enablement></enablement>
+      </consolePatternMatchListener>
+   </extension>
+   <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
             class="cn.ieclipse.smartqq.preferences.PreferenceInitializer">
@@ -59,6 +88,33 @@
             id="cn.ieclipse.smartqq.preferences.QiniuPerferencePage"
             name="File Upload">
       </page>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:#AbstractTextEditorContext">
+         <command
+               commandId="cn.ieclipse.smartqq.command.CodeReview"
+               icon="icons/review.png"
+               label="Code Review"
+               style="push">
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            id="cn.ieclipse.smartqq.command.CodeReview"
+            name="Code Review">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="cn.ieclipse.smartqq.handlers.ReviewHandler"
+            commandId="cn.ieclipse.smartqq.command.CodeReview">
+      </handler>
    </extension>
 
 </plugin>
