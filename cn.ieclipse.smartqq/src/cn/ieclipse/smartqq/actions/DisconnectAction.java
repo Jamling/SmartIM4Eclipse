@@ -20,6 +20,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
 import cn.ieclipse.smartqq.QQPlugin;
+import cn.ieclipse.smartqq.views.ContactView;
 
 /**
  * 类/接口描述
@@ -29,7 +30,9 @@ import cn.ieclipse.smartqq.QQPlugin;
  *       
  */
 public class DisconnectAction extends Action {
-    public DisconnectAction() {
+    ContactView contactView;
+    public DisconnectAction(ContactView contactView) {
+        this.contactView = contactView;
         setText("Close");
         setToolTipText("Disconnect from server");
         setImageDescriptor(PlatformUI.getWorkbench().getSharedImages()
@@ -41,6 +44,8 @@ public class DisconnectAction extends Action {
         QQPlugin.getDefault().getClient().close();
         QQPlugin.getDefault().closeAllChat();
         QQPlugin.getDefault().enable = true;
-        
+        if (contactView != null) {
+            contactView.initFriends();
+        }
     }
 }

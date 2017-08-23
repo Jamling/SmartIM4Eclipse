@@ -164,6 +164,15 @@ public class ChatConsole extends IOConsole {
         }
     }
     
+    public void sendMsg(final String msg) {
+        writeMine(msg);
+        new Thread() {
+            public void run() {
+                post(msg);
+            };
+        }.start();
+    }
+    
     public void sendFile(final String file) {
         final File f = new File(file);
         new Thread() {
@@ -230,7 +239,7 @@ public class ChatConsole extends IOConsole {
         mineStream = newOutputStream();
         
         outputStream.setColor(SWTResourceManager.getColor(SWT.COLOR_BLACK));
-        inputStream.setColor(SWTResourceManager.getColor(SWT.COLOR_BLUE));
+        inputStream.setColor(SWTResourceManager.getColor(SWT.COLOR_BLACK));
         promptStream.setColor(
                 SWTResourceManager.getColor(SWT.COLOR_WIDGET_DARK_SHADOW));
         mineStream.setColor(SWTResourceManager.getColor(SWT.COLOR_DARK_BLUE));
@@ -340,7 +349,6 @@ public class ChatConsole extends IOConsole {
             page.hideView(view);
         }
     }
-    
     
     public void activeInput() {
         final StyledText text = getPage().getViewer().getTextWidget();

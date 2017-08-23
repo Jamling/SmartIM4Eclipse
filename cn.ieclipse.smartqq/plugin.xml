@@ -12,7 +12,7 @@
             allowMultiple="false"
             category="cn.ieclipse.smartqq"
             class="cn.ieclipse.smartqq.views.ContactView"
-            icon="icons/editor_area.png"
+            icon="icons/review.png"
             id="cn.ieclipse.smartqq.views.ContactView"
             name="Smart">
       </view>

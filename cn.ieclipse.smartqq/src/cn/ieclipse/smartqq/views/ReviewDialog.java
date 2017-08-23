@@ -133,7 +133,8 @@ public class ReviewDialog extends Dialog {
                         else {
                             consoles.remove(console);
                         }
-                        getButton(IDialogConstants.OK_ID).setEnabled(!consoles.isEmpty());
+                        getButton(IDialogConstants.OK_ID)
+                                .setEnabled(!consoles.isEmpty());
                     }
                 });
                 
@@ -156,7 +157,7 @@ public class ReviewDialog extends Dialog {
                 true);
         createButton(parent, IDialogConstants.CANCEL_ID,
                 IDialogConstants.CANCEL_LABEL, false);
-        
+                
         getButton(IDialogConstants.OK_ID).setEnabled(!consoles.isEmpty());
     }
     
@@ -165,9 +166,7 @@ public class ReviewDialog extends Dialog {
         String msg = String.format("%s(Reviews: %s)", text.getText(),
                 styledText.getText());
         for (ChatConsole console : consoles) {
-            console.write(
-                    Utils.formatMsg(System.currentTimeMillis(), "明月", msg));
-            System.out.println("send");
+            console.sendMsg(msg);
         }
         super.okPressed();
     }

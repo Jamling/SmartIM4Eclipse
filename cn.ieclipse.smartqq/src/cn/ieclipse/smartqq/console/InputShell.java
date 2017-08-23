@@ -112,12 +112,7 @@ public class InputShell extends Shell {
                 e.doit = false;
                 input = text.getText();
                 if (console != null && !input.isEmpty()) {
-                    console.writeMine(input);
-                    new Thread() {
-                        public void run() {
-                            console.post(input);
-                        };
-                    }.start();
+                    console.sendMsg(input);
                 }
                 text.setText("");
                 setVisible(false);

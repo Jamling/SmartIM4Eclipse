@@ -29,6 +29,9 @@ public class FriendAdapter {
             
             @Override
             public void doubleClick(DoubleClickEvent event) {
+                if (!QQPlugin.getDefault().getClient().isLogin()) {
+                    return;
+                }
                 IStructuredSelection isel = (IStructuredSelection) event
                         .getSelection();
                 Object obj = isel.getFirstElement();

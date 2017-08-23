@@ -17,11 +17,10 @@ package cn.ieclipse.smartqq.actions;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.SWT;
 import org.eclipse.wb.swt.ResourceManager;
 
+import cn.ieclipse.smartqq.QQPlugin;
 import cn.ieclipse.smartqq.console.ChatConsole;
-import cn.ieclipse.smartqq.views.LetterImageFactory;
 
 /**
  * 类/接口描述
@@ -37,9 +36,10 @@ public class SendAction extends Action {
         this.fConsole = console;
         setText("Input");
         setToolTipText("Input message");
-        ImageDescriptor image = ResourceManager
-                .getImageDescriptor("icons/editor_area.png");
-        image = LetterImageFactory.createDescriptor('I', SWT.COLOR_DARK_GRAY);
+        ImageDescriptor image = QQPlugin.getImageDescriptor("icons/type.png");
+        // image = LetterImageFactory.createDescriptor('I',
+        // SWT.COLOR_DARK_GRAY);
+        
         setImageDescriptor(image);
     }
     

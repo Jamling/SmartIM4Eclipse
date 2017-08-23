@@ -41,8 +41,8 @@ public class ContactView extends ViewPart implements IShowInTarget {
      */
     public static final String ID = "cn.ieclipse.smartqq.views.ContactView";
     private DrillDownAdapter drillDownAdapter;
-    private Action action1;
-    private Action action2;
+    private Action login;
+    private Action settings;
     private Action exit;
     private Action broadcast;
     private Action doubleClickAction;
@@ -122,6 +122,12 @@ public class ContactView extends ViewPart implements IShowInTarget {
                 QQPlugin.getDefault().getLog().log(info);
             }
         }
+        else {
+            ftvFriend.setInput(null);
+            ftvGroup.setInput(null);
+            ftvDiscuss.setInput(null);
+            ftvRecent.setInput(null);
+        }
     }
     
     private void hookContextMenu() {
@@ -141,44 +147,47 @@ public class ContactView extends ViewPart implements IShowInTarget {
     }
     
     private void fillLocalPullDown(IMenuManager manager) {
-        manager.add(action1);
+        manager.add(login);
         manager.add(new Separator());
-        manager.add(action2);
+        manager.add(settings);
     }
     
     private void fillContextMenu(IMenuManager manager) {
-        manager.add(action1);
+        manager.add(login);
         manager.add(exit);
         manager.add(new Separator());
         manager.add(broadcast);
-        manager.add(action2);
+        manager.add(settings);
         // drillDownAdapter.addNavigationActions(manager);
         // Other plug-ins can contribute there actions here
         manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
     }
     
     private void fillLocalToolBar(IToolBarManager manager) {
-        manager.add(action1);
+        manager.add(login);
         manager.add(exit);
         manager.add(new Separator());
         manager.add(broadcast);
-        manager.add(action2);
+        manager.add(settings);
         // manager.add(doubleClickAction);
         // drillDownAdapter.addNavigationActions(manager);
     }
     
     private void makeActions() {
-        action1 = new LoginAction(this);
-        action2 = new SettingAction();
-        exit = new DisconnectAction();
+        login = new LoginAction(this);
+        settings = new SettingAction();
+        exit = new DisconnectAction(this);
+        
         broadcast = new BroadcastAction();
         doubleClickAction = new Action() {
             public void run() {
                 Friend f = new Friend();
                 f.setUserId(System.currentTimeMillis());
                 f.setMarkname("Test" + System.currentTimeMillis());
-                ChatConsole console = QQPlugin.getDefault().findConsole(f, true);
-                console.write(Utils.formatMsg(System.currentTimeMillis(), "明月", "我的未来不是梦http://www.baidu.com咕咕"));
+                ChatConsole console = QQPlugin.getDefault().findConsole(f,
+                        true);
+                console.write(Utils.formatMsg(System.currentTimeMillis(), "明月",
+                        "我的未来不是梦http://www.baidu.com咕咕"));
             }
         };
         doubleClickAction.setText("Test");
@@ -197,7 +206,7 @@ public class ContactView extends ViewPart implements IShowInTarget {
     public void setFocus() {
     
     }
-
+    
     @Override
     public boolean show(ShowInContext context) {
         ISelection sel = context.getSelection();

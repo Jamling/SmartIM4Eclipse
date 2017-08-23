@@ -89,8 +89,13 @@ public class FriendContentProvider
             }
             return groups == null ? null : groups.toArray();
         }
-        List<Category> categories = QQPlugin.getDefault().getClient()
-                .getFriendListWithCategory();
-        return categories == null ? null : categories.toArray();
+        else if ("friend".equals(inputElement)) {
+            List<Category> categories = QQPlugin.getDefault().getClient()
+                    .getFriendListWithCategory();
+            return categories == null ? null : categories.toArray();
+        }
+        else {
+            return null;
+        }
     }
 }
