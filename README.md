@@ -2,8 +2,7 @@
 
 ## SmartQQ4Eclipse
 
-![screenshot](https://raw.githubusercontent.com/Jamling/SmartQQ4Eclipse/master/main.png)
-![screenshot](https://raw.githubusercontent.com/Jamling/SmartQQ4Eclipse/master/chat.png)
+![screenshot](https://raw.githubusercontent.com/Jamling/SmartQQ4Eclipse/master/screenshot.gif)
 
 Eclipse上的SmartQQ插件，防Boss利器，让你可以在eclipse中使用QQ进行聊天
 
