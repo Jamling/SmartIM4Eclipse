@@ -35,8 +35,8 @@ public class FileAction extends Action {
     
     public FileAction(ChatConsole console) {
         this.fConsole = console;
-        setText("Send file");
-        setToolTipText("Send image or file");
+        setText("Send File");
+        setToolTipText("Send file or paste file to chat console");
         setImageDescriptor(PlatformUI.getWorkbench().getSharedImages()
                 .getImageDescriptor(ISharedImages.IMG_OBJ_FILE));
     }

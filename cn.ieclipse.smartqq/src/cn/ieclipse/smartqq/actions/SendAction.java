@@ -17,7 +17,6 @@ package cn.ieclipse.smartqq.actions;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.wb.swt.ResourceManager;
 
 import cn.ieclipse.smartqq.QQPlugin;
 import cn.ieclipse.smartqq.console.ChatConsole;

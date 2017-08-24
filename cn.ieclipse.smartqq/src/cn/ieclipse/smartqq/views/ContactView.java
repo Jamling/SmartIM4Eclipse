@@ -169,7 +169,7 @@ public class ContactView extends ViewPart implements IShowInTarget {
         manager.add(new Separator());
         manager.add(broadcast);
         manager.add(settings);
-        // manager.add(doubleClickAction);
+        manager.add(doubleClickAction);
         // drillDownAdapter.addNavigationActions(manager);
     }
     

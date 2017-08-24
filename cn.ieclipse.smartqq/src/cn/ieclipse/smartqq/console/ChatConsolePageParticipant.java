@@ -16,13 +16,11 @@
 package cn.ieclipse.smartqq.console;
 
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.bindings.keys.KeyBinding;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.IConsoleConstants;
 import org.eclipse.ui.console.IConsolePageParticipant;
 import org.eclipse.ui.console.actions.CloseConsoleAction;
-import org.eclipse.ui.internal.KeyBindingService;
 import org.eclipse.ui.part.IPageBookViewPage;
 
 import cn.ieclipse.smartqq.actions.FileAction;

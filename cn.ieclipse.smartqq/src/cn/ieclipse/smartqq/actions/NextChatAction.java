@@ -35,8 +35,8 @@ public class NextChatAction extends Action {
     
     public NextChatAction(ChatConsole console) {
         this.fConsole = console;
-        setText("Next");
-        setToolTipText("Next chat");
+        setText("Next Chat");
+        setToolTipText("Next chat console");
         ImageDescriptor image = PlatformUI.getWorkbench().getSharedImages()
                 .getImageDescriptor(ISharedImages.IMG_TOOL_FORWARD_DISABLED);
         setImageDescriptor(image);

@@ -41,7 +41,6 @@ import org.eclipse.ui.console.IConsoleManager;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import cn.ieclipse.smartqq.QQPlugin;
-import cn.ieclipse.smartqq.Utils;
 import cn.ieclipse.smartqq.console.ChatConsole;
 import swing2swt.layout.FlowLayout;
 
@@ -191,9 +190,10 @@ public class ReviewDialog extends Dialog {
     }
     
     private void initData() {
-        if (ts != null && file != null) {
-            int line = ts.getStartLine() + 1;
-            String text = ts.getText();
+        if (file != null) {
+            int line = ts == null ? 0 : ts.getStartLine();
+            line++;
+            String text = ts == null ? "" : ts.getText();
             String msg = String.format("Code: %s:%s ", file.getFullPath(),
                     line);
             this.text.setText(msg);

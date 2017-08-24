@@ -39,7 +39,7 @@ public class ProjectFileAction extends Action {
     public ProjectFileAction(ChatConsole console) {
         this.fConsole = console;
         setText("Send Project File");
-        setToolTipText("Send your project file to SmartQQ");
+        setToolTipText("Send your project(workspace) file to SmartQQ");
         // setImageDescriptor(
         // LetterImageFactory.createDescriptor('P', SWT.COLOR_DARK_GRAY));
         setImageDescriptor(QQPlugin.getImageDescriptor("icons/project.png"));

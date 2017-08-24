@@ -35,8 +35,8 @@ public class PrevChatAction extends Action {
     
     public PrevChatAction(ChatConsole console) {
         this.fConsole = console;
-        setText("Prev");
-        setToolTipText("Previous chat");
+        setText("Previous Chat");
+        setToolTipText("Previous chat console");
         ImageDescriptor image = PlatformUI.getWorkbench().getSharedImages()
                 .getImageDescriptor(ISharedImages.IMG_TOOL_BACK_DISABLED);
         setImageDescriptor(image);
