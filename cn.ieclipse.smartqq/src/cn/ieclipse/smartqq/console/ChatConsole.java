@@ -27,10 +27,13 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.scienjus.smartqq.QNUploader;
 import com.scienjus.smartqq.QNUploader.UploadInfo;
+import com.scienjus.smartqq.model.DefaultContact;
 import com.scienjus.smartqq.model.Discuss;
+import com.scienjus.smartqq.model.DiscussInfo;
 import com.scienjus.smartqq.model.DiscussMessage;
 import com.scienjus.smartqq.model.Friend;
 import com.scienjus.smartqq.model.Group;
+import com.scienjus.smartqq.model.GroupInfo;
 import com.scienjus.smartqq.model.GroupMessage;
 import com.scienjus.smartqq.model.Message;
 
@@ -42,9 +45,7 @@ import cn.ieclipse.smartqq.views.ContactView;
 public class ChatConsole extends IOConsole {
     private static final String ENTER_KEY = "\r\n";
     private String id;
-    private Friend f;
-    private Group g;
-    private Discuss d;
+    private long uin;
     private ChatConsolePage page;
     
     public ChatConsole(String name, String consoleType,
@@ -57,35 +58,50 @@ public class ChatConsole extends IOConsole {
         super(name, imageDescriptor);
     }
     
-    public ChatConsole(Friend f) {
-        this(f.getMarkname(), null);
-        this.id = "F_" + f.getUserId();
-        this.f = f;
-    }
-    
-    public ChatConsole(Group f) {
-        this(f.getName(), null);
-        this.id = ("G_" + f.getId());
-        this.g = f;
-    }
-    
-    public ChatConsole(Discuss f) {
-        this(f.getName(), null);
-        this.id = ("D_" + f.getId());
-        this.d = f;
+    public ChatConsole(String id, String name, long uin) {
+        this(name, QQPlugin.getImageDescriptor("icons/review.png"));
+        this.id = id;
+        this.uin = uin;
     }
     
     public static ChatConsole create(Object obj) {
         if (obj instanceof Friend) {
-            return new ChatConsole((Friend) obj);
+            Friend f = (Friend) obj;
+            return new ChatConsole("F_" + f.getUserId(), f.getMarkname(),
+                    f.getUin());
         }
         else if (obj instanceof Group) {
-            return new ChatConsole((Group) obj);
+            Group g = (Group) obj;
+            return new ChatConsole("G_" + g.getId(), g.getName(), g.getUin());
         }
         else if (obj instanceof Discuss) {
-            return new ChatConsole((Discuss) obj);
+            Discuss d = (Discuss) obj;
+            return new ChatConsole("D_" + d.getId(), d.getName(), d.getUin());
+        }
+        else if (obj instanceof GroupInfo) {
+            GroupInfo g = (GroupInfo) obj;
+            return new ChatConsole("G_" + g.getGid(), g.getName(), g.getGid());
+        }
+        else if (obj instanceof DiscussInfo) {
+            DiscussInfo g = (DiscussInfo) obj;
+            return new ChatConsole("D_" + g.getId(), g.getName(), g.getId());
         }
         return null;
+    }
+    
+    private static long getContactId(Object obj) {
+        if (obj instanceof DefaultContact) {
+            return ((DefaultContact) obj).getUin();
+        }
+        else if (obj instanceof GroupInfo) {
+            GroupInfo g = (GroupInfo) obj;
+            return g.getGid();
+        }
+        else if (obj instanceof DiscussInfo) {
+            DiscussInfo g = (DiscussInfo) obj;
+            return g.getId();
+        }
+        return 0;
     }
     
     public static boolean isChatConsole(IConsole existing, Object obj) {
@@ -95,13 +111,19 @@ public class ChatConsole extends IOConsole {
             String name = existing.getName();
             
             if (obj instanceof Friend) {
-                return ("F_" + ((Friend) obj).getUserId()).equals(id);
+                return ("F_" + getContactId(obj)).equals(id);
             }
             else if (obj instanceof Group) {
-                return ("G_" + ((Group) obj).getId()).equals(id);
+                return ("G_" + getContactId(obj)).equals(id);
+            }
+            else if (obj instanceof GroupInfo) {
+                return ("G_" + getContactId(obj)).equals(id);
             }
             else if (obj instanceof Discuss) {
                 return ("D_" + ((Discuss) obj).getId()).equals(id);
+            }
+            else if (obj instanceof DiscussInfo) {
+                return ("D_" + getContactId(obj)).equals(id);
             }
         }
         return false;
@@ -140,7 +162,7 @@ public class ChatConsole extends IOConsole {
     
     public void writeMine(String input) {
         String name = QQPlugin.getDefault().getClient().getAccountInfo()
-                .getAccount();
+                .getNick();
         String msg = Utils.formatMsg(System.currentTimeMillis(), name, input);
         try {
             mineStream.write(msg);
@@ -150,17 +172,14 @@ public class ChatConsole extends IOConsole {
     }
     
     public void post(final String msg) {
-        if (this.f != null && id.startsWith("F_")) {
-            QQPlugin.getDefault().getClient().sendMessageToFriend(f.getUserId(),
-                    msg);
+        if (this.id != null && id.startsWith("F_")) {
+            QQPlugin.getDefault().getClient().sendMessageToFriend(uin, msg);
         }
-        else if (this.g != null && id.startsWith("G_")) {
-            QQPlugin.getDefault().getClient().sendMessageToGroup(g.getId(),
-                    msg);
+        else if (this.id != null && id.startsWith("G_")) {
+            QQPlugin.getDefault().getClient().sendMessageToGroup(uin, msg);
         }
-        else if (this.d != null && id.startsWith("D_")) {
-            QQPlugin.getDefault().getClient().sendMessageToDiscuss(d.getId(),
-                    msg);
+        else if (this.id != null && id.startsWith("D_")) {
+            QQPlugin.getDefault().getClient().sendMessageToDiscuss(uin, msg);
         }
     }
     

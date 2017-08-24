@@ -8,6 +8,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
+import org.eclipse.ui.console.IConsoleListener;
 import org.eclipse.ui.console.IConsoleManager;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -141,6 +142,26 @@ public class QQPlugin extends AbstractUIPlugin {
         };
         getClient().setCallback(callback);
         getClient().start();
+        
+        IConsoleManager manager = ConsolePlugin.getDefault()
+                .getConsoleManager();
+        manager.addConsoleListener(new IConsoleListener() {
+            
+            @Override
+            public void consolesRemoved(IConsole[] consoles) {
+                if (consoles != null) {
+                    for (IConsole t : consoles) {
+                        if (t == QQPlugin.getDefault().console) {
+                            QQPlugin.getDefault().console = null;
+                        }
+                    }
+                }
+            }
+            
+            @Override
+            public void consolesAdded(IConsole[] consoles) {
+            }
+        });
     }
     
     public ContactView getContactView() {
