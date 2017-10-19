@@ -4,7 +4,7 @@
 
 ![screenshot](https://raw.githubusercontent.com/Jamling/SmartQQ4Eclipse/master/screenshot.gif)
 
-Eclipse上的SmartQQ插件，防Boss利器，让你可以在eclipse中使用QQ进行聊天
+Eclipse上的SmartQQ/微信插件，防Boss利器，让你可以在eclipse中使用QQ/微信进行聊天
 
 Intellij IDEA上的插件请移步这里: https://github.com/Jamling/SmartQQ4IntelliJ, 支持所有的Intellij IDE哦，包含Android Studio, WebStrom等
 
@@ -51,6 +51,9 @@ Intellij IDEA上的插件请移步这里: https://github.com/Jamling/SmartQQ4Int
 5. 双击Smart视图中的好友或群，打开聊天窗口（聊天窗口为Console）
 6. 使用快捷键或点击I图标，激活输入窗口（不建议直接在console中输入，会导致同步时间）
 7. 输入聊天内容，并按快捷键（默认为Enter）发送聊天信息
+
+### 微信
+1. 如果微信无法生成二维码图片，提示javax.net.ssl.SSLProtocolException: handshake alert:  unrecognized_name，请给eclipse加上`-Djsse.enableSNIExtension=false`参数，可以在eclipse.ini中加，也可以在eclipse快捷方式目标位置中添加
 
 ## 进阶使用
 1. 文件发送

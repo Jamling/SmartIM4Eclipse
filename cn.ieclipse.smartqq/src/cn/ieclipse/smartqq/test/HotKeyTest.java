@@ -7,7 +7,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import cn.ieclipse.smartqq.preferences.HotKeyFieldEditor;
+import cn.ieclipse.smartim.preferences.HotKeyFieldEditor;
 
 public class HotKeyTest extends Shell {
     private Text text;

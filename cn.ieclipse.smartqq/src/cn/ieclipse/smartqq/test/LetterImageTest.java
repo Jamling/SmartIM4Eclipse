@@ -6,7 +6,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
-import cn.ieclipse.smartqq.views.LetterImageFactory;
+import cn.ieclipse.smartim.common.LetterImageFactory;
 
 public class LetterImageTest extends Shell {
     

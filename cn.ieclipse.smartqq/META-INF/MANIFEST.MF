@@ -2,8 +2,8 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: SmartQQ
 Bundle-SymbolicName: cn.ieclipse.smartqq;singleton:=true
-Bundle-Version: 1.0.9
-Bundle-Activator: cn.ieclipse.smartqq.QQPlugin
+Bundle-Version: 2.0.0
+Bundle-Activator: cn.ieclipse.smartim.IMPlugin
 Bundle-Vendor: ieclipse.cn
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -11,17 +11,21 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jface.text,
  org.eclipse.core.resources,
  org.eclipse.ui.ide,
- org.eclipse.ui.workbench.texteditor
+ org.eclipse.ui.workbench.texteditor,
+ org.eclipse.core.net,
+ org.slf4j.api,
+ ch.qos.logback.classic,
+ ch.qos.logback.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
- libs/smartqq.jar,
- libs/fastjson-1.2.7.jar,
+ libs/gson-2.8.0.jar,
  libs/log4j-1.2.17.jar,
  libs/okhttp-3.8.1.jar,
  libs/okio-1.13.0.jar,
- libs/gson-2.6.2.jar,
  libs/happy-dns-java-0.1.4.jar,
  libs/qiniu-java-sdk-7.2.7.jar,
- swing2swt.jar,
- libs/swing2swt.jar
+ libs/swing2swt.jar,
+ libs/smartim-0.0.1.jar,
+ libs/smartqq.jar,
+ libs/wechat-robot.jar

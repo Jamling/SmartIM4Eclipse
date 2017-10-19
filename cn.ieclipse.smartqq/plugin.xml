@@ -5,87 +5,98 @@
    <extension
          point="org.eclipse.ui.views">
       <category
-            name="SmartQQ"
-            id="cn.ieclipse.smartqq">
+            name="SmartIM"
+            id="cn.ieclipse.smartim">
       </category>
       <view
             allowMultiple="false"
-            category="cn.ieclipse.smartqq"
-            class="cn.ieclipse.smartqq.views.ContactView"
+            category="cn.ieclipse.smartim"
+            class="cn.ieclipse.smartqq.views.QQContactView"
             icon="icons/review.png"
-            id="cn.ieclipse.smartqq.views.ContactView"
-            name="Smart">
+            id="cn.ieclipse.smartqq.views.QQContactView"
+            name="SmartQQ">
+      </view>
+      <view
+            category="cn.ieclipse.smartim"
+            class="cn.ieclipse.wechat.views.WXContactView"
+            icon="icons/review.png"
+            id="cn.ieclipse.wechat.views.WXContactView"
+            name="Wechat"
+            restorable="true">
       </view>
    </extension>
    <extension
          point="org.eclipse.ui.console.consolePageParticipants">
       <consolePageParticipant
-            class="cn.ieclipse.smartqq.console.ChatConsolePageParticipant"
+            class="cn.ieclipse.smartim.console.IMChatConsolePageParticipant"
             id="cn.ieclipse.smartqq.consolePageParticipant1">
          <enablement>
             <instanceof
-                  value="cn.ieclipse.smartqq.console.ChatConsole">
+                  value="cn.ieclipse.smartim.console.IMChatConsole">
             </instanceof></enablement>
       </consolePageParticipant>
    </extension>
    <extension
          point="org.eclipse.ui.console.consolePatternMatchListeners">
       <consolePatternMatchListener
-            class="cn.ieclipse.smartqq.console.SenderMatchDelegate"
+            class="cn.ieclipse.smartim.console.SenderMatchDelegate"
             id="cn.ieclipse.smartqq.consolePatternMatchListener1"
             regex="\d{2}:\d{2}:\d{2} \S+: ">
          <enablement>
             <instanceof
-                  value="cn.ieclipse.smartqq.console.ChatConsole">
+                  value="cn.ieclipse.smartim.console.IMChatConsole">
             </instanceof></enablement>
       </consolePatternMatchListener>
       <consolePatternMatchListener
-            class="cn.ieclipse.smartqq.console.UrlMatchDelegate"
+            class="cn.ieclipse.smartim.console.UrlMatchDelegate"
             id="cn.ieclipse.smartqq.consolePatternMatchListener2"
             regex="(https?|ftp|file)://[-a-zA-Z0-9+&amp;@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&amp;@#/%=~_|]">
          <enablement>
              <instanceof
-                  value="cn.ieclipse.smartqq.console.ChatConsole">
+                  value="cn.ieclipse.smartim.console.IMChatConsole">
             </instanceof>
          </enablement>
       </consolePatternMatchListener>
       <consolePatternMatchListener
-            class="cn.ieclipse.smartqq.console.ReviewMatchDelegate"
+            class="cn.ieclipse.smartim.console.ReviewMatchDelegate"
             id="cn.ieclipse.smartqq.consolePatternMatchListener3"
             qualifier="Code: "
             regex="Code: [\S]+:[\d]+ ">
-         <enablement></enablement>
+         <enablement>
+            <instanceof
+                  value="cn.ieclipse.smartim.console.IMChatConsole">
+            </instanceof></enablement>
       </consolePatternMatchListener>
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
-            class="cn.ieclipse.smartqq.preferences.PreferenceInitializer">
+            class="cn.ieclipse.smartim.preferences.PreferenceInitializer">
       </initializer>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            class="cn.ieclipse.smartqq.preferences.SmartQQPreferencePage"
-            id="cn.ieclipse.smartqq.preferences.SmartQQPreferencePage"
+            class="cn.ieclipse.smartim.preferences.SmartQQPreferencePage"
+            id="cn.ieclipse.smartim.preferences.SmartQQPreferencePage"
             name="SmartQQ">
       </page>
       <page
-            category="cn.ieclipse.smartqq.preferences.SmartQQPreferencePage"
-            class="cn.ieclipse.smartqq.preferences.HotKeyPreferencePage"
-            id="cn.ieclipse.smartqq.preferences.HotKeyPreferencePage"
+            category="cn.ieclipse.smartim.preferences.SmartQQPreferencePage"
+            class="cn.ieclipse.smartim.preferences.HotKeyPreferencePage"
+            id="cn.ieclipse.smartim.preferences.HotKeyPreferencePage"
             name="Hot keys">
       </page>
       <page
-            category="cn.ieclipse.smartqq.preferences.SmartQQPreferencePage"
-            class="cn.ieclipse.smartqq.preferences.RobotPreferencePage"
-            id="cn.ieclipse.smartqq.preferences.RobotPreferencePage"
+            category="cn.ieclipse.smartim.preferences.SmartQQPreferencePage"
+            class="cn.ieclipse.smartim.preferences.RobotPreferencePage"
+            id="cn.ieclipse.smartim.preferences.RobotPreferencePage"
             name="Robot">
       </page>
       <page
-            category="cn.ieclipse.smartqq.preferences.SmartQQPreferencePage"
-            class="cn.ieclipse.smartqq.preferences.QiniuPerferencePage"
-            id="cn.ieclipse.smartqq.preferences.QiniuPerferencePage"
+            category="cn.ieclipse.smartim.preferences.SmartQQPreferencePage"
+            class="cn.ieclipse.smartim.preferences.QiniuPerferencePage"
+            id="cn.ieclipse.smartim.preferences.QiniuPerferencePage"
             name="File Upload">
       </page>
    </extension>
@@ -112,7 +123,7 @@
    <extension
          point="org.eclipse.ui.handlers">
       <handler
-            class="cn.ieclipse.smartqq.handlers.ReviewHandler"
+            class="cn.ieclipse.smartim.handlers.ReviewHandler"
             commandId="cn.ieclipse.smartqq.command.CodeReview">
       </handler>
    </extension>
