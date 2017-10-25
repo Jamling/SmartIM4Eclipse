@@ -15,13 +15,21 @@
  */
 package cn.ieclipse.smartqq;
 
+import com.scienjus.smartqq.client.SmartQQClient;
+import com.scienjus.smartqq.model.DiscussFrom;
+import com.scienjus.smartqq.model.FriendFrom;
+import com.scienjus.smartqq.model.GroupFrom;
 import com.scienjus.smartqq.model.QQMessage;
 
+import cn.ieclipse.smartim.IMClientFactory;
+import cn.ieclipse.smartim.IMHistoryManager;
 import cn.ieclipse.smartim.IMPlugin;
-import cn.ieclipse.smartim.Utils;
 import cn.ieclipse.smartim.callback.ReceiveCallback;
+import cn.ieclipse.smartim.common.IMUtils;
+import cn.ieclipse.smartim.common.Notifications;
 import cn.ieclipse.smartim.model.impl.AbstractFrom;
 import cn.ieclipse.smartim.model.impl.AbstractMessage;
+import cn.ieclipse.smartim.preferences.SettingsPerferencePage;
 import cn.ieclipse.smartqq.console.QQChatConsole;
 
 /**
@@ -36,15 +44,50 @@ public class QQReceiveCallback implements ReceiveCallback {
     
     @Override
     public void onReceiveMessage(AbstractMessage message, AbstractFrom from) {
+        if (from != null && from.getContact() != null) {
+            boolean unkown = false;
+            boolean notify = IMPlugin.getDefault().getPreferenceStore()
+                    .getBoolean(SettingsPerferencePage.NOTIFY_FRIEND);
+            String uin = from.getContact().getUin();
+            if (from instanceof GroupFrom) {
+                GroupFrom gf = (GroupFrom) from;
+                unkown = (gf.getGroupUser() == null
+                        || gf.getGroupUser().isUnknown());
+                uin = gf.getGroup().getUin();
+                notify = IMPlugin.getDefault().getPreferenceStore()
+                        .getBoolean(SettingsPerferencePage.NOTIFY_GROUP);
+            }
+            else if (from instanceof DiscussFrom) {
+                DiscussFrom gf = (DiscussFrom) from;
+                unkown = (gf.getDiscussUser() == null
+                        || gf.getDiscussUser().isUnknown());
+                uin = gf.getDiscuss().getUin();
+                notify = IMPlugin.getDefault().getPreferenceStore()
+                        .getBoolean(SettingsPerferencePage.NOTIFY_GROUP);
+            }
+            if (!unkown) {
+                SmartQQClient client = IMClientFactory.getInstance()
+                        .getQQClient();
+                IMHistoryManager.getInstance().save(client, uin,
+                        message.getRaw());
+            }
+            if (notify) {
+                CharSequence content = (from instanceof FriendFrom)
+                        ? message.getText()
+                        : from.getName() + ":" + message.getText();
+                Notifications.notify(QQChatConsole.class, from.getContact(),
+                        from.getContact().getName(), content);
+            }
+        }
         QQChatConsole console = IMPlugin.getDefault()
                 .findConsole(QQChatConsole.class, from.getContact(), false);
         if (console != null) {
             lastConsole = console;
-            String name = from.getContact().getName();
+            String name = from.getName();
             String msg = null;
             if (message instanceof QQMessage) {
                 QQMessage m = (QQMessage) message;
-                msg = Utils.formatMsg(m.getTime(), name, m.getContent());
+                msg = IMUtils.formatMsg(m.getTime(), name, m.getContent());
             }
             console.write(msg);
         }

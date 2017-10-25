@@ -5,23 +5,29 @@ import java.io.File;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.console.IConsole;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.scienjus.smartqq.QNUploader;
 import com.scienjus.smartqq.QNUploader.UploadInfo;
 import com.scienjus.smartqq.client.SmartQQClient;
+import com.scienjus.smartqq.handler.msg.DiscussMessageHandler;
+import com.scienjus.smartqq.handler.msg.FriendMessageHandler;
+import com.scienjus.smartqq.handler.msg.GroupMessageHandler;
 import com.scienjus.smartqq.model.Discuss;
 import com.scienjus.smartqq.model.DiscussInfo;
 import com.scienjus.smartqq.model.Friend;
 import com.scienjus.smartqq.model.Group;
 import com.scienjus.smartqq.model.GroupInfo;
+import com.scienjus.smartqq.model.QQMessage;
 import com.scienjus.smartqq.model.UserInfo;
 
 import cn.ieclipse.smartim.IMClientFactory;
+import cn.ieclipse.smartim.IMHistoryManager;
 import cn.ieclipse.smartim.IMPlugin;
-import cn.ieclipse.smartim.SmartClient;
 import cn.ieclipse.smartim.common.IMUtils;
 import cn.ieclipse.smartim.console.IMChatConsole;
 import cn.ieclipse.smartim.model.IContact;
-import cn.ieclipse.smartim.model.IMessage;
+import cn.ieclipse.smartim.model.impl.AbstractFrom;
 import cn.ieclipse.smartim.preferences.QiniuPerferencePage;
 
 public class QQChatConsole extends IMChatConsole {
@@ -35,8 +41,32 @@ public class QQChatConsole extends IMChatConsole {
     }
     
     @Override
-    public SmartClient getClient() {
-        return IMClientFactory.getInstance().getQQClient();
+    public SmartQQClient getClient() {
+        return (SmartQQClient) IMClientFactory.getInstance().getQQClient();
+    }
+    
+    @Override
+    public void loadHistory(String raw) {
+        if (IMUtils.isMySendMsg(raw)) {
+            write(raw);
+            return;
+        }
+        JsonObject obj = new JsonParser().parse(raw).getAsJsonObject();
+        QQMessage m = null;
+        if (obj.has("group_code")) {
+            m = (QQMessage) new GroupMessageHandler().handle(obj);
+        }
+        else if (obj.has("did")) {
+            m = (QQMessage) new DiscussMessageHandler().handle(obj);
+        }
+        else {
+            m = (QQMessage) new FriendMessageHandler().handle(obj);
+        }
+        
+        AbstractFrom from = getClient().parseFrom(m);
+        String name = from == null ? "未知用户" : from.getName();
+        String msg = IMUtils.formatMsg(m.getTime(), name, m.getContent());
+        write(msg);
     }
     
     @Deprecated
@@ -104,19 +134,9 @@ public class QQChatConsole extends IMChatConsole {
     }
     
     public void post(final String msg) {
-        long uin = Long.parseLong(this.uin);
         SmartQQClient client = (SmartQQClient) getClient();
         if (this.contact != null) {
-            // if (this.id != null && id.startsWith("F_")) {
-            // client.sendMessageToFriend(uin, msg);
-            // }
-            // else if (this.id != null && id.startsWith("G_")) {
-            // client.sendMessageToGroup(uin, msg);
-            // }
-            // else if (this.id != null && id.startsWith("D_")) {
-            // client.sendMessageToDiscuss(uin, msg);
-            // }
-            IMessage m = client.createMessage(msg, contact);
+            QQMessage m = client.createMessage(msg, contact);
             client.sendMessage(m, this.contact);
         }
     }

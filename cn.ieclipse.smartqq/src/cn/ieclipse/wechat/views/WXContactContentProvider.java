@@ -18,11 +18,10 @@ package cn.ieclipse.wechat.views;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 import org.eclipse.jface.viewers.Viewer;
 
-import cn.ieclipse.smartim.Utils;
+import cn.ieclipse.smartim.common.IMUtils;
 import cn.ieclipse.smartim.model.VirtualCategory;
 import cn.ieclipse.smartim.views.IMContactContentProvider;
 import cn.ieclipse.smartim.views.IMContactView;
@@ -107,7 +106,7 @@ public class WXContactContentProvider extends IMContactContentProvider {
     public boolean hasChildren(Object element) {
         if (element instanceof Contact) {
             Contact contact = (Contact) element;
-            return !Utils.isEmpty(contact.MemberList);
+            return !IMUtils.isEmpty(contact.MemberList);
         }
         else if (element instanceof VirtualCategory) {
             return ((VirtualCategory<?>) element).hasChildren();
@@ -117,12 +116,12 @@ public class WXContactContentProvider extends IMContactContentProvider {
     
     public List<VirtualCategory<Contact>> getContactGroup(List<Contact> list) {
         List<VirtualCategory<Contact>> cates = new ArrayList<>();
-        if (!Utils.isEmpty(list)) {
+        if (!IMUtils.isEmpty(list)) {
             List<Contact> unA = new ArrayList<>();
             TreeMap<String, List<Contact>> maps = new TreeMap<>();
             for (Contact c : list) {
                 String py = c.getPYInitial();
-                char A = Utils.isEmpty(py) ? '#' : py.charAt(0);
+                char A = IMUtils.isEmpty(py) ? '#' : py.charAt(0);
                 if (A >= 'A' && A <= 'Z' || A >= 'a' && A <= 'z') {
                     String a = String.valueOf(A).toUpperCase();
                     List<Contact> values = maps.get(a);
@@ -139,7 +138,7 @@ public class WXContactContentProvider extends IMContactContentProvider {
             for (String n : maps.keySet()) {
                 cates.add(new VirtualCategory<>(n, maps.get(n)));
             }
-            if (!Utils.isEmpty(unA)) {
+            if (!IMUtils.isEmpty(unA)) {
                 cates.add(new VirtualCategory<>("#", unA));
             }
         }

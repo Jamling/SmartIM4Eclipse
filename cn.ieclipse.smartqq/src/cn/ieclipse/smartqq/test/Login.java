@@ -21,7 +21,6 @@ public class Login {
     public static void main(String[] args) {
         LoginDialog dialog = new LoginDialog(new Shell());
         dialog.open();
-        IMPlugin.getDefault().start();
         Display display = Display.getDefault();
         while (!display.isDisposed()) {
             if (!display.readAndDispatch()) {

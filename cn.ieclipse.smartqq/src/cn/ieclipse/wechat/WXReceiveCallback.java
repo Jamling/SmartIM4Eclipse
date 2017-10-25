@@ -15,15 +15,19 @@
  */
 package cn.ieclipse.wechat;
 
-import com.scienjus.smartqq.model.QQMessage;
-
+import cn.ieclipse.smartim.IMClientFactory;
+import cn.ieclipse.smartim.IMHistoryManager;
 import cn.ieclipse.smartim.IMPlugin;
-import cn.ieclipse.smartim.Utils;
 import cn.ieclipse.smartim.callback.ReceiveCallback;
+import cn.ieclipse.smartim.common.IMUtils;
+import cn.ieclipse.smartim.common.Notifications;
 import cn.ieclipse.smartim.model.impl.AbstractFrom;
 import cn.ieclipse.smartim.model.impl.AbstractMessage;
-import cn.ieclipse.smartqq.console.QQChatConsole;
+import cn.ieclipse.smartim.preferences.SettingsPerferencePage;
 import cn.ieclipse.wechat.console.WXChatConsole;
+import io.github.biezhi.wechat.api.WechatClient;
+import io.github.biezhi.wechat.model.GroupFrom;
+import io.github.biezhi.wechat.model.UserFrom;
 import io.github.biezhi.wechat.model.WechatMessage;
 
 /**
@@ -38,15 +42,38 @@ public class WXReceiveCallback implements ReceiveCallback {
     
     @Override
     public void onReceiveMessage(AbstractMessage message, AbstractFrom from) {
+        
+        if (from != null && from.getContact() != null) {
+            boolean notify = IMPlugin.getDefault().getPreferenceStore()
+                    .getBoolean(SettingsPerferencePage.NOTIFY_FRIEND);
+            String uin = from.getContact().getUin();
+            if (from instanceof GroupFrom) {
+                notify = IMPlugin.getDefault().getPreferenceStore()
+                        .getBoolean(SettingsPerferencePage.NOTIFY_GROUP);
+            }
+            
+            WechatClient client = IMClientFactory.getInstance()
+                    .getWechatClient();
+            IMHistoryManager.getInstance().save(client, uin, message.getRaw());
+            
+            if (notify) {
+                CharSequence content = (from instanceof UserFrom)
+                        ? message.getText()
+                        : from.getName() + ":" + message.getText();
+                Notifications.notify(WXChatConsole.class, from.getContact(),
+                        from.getContact().getName(), content);
+            }
+        }
+        
         WXChatConsole console = IMPlugin.getDefault()
                 .findConsole(WXChatConsole.class, from.getContact(), false);
         if (console != null) {
             lastConsole = console;
-            String name = from.getContact().getName();
+            String name = from.getName();
             String msg = null;
             if (message instanceof WechatMessage) {
                 WechatMessage m = (WechatMessage) message;
-                msg = Utils.formatMsg(m.CreateTime, name, m.text);
+                msg = IMUtils.formatMsg(m.CreateTime, name, m.getText());
             }
             console.write(msg);
         }

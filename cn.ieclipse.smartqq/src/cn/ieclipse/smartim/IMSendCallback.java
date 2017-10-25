@@ -16,6 +16,8 @@
 package cn.ieclipse.smartim;
 
 import cn.ieclipse.smartim.callback.SendCallback;
+import cn.ieclipse.smartim.common.IMUtils;
+import cn.ieclipse.smartim.common.Notifications;
 import cn.ieclipse.smartim.console.IMChatConsole;
 
 /**
@@ -28,24 +30,34 @@ import cn.ieclipse.smartim.console.IMChatConsole;
 public class IMSendCallback implements SendCallback {
     
     @Override
-    public void onSendResult(int type, String targetId, String msg,
+    public void onSendResult(int type, String targetId, CharSequence msg,
             boolean success, Throwable t) {
-        if (!success) {
-            String s = Utils.isEmpty(msg) ? ""
-                    : (msg.length() > 20 ? msg.substring(0, 20) + "..." : msg);
-            IMChatConsole console = IMPlugin.getDefault()
-                    .getChatConsole(targetId, true);
-            if (console != null) {
-                console.error(s);
-            }
-            else {
-                IMPlugin.getDefault()
-                        .log(String.format("发送到%s的信息（%s）", targetId, s), t);
-            }
+        if (success) {
+            onSuccess(type, targetId, msg);
+        }
+        else {
+            onFailure(type, targetId, msg, t);
         }
     }
     
-    protected void log() {
+    protected void onSuccess(int type, String targetId, CharSequence msg) {
     
+    }
+    
+    protected void onFailure(int type, String targetId, CharSequence msg,
+            Throwable t) {
+        String s = IMUtils.isEmpty(msg) ? ""
+                : (msg.length() > 20 ? msg.toString().substring(0, 20) + "..."
+                        : msg.toString());
+        IMChatConsole console = IMPlugin.getDefault().getChatConsole(targetId,
+                true);
+        if (console != null) {
+            console.error(String.format("%s 发送失败！", s));
+        }
+        else {
+            IMPlugin.getDefault()
+                    .log(String.format("发送到%s的信息（%s）", targetId, s), t);
+            Notifications.notify("发送失败", String.format("%s 发送失败！", s));
+        }
     }
 }

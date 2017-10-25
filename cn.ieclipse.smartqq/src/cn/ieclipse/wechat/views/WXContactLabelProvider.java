@@ -18,7 +18,7 @@ package cn.ieclipse.wechat.views;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 
-import cn.ieclipse.smartim.Utils;
+import cn.ieclipse.smartim.common.IMUtils;
 import cn.ieclipse.smartim.common.LetterImageFactory;
 import cn.ieclipse.smartim.views.IMContactLabelProvider;
 import cn.ieclipse.smartim.views.IMContactView;
@@ -41,7 +41,7 @@ public class WXContactLabelProvider extends IMContactLabelProvider {
     public Image getImage(Object obj) {
         if (obj instanceof Contact) {
             Contact c = (Contact) obj;
-            boolean hasMember = Utils.isEmpty(c.MemberList);
+            boolean hasMember = IMUtils.isEmpty(c.MemberList);
             if (hasMember) {
                 return LetterImageFactory.create('G', SWT.COLOR_DARK_BLUE);
             }

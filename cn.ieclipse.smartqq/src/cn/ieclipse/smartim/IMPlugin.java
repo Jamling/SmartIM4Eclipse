@@ -1,6 +1,6 @@
 package cn.ieclipse.smartim;
 
-import java.lang.reflect.InvocationTargetException;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +11,6 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
-import org.eclipse.ui.console.IConsoleListener;
 import org.eclipse.ui.console.IConsoleManager;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -20,8 +19,8 @@ import org.osgi.framework.ServiceReference;
 import com.scienjus.smartqq.QNUploader;
 
 import cn.ieclipse.smartim.console.IMChatConsole;
+import cn.ieclipse.smartim.console.IMConsoleListener;
 import cn.ieclipse.smartim.model.IContact;
-import cn.ieclipse.smartqq.console.QQChatConsole;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -43,9 +42,15 @@ public class IMPlugin extends AbstractUIPlugin {
     public void start(BundleContext context) throws Exception {
         super.start(context);
         plugin = this;
+        IConsoleManager manager = ConsolePlugin.getDefault()
+                .getConsoleManager();
+        manager.addConsoleListener(consoleListener);
     }
     
     public void stop(BundleContext context) throws Exception {
+        IConsoleManager manager = ConsolePlugin.getDefault()
+                .getConsoleManager();
+        manager.removeConsoleListener(consoleListener);
         plugin = null;
         super.stop(context);
     }
@@ -75,6 +80,7 @@ public class IMPlugin extends AbstractUIPlugin {
     }
     
     // -------->
+    private IMConsoleListener consoleListener = new IMConsoleListener();
     private QNUploader uploader;
     public IConsole console;
     
@@ -97,6 +103,10 @@ public class IMPlugin extends AbstractUIPlugin {
         return uploader;
     }
     
+    public File getStateDir() {
+        return getStateLocation().makeAbsolute().toFile();
+    }
+    
     public void log(String msg, Throwable e) {
         if (e == null) {
             IStatus info = new Status(IStatus.INFO, IMPlugin.PLUGIN_ID, msg);
@@ -111,28 +121,6 @@ public class IMPlugin extends AbstractUIPlugin {
     
     public void log(String msg) {
         log(msg, null);
-    }
-    
-    public void start() {
-        IConsoleManager manager = ConsolePlugin.getDefault()
-                .getConsoleManager();
-        manager.addConsoleListener(new IConsoleListener() {
-            
-            @Override
-            public void consolesRemoved(IConsole[] consoles) {
-                if (consoles != null) {
-                    for (IConsole t : consoles) {
-                        if (t == IMPlugin.getDefault().console) {
-                            IMPlugin.getDefault().console = null;
-                        }
-                    }
-                }
-            }
-            
-            @Override
-            public void consolesAdded(IConsole[] consoles) {
-            }
-        });
     }
     
     public IMChatConsole getChatConsole(String uin, boolean show) {
@@ -249,7 +237,7 @@ public class IMPlugin extends AbstractUIPlugin {
     
     public static void runOnUI(Runnable runnable) {
         Display display = Display.getDefault();
-        if (display != null && !display.readAndDispatch()) {
+        if (display != null) {
             display.asyncExec(runnable);
         }
     }

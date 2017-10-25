@@ -43,11 +43,13 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
         store.setDefault(HotKeyPreferencePage.KEY_HIDE_CLOSE, "Alt + C"); //$NON-NLS-1$
         
         store.setDefault(RobotPreferencePage.ROBOT_ENABLE, false);
-        store.setDefault(RobotPreferencePage.ROBOT_NAME, Messages.PreferenceInitializer_robot_name);
+        store.setDefault(RobotPreferencePage.ROBOT_NAME,
+                Messages.PreferenceInitializer_robot_name);
         store.setDefault(RobotPreferencePage.TURING_API,
                 "http://www.tuling123.com/openapi/api"); //$NON-NLS-1$
         store.setDefault(RobotPreferencePage.TURING_KEY, ""); //$NON-NLS-1$
-        store.setDefault(RobotPreferencePage.GROUP_WELCOME, Messages.PreferenceInitializer_robot_group_welcome);
+        store.setDefault(RobotPreferencePage.GROUP_WELCOME,
+                Messages.PreferenceInitializer_robot_group_welcome);
         store.setDefault(RobotPreferencePage.GROUP_REPLY_ANY, false);
         store.setDefault(RobotPreferencePage.FRIEND_REPLY_ANY, false);
         
@@ -58,6 +60,11 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
         store.setDefault(QiniuPerferencePage.ZONE, "autoZone");
         store.setDefault(QiniuPerferencePage.BUCKET, "");
         store.setDefault(QiniuPerferencePage.DOMAIN, "");
+        
+        store.setDefault(SettingsPerferencePage.NOTIFY_ENABLE, true);
+        store.setDefault(SettingsPerferencePage.NOTIFY_GROUP, false);
+        store.setDefault(SettingsPerferencePage.NOTIFY_FRIEND, true);
+        store.setDefault(SettingsPerferencePage.NOTIFY_DISMISS, 5);
     }
     
 }

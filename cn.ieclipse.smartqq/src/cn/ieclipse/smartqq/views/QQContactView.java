@@ -10,12 +10,15 @@ import com.scienjus.smartqq.client.SmartQQClient;
 import com.scienjus.smartqq.model.Friend;
 
 import cn.ieclipse.smartim.IMClientFactory;
+import cn.ieclipse.smartim.IMHistoryManager;
 import cn.ieclipse.smartim.IMPlugin;
+import cn.ieclipse.smartim.callback.SendCallback;
 import cn.ieclipse.smartim.common.IMUtils;
 import cn.ieclipse.smartim.console.IMChatConsole;
 import cn.ieclipse.smartim.views.IMContactView;
 import cn.ieclipse.smartqq.QQReceiveCallback;
 import cn.ieclipse.smartqq.QQRobotCallback;
+import cn.ieclipse.smartqq.QQSendCallback;
 import cn.ieclipse.smartqq.actions.QQBroadcastAction;
 import cn.ieclipse.smartqq.console.QQChatConsole;
 
@@ -41,6 +44,7 @@ public class QQContactView extends IMContactView {
         
         receiveCallback = new QQReceiveCallback();
         robotCallback = new QQRobotCallback();
+        sendCallback = new QQSendCallback(this);
     }
     
     /**

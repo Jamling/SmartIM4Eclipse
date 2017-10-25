@@ -16,10 +16,15 @@
 package cn.ieclipse.wechat.console;
 
 import cn.ieclipse.smartim.IMClientFactory;
-import cn.ieclipse.smartim.SmartClient;
+import cn.ieclipse.smartim.IMHistoryManager;
+import cn.ieclipse.smartim.common.IMUtils;
 import cn.ieclipse.smartim.console.IMChatConsole;
 import cn.ieclipse.smartim.model.IContact;
+import cn.ieclipse.smartim.model.impl.AbstractFrom;
+import cn.ieclipse.util.EncodeUtils;
+import cn.ieclipse.util.StringUtils;
 import io.github.biezhi.wechat.api.WechatClient;
+import io.github.biezhi.wechat.model.WechatMessage;
 
 /**
  * 类/接口描述
@@ -40,7 +45,32 @@ public class WXChatConsole extends IMChatConsole {
     
     @Override
     public void post(String msg) {
-        getClient().sendMessage(msg, uin);
+        WechatClient client = getClient();
+        if (client.isLogin() && contact != null) {
+            WechatMessage m = client.createMessage(0, msg, contact);
+            client.sendMessage(m, contact);
+        }
+        else {
+            error("发送失败，客户端异常（可能已断开连接或找不到联系人）");
+        }
+    }
+    
+    // @Override
+    // public String getHistoryFile() {
+    // return EncodeUtils.getMd5(uin);
+    // }
+    
+    @Override
+    public void loadHistory(String raw) {
+        if (IMUtils.isMySendMsg(raw)) {
+            write(raw);
+            return;
+        }
+        WechatMessage m = (WechatMessage) getClient().handleMessage(raw);
+        AbstractFrom from = getClient().getFrom(m);
+        String name = from == null ? "未知用户" : from.getName();
+        String msg = IMUtils.formatMsg(m.getTime(), name, m.getText());
+        write(msg);
     }
     
     @Override

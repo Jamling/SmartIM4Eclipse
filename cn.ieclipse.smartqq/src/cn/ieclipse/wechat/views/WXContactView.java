@@ -22,10 +22,10 @@ import org.eclipse.swt.widgets.TabFolder;
 
 import cn.ieclipse.smartim.IMClientFactory;
 import cn.ieclipse.smartim.IMPlugin;
-import cn.ieclipse.smartim.SmartClient;
 import cn.ieclipse.smartim.views.IMContactView;
-import cn.ieclipse.smartqq.QQRobotCallback;
 import cn.ieclipse.wechat.WXReceiveCallback;
+import cn.ieclipse.wechat.WXRobotCallback;
+import cn.ieclipse.wechat.WXSendCallback;
 import cn.ieclipse.wechat.actions.WXBroadcastAction;
 import io.github.biezhi.wechat.api.WechatClient;
 
@@ -53,7 +53,8 @@ public class WXContactView extends IMContactView {
         doubleClicker = new WXDoubleClicker(this);
         
         receiveCallback = new WXReceiveCallback();
-        //robotCallback = new QQRobotCallback();
+        robotCallback = new WXRobotCallback();
+        sendCallback = new WXSendCallback(this);
     }
     
     @Override
@@ -77,6 +78,7 @@ public class WXContactView extends IMContactView {
                 ftvPublic.setInput("public");
                 client.setReceiveCallback(receiveCallback);
                 client.setSendCallback(sendCallback);
+                client.addReceiveCallback(robotCallback);
                 client.start();
             } catch (Exception e) {
                 IMPlugin.getDefault().log("微信初始化失败", e);

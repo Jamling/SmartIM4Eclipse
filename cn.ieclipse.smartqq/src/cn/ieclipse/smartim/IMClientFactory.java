@@ -32,7 +32,7 @@ import io.github.biezhi.wechat.api.WechatClient;
  */
 public class IMClientFactory {
     public static final String TYPE_QQ = "QQ";
-    public static final String TYPE_WECHAT = "WX";
+    public static final String TYPE_WECHAT = "Wechat";
     private Map<String, SmartClient> clients = null;
     
     private static IMClientFactory instance = new IMClientFactory();
@@ -58,18 +58,19 @@ public class IMClientFactory {
         SmartClient client = clients.get(type);
         if (client == null || client.isClose()) {
             client = create(type);
-            client.setWorkDir(new File("").getAbsoluteFile());
+            File dir = IMPlugin.getDefault().getStateDir().getAbsoluteFile();
+            client.setWorkDir(new File(dir, type));
             clients.put(type, client);
         }
         return client;
     }
     
-    public SmartClient getQQClient() {
-        return getClient(TYPE_QQ);
+    public SmartQQClient getQQClient() {
+        return (SmartQQClient) getClient(TYPE_QQ);
     }
     
-    public SmartClient getWechatClient() {
-        return getClient(TYPE_WECHAT);
+    public WechatClient getWechatClient() {
+        return (WechatClient) getClient(TYPE_WECHAT);
     }
     
     public static IMClientFactory getInstance() {

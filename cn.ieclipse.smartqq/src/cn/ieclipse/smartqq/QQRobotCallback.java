@@ -97,7 +97,7 @@ public class QQRobotCallback extends IMRobotCallback {
             String msg = m.getContent(true);
             String reply = getTuringReply(String.valueOf(m.getUserId()), msg);
             if (reply != null) {
-                String input = robotName + "@" + from.getContact().getName()
+                String input = robotName + "@" + from.getMember().getName()
                         + SEP + reply;
                 if (console != null) {
                     console.post(input);
@@ -141,7 +141,7 @@ public class QQRobotCallback extends IMRobotCallback {
             String reply = getTuringReply(String.valueOf(m.getUserId()),
                     m.getContent());
             if (reply != null) {
-                String input = robotName + "@" + from.getContact().getName()
+                String input = robotName + "@" + from.getName()
                         + SEP + reply;
                 if (console != null) {
                     console.post(input);

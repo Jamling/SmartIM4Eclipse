@@ -99,6 +99,12 @@
             id="cn.ieclipse.smartim.preferences.QiniuPerferencePage"
             name="File Upload">
       </page>
+      <page
+            category="cn.ieclipse.smartim.preferences.SmartQQPreferencePage"
+            class="cn.ieclipse.smartim.preferences.SettingsPerferencePage"
+            id="cn.ieclipse.smartim.preferences.SettingsPerferencePage"
+            name="Settgins">
+      </page>
    </extension>
    <extension
          point="org.eclipse.ui.menus">

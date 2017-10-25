@@ -2,6 +2,7 @@ package cn.ieclipse.smartim.console;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -18,6 +19,8 @@ import org.eclipse.ui.console.TextConsolePage;
 import org.eclipse.ui.part.IPageBookViewPage;
 import org.eclipse.wb.swt.SWTResourceManager;
 
+import cn.ieclipse.smartim.AbstractSmartClient;
+import cn.ieclipse.smartim.IMHistoryManager;
 import cn.ieclipse.smartim.IMPlugin;
 import cn.ieclipse.smartim.SmartClient;
 import cn.ieclipse.smartim.common.IMUtils;
@@ -67,11 +70,35 @@ public abstract class IMChatConsole extends IOConsole {
     
     public abstract SmartClient getClient();
     
+    public String getHistoryFile() {
+        return uin;
+    }
+    
+    public abstract void loadHistory(String raw);
+    
     @Override
     public IPageBookViewPage createPage(IConsoleView view) {
         IPageBookViewPage page = null;
         page = this.page = new IMChatConsolePage(this, view);
         return page;
+    }
+    
+    public void loadHistories() {
+        initStreams();
+        SmartClient client = getClient();
+        if (client != null && client instanceof AbstractSmartClient) {
+            List<String> ms = IMHistoryManager.getInstance()
+                    .load((AbstractSmartClient) client, getHistoryFile());
+            for (String raw : ms) {
+                if (!IMUtils.isEmpty(raw)) {
+                    try {
+                        loadHistory(raw);
+                    } catch (Exception e) {
+                        error("历史消息记录：" + raw);
+                    }
+                }
+            }
+        }
     }
     
     public void write(String msg) {
@@ -92,10 +119,18 @@ public abstract class IMChatConsole extends IOConsole {
         }
     }
     
-    public void post(final String msg) {
-    }
+    public abstract void post(final String msg);
     
     public void sendMsg(final String msg) {
+        SmartClient client = getClient();
+        if (client == null || client.isClose()) {
+            error("连接已关闭");
+            return;
+        }
+        if (!client.isLogin()) {
+            error("连接已关闭，请重新登录");
+            return;
+        }
         writeMine(msg);
         new Thread() {
             public void run() {
@@ -128,20 +163,27 @@ public abstract class IMChatConsole extends IOConsole {
     @Override
     protected void init() {
         super.init();
-        inputStream = getInputStream();
-        outputStream = newOutputStream();
-        errorStream = newOutputStream();
-        promptStream = newOutputStream();
-        mineStream = newOutputStream();
-        
-        outputStream.setColor(SWTResourceManager.getColor(SWT.COLOR_BLACK));
-        inputStream.setColor(SWTResourceManager.getColor(SWT.COLOR_BLACK));
-        promptStream.setColor(
-                SWTResourceManager.getColor(SWT.COLOR_WIDGET_DARK_SHADOW));
-        mineStream.setColor(SWTResourceManager.getColor(SWT.COLOR_DARK_BLUE));
-        errorStream.setColor(SWTResourceManager.getColor(SWT.COLOR_RED));
+        initStreams();
         
         // new Thread(inputRunnable).start();
+    }
+    
+    private void initStreams() {
+        if (inputStream == null) {
+            inputStream = getInputStream();
+            outputStream = newOutputStream();
+            errorStream = newOutputStream();
+            promptStream = newOutputStream();
+            mineStream = newOutputStream();
+            
+            outputStream.setColor(SWTResourceManager.getColor(SWT.COLOR_BLACK));
+            inputStream.setColor(SWTResourceManager.getColor(SWT.COLOR_BLACK));
+            promptStream.setColor(
+                    SWTResourceManager.getColor(SWT.COLOR_WIDGET_DARK_SHADOW));
+            mineStream
+                    .setColor(SWTResourceManager.getColor(SWT.COLOR_DARK_BLUE));
+            errorStream.setColor(SWTResourceManager.getColor(SWT.COLOR_RED));
+        }
     }
     
     private Runnable inputRunnable = new Runnable() {

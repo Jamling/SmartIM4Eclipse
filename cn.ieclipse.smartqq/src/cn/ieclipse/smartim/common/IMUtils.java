@@ -17,6 +17,7 @@ package cn.ieclipse.smartim.common;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 
 /**
  * 类/接口描述
@@ -55,8 +56,16 @@ public class IMUtils {
         return text == null || text.length() == 0;
     }
     
-    public static String formatMsg(long time, String name, String msg) {
+    public static boolean isEmpty(Collection<?> list) {
+        return list == null || list.isEmpty();
+    }
+    
+    public static String formatMsg(long time, String name, CharSequence msg) {
         String s1 = new SimpleDateFormat("HH:mm:ss").format(time);
         return String.format("%s %s: %s\n", s1, name, msg);
+    }
+    
+    public static boolean isMySendMsg(String raw) {
+        return raw.matches("^\\d{2}:\\d{2}:\\d{2} [.\\s\\S]*");
     }
 }
