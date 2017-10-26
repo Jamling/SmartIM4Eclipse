@@ -21,6 +21,8 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.widgets.Composite;
 
+import cn.ieclipse.smartim.dialogs.HotKeyInputDialog;
+
 /**
  * 类/接口描述
  * 

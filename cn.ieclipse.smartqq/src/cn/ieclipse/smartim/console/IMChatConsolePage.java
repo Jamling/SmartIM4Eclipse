@@ -134,13 +134,11 @@ public class IMChatConsolePage extends TextConsolePage {
         @Override
         public void keyPressed(KeyEvent e) {
             String key = HotKeyFieldEditor.keyEvent2String(e);
-            System.out.println("input " + key);
         }
         
         @Override
         public void verifyKey(VerifyEvent e) {
             String key = HotKeyFieldEditor.keyEvent2String(e);
-            System.out.println("verify " + key);
             if (key.equals(store.getString(HotKeyPreferencePage.KEY_INPUT))) {
                 fConsole.activeInput();
             }

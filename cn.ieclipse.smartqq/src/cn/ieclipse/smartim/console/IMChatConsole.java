@@ -25,6 +25,7 @@ import cn.ieclipse.smartim.IMPlugin;
 import cn.ieclipse.smartim.SmartClient;
 import cn.ieclipse.smartim.common.IMUtils;
 import cn.ieclipse.smartim.model.IContact;
+import cn.ieclipse.smartim.preferences.SettingsPerferencePage;
 
 public abstract class IMChatConsole extends IOConsole {
     protected static final String ENTER_KEY = "\r\n";
@@ -219,22 +220,23 @@ public abstract class IMChatConsole extends IOConsole {
     public void toggleHide() {
         if (IMPlugin.getDefault().enable) {
             hide();
-            IMPlugin.getDefault().enable = false;
+            IMPlugin.setEnable(false);
         }
         else {
             toggleContactView(true);
-            IMPlugin.getDefault().enable = true;
+            IMPlugin.setEnable(true);
         }
+        IMPlugin.setNotify(IMPlugin.getDefault().enable);
     }
     
     public void toggleClose() {
         if (IMPlugin.getDefault().enable) {
             close();
-            IMPlugin.getDefault().enable = false;
+            IMPlugin.setEnable(false);
         }
         else {
             toggleContactView(true);
-            IMPlugin.getDefault().enable = true;
+            IMPlugin.setEnable(true);
         }
     }
     

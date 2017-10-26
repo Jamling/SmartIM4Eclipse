@@ -43,7 +43,7 @@ public class DisconnectAction extends Action {
     @Override
     public void run() {
         IMPlugin.getDefault().closeAllChat();
-        IMPlugin.getDefault().enable = true;
+        IMPlugin.setEnable(true);
         if (contactView != null) {
             contactView.getClient().close();
             contactView.initContacts();

@@ -1,4 +1,4 @@
-package cn.ieclipse.smartim.preferences;
+package cn.ieclipse.smartim.dialogs;
 
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -8,6 +8,9 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
+
+import cn.ieclipse.smartim.common.PreventESCTraverseListener;
+import cn.ieclipse.smartim.preferences.HotKeyFieldEditor;
 
 public class HotKeyInputDialog extends InputDialog {
     
@@ -21,6 +24,7 @@ public class HotKeyInputDialog extends InputDialog {
         this(parentShell, "Input key",
                 "Set hot key for '" + editor.getLabelText() + "'",
                 editor.getTextControl(null).getText(), null);
+        getShell().addTraverseListener(new PreventESCTraverseListener());
     }
     
     @Override

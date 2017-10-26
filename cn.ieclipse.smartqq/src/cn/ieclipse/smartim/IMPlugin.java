@@ -21,6 +21,7 @@ import com.scienjus.smartqq.QNUploader;
 import cn.ieclipse.smartim.console.IMChatConsole;
 import cn.ieclipse.smartim.console.IMConsoleListener;
 import cn.ieclipse.smartim.model.IContact;
+import cn.ieclipse.smartim.preferences.SettingsPerferencePage;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -243,4 +244,13 @@ public class IMPlugin extends AbstractUIPlugin {
     }
     
     public boolean enable = true;
+    
+    public static void setEnable(boolean enable) {
+        getDefault().enable = enable;
+    }
+    
+    public static void setNotify(boolean enable) {
+        getDefault().getPreferenceStore()
+                .setValue(SettingsPerferencePage.NOTIFY_ENABLE, enable);
+    }
 }
