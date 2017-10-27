@@ -16,6 +16,8 @@
 package cn.ieclipse.smartim.actions;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Shell;
 
 import cn.ieclipse.smartim.IMPlugin;
 import cn.ieclipse.smartim.dialogs.LoginDialog;
@@ -44,9 +46,17 @@ public class LoginAction extends Action {
     @Override
     public void run() {
         if (fView != null) {
-            LoginDialog dialog = new LoginDialog(fView.getSite().getShell());
-            dialog.setClient(fView.getClient());
-            dialog.open();
+            Shell shell = fView.getSite().getShell();
+            boolean ok = true;
+            if (fView.getClient().isLogin()) {
+                ok = MessageDialog.openConfirm(shell, null,
+                        "您已处于登录状态，确定要重新登录吗？");
+            }
+            if (ok) {
+                LoginDialog dialog = new LoginDialog(shell);
+                dialog.setClient(fView.getClient());
+                dialog.open();
+            }
             fView.initContacts();
         }
     }

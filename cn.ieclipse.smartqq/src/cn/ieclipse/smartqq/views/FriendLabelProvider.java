@@ -7,6 +7,7 @@ import org.eclipse.ui.PlatformUI;
 
 import com.scienjus.smartqq.client.SmartQQClient;
 import com.scienjus.smartqq.model.Category;
+import com.scienjus.smartqq.model.QQContact;
 import com.scienjus.smartqq.model.Recent;
 
 import cn.ieclipse.smartim.common.LetterImageFactory;
@@ -52,6 +53,14 @@ public class FriendLabelProvider extends IMContactLabelProvider {
             }
             else if (type == 2) {
                 return LetterImageFactory.create('D', SWT.COLOR_DARK_CYAN);
+            }
+        }
+        else if (obj instanceof QQContact) {
+            QQContact c = (QQContact) obj;
+            if (c.getUnread() > 0) {
+                int ch = Math.min(c.getUnread(), 9) + (int) '0';
+                return LetterImageFactory.create((char) ch,
+                        SWT.COLOR_RED);
             }
         }
         String imageKey = ISharedImages.IMG_OBJ_ELEMENT;

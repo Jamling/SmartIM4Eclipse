@@ -103,6 +103,7 @@ public class Notifications extends Shell {
                 // setVisible(false);
                 if (target != null && chatClass != null) {
                     IMPlugin.getDefault().findConsole(chatClass, target, true);
+                    setVisible(false);
                 }
             }
         });
@@ -181,6 +182,7 @@ public class Notifications extends Shell {
             instance = new Notifications(p.getDisplay());
             instance.open();
             instance.layout();
+            instance.setFocus();
             instance.setVisible(false);
         }
         return instance;

@@ -13,35 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cn.ieclipse.wechat.actions;
+package cn.ieclipse.wechat;
 
-import org.eclipse.swt.widgets.Shell;
-
-import cn.ieclipse.smartim.actions.BroadcastAction;
-import cn.ieclipse.smartim.views.IMContactView;
-import cn.ieclipse.wechat.views.WXBroadcastDialog;
+import cn.ieclipse.smartim.callback.ModificationCallback;
+import cn.ieclipse.smartim.model.IContact;
 import cn.ieclipse.wechat.views.WXContactView;
+import io.github.biezhi.wechat.model.Contact;
 
 /**
  * 类/接口描述
  * 
  * @author Jamling
- * @date 2017年10月19日
+ * @date 2017年10月27日
  *       
  */
-public class WXBroadcastAction extends BroadcastAction {
-    WXContactView contactView;
+public class WXModificationCallback implements ModificationCallback {
+    private WXContactView fContactView;
     
-    public WXBroadcastAction(IMContactView contactView) {
-        super(contactView);
-        this.contactView = (WXContactView) contactView;
-        setText("群发微信消息");
+    public WXModificationCallback(WXContactView fContactView) {
+        this.fContactView = fContactView;
     }
     
     @Override
-    protected void openDialog(Shell shell) {
-        WXBroadcastDialog dialog = new WXBroadcastDialog(shell,
-                (WXContactView) contactView);
-        dialog.open();
+    public void onContactChanged(IContact contact) {
+        if (contact instanceof Contact) {
+            fContactView.notifyUpdateContacts(0, true);
+        }
     }
+    
 }

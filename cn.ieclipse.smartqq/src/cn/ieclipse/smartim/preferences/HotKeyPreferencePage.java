@@ -35,7 +35,7 @@ public class HotKeyPreferencePage extends FieldEditorPreferencePage
             + ".key.hide_close"; //$NON-NLS-1$
             
     public HotKeyPreferencePage() {
-        super(FLAT);
+        super(GRID);
         setPreferenceStore(IMPlugin.getDefault().getPreferenceStore());
         setDescription(Messages.HotKeyPreferencePage_desc);
     }

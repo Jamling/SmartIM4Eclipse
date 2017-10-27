@@ -19,6 +19,7 @@ import com.scienjus.smartqq.client.SmartQQClient;
 import com.scienjus.smartqq.model.DiscussFrom;
 import com.scienjus.smartqq.model.FriendFrom;
 import com.scienjus.smartqq.model.GroupFrom;
+import com.scienjus.smartqq.model.QQContact;
 import com.scienjus.smartqq.model.QQMessage;
 
 import cn.ieclipse.smartim.IMClientFactory;
@@ -31,6 +32,7 @@ import cn.ieclipse.smartim.model.impl.AbstractFrom;
 import cn.ieclipse.smartim.model.impl.AbstractMessage;
 import cn.ieclipse.smartim.preferences.SettingsPerferencePage;
 import cn.ieclipse.smartqq.console.QQChatConsole;
+import cn.ieclipse.smartqq.views.QQContactView;
 
 /**
  * 类/接口描述
@@ -41,6 +43,11 @@ import cn.ieclipse.smartqq.console.QQChatConsole;
  */
 public class QQReceiveCallback implements ReceiveCallback {
     private QQChatConsole lastConsole;
+    private QQContactView fContactView;
+    
+    public QQReceiveCallback(QQContactView fContactView) {
+        this.fContactView = fContactView;
+    }
     
     @Override
     public void onReceiveMessage(AbstractMessage message, AbstractFrom from) {
@@ -49,6 +56,7 @@ public class QQReceiveCallback implements ReceiveCallback {
             boolean notify = IMPlugin.getDefault().getPreferenceStore()
                     .getBoolean(SettingsPerferencePage.NOTIFY_FRIEND);
             String uin = from.getContact().getUin();
+            QQContact qqContact = null;
             if (from instanceof GroupFrom) {
                 GroupFrom gf = (GroupFrom) from;
                 unkown = (gf.getGroupUser() == null
@@ -56,6 +64,8 @@ public class QQReceiveCallback implements ReceiveCallback {
                 uin = gf.getGroup().getUin();
                 notify = IMPlugin.getDefault().getPreferenceStore()
                         .getBoolean(SettingsPerferencePage.NOTIFY_GROUP);
+                qqContact = fContactView.getClient()
+                        .getGroup(gf.getGroup().getId());
             }
             else if (from instanceof DiscussFrom) {
                 DiscussFrom gf = (DiscussFrom) from;
@@ -64,6 +74,8 @@ public class QQReceiveCallback implements ReceiveCallback {
                 uin = gf.getDiscuss().getUin();
                 notify = IMPlugin.getDefault().getPreferenceStore()
                         .getBoolean(SettingsPerferencePage.NOTIFY_GROUP);
+                qqContact = fContactView.getClient()
+                        .getGroup(gf.getDiscuss().getId());
             }
             if (!unkown) {
                 SmartQQClient client = IMClientFactory.getInstance()
@@ -78,18 +90,28 @@ public class QQReceiveCallback implements ReceiveCallback {
                 Notifications.notify(QQChatConsole.class, from.getContact(),
                         from.getContact().getName(), content);
             }
-        }
-        QQChatConsole console = IMPlugin.getDefault()
-                .findConsole(QQChatConsole.class, from.getContact(), false);
-        if (console != null) {
-            lastConsole = console;
-            String name = from.getName();
-            String msg = null;
-            if (message instanceof QQMessage) {
-                QQMessage m = (QQMessage) message;
-                msg = IMUtils.formatMsg(m.getTime(), name, m.getContent());
+            if (qqContact != null) {
+                qqContact.setLastMessage(message);
             }
-            console.write(msg);
+            
+            QQChatConsole console = IMPlugin.getDefault()
+                    .findConsole(QQChatConsole.class, from.getContact(), false);
+            if (console != null) {
+                lastConsole = console;
+                String name = from.getName();
+                String msg = null;
+                if (message instanceof QQMessage) {
+                    QQMessage m = (QQMessage) message;
+                    msg = IMUtils.formatMsg(m.getTime(), name, m.getContent());
+                }
+                console.write(msg);
+            }
+            else {
+                if (qqContact != null) {
+                    qqContact.increaceUnRead();
+                }
+                fContactView.notifyUpdateContacts(0, false);
+            }
         }
     }
     

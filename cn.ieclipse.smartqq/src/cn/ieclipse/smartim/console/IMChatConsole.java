@@ -33,7 +33,9 @@ public abstract class IMChatConsole extends IOConsole {
     protected String uin;
     protected IContact contact;
     protected IMChatConsolePage page;
-    
+    private static ImageDescriptor icon = IMPlugin
+            .getImageDescriptor("icons/review.png");
+            
     public IMChatConsole(String name, String consoleType,
             ImageDescriptor imageDescriptor, String encoding,
             boolean autoLifecycle) {
@@ -45,7 +47,7 @@ public abstract class IMChatConsole extends IOConsole {
     }
     
     public IMChatConsole(String id, String name, String uin) {
-        this(name, IMPlugin.getImageDescriptor("icons/review.png"));
+        this(name, icon);
         this.id = id;
         this.uin = uin;
     }

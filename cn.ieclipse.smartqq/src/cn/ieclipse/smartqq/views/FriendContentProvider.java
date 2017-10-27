@@ -1,5 +1,6 @@
 package cn.ieclipse.smartqq.views;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jface.viewers.Viewer;
@@ -8,6 +9,7 @@ import com.scienjus.smartqq.client.SmartQQClient;
 import com.scienjus.smartqq.model.Category;
 import com.scienjus.smartqq.model.Discuss;
 import com.scienjus.smartqq.model.Group;
+import com.scienjus.smartqq.model.QQContact;
 import com.scienjus.smartqq.model.Recent;
 
 import cn.ieclipse.smartim.model.VirtualCategory;
@@ -19,7 +21,7 @@ public class FriendContentProvider extends IMContactContentProvider {
     public FriendContentProvider(IMContactView view, boolean check) {
         super(view, check);
     }
-
+    
     @Override
     public void dispose() {
         // TODO Auto-generated method stub
@@ -28,8 +30,6 @@ public class FriendContentProvider extends IMContactContentProvider {
     
     @Override
     public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-        // TODO Auto-generated method stub
-        
     }
     
     @Override
@@ -64,8 +64,9 @@ public class FriendContentProvider extends IMContactContentProvider {
     public Object[] getElements(Object inputElement) {
         SmartQQClient client = (SmartQQClient) fView.getClient();
         if ("recent".equals(inputElement)) {
-            List<Recent> recents = client.getRecentList();
-            return recents == null ? null : recents.toArray();
+            // List<Recent> recents = client.getRecentList();
+            // return recents == null ? null : recents.toArray();
+            return getRecentTargets(client).toArray();
         }
         else if ("group".equals(inputElement)) {
             List<Group> groups = client.getGroupList();
@@ -89,5 +90,13 @@ public class FriendContentProvider extends IMContactContentProvider {
         else {
             return null;
         }
+    }
+    
+    public List<QQContact> getRecentTargets(SmartQQClient client) {
+        List<Recent> recents = client.getRecentList();
+        List<QQContact> list = client.getRecents2();
+        Collections.sort(list);
+        System.out.println(list);
+        return list;
     }
 }

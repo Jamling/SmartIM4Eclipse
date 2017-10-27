@@ -15,14 +15,14 @@
  */
 package cn.ieclipse.wechat.console;
 
+import org.eclipse.jface.resource.ImageDescriptor;
+
 import cn.ieclipse.smartim.IMClientFactory;
-import cn.ieclipse.smartim.IMHistoryManager;
+import cn.ieclipse.smartim.IMPlugin;
 import cn.ieclipse.smartim.common.IMUtils;
 import cn.ieclipse.smartim.console.IMChatConsole;
 import cn.ieclipse.smartim.model.IContact;
 import cn.ieclipse.smartim.model.impl.AbstractFrom;
-import cn.ieclipse.util.EncodeUtils;
-import cn.ieclipse.util.StringUtils;
 import io.github.biezhi.wechat.api.WechatClient;
 import io.github.biezhi.wechat.model.WechatMessage;
 
@@ -34,13 +34,17 @@ import io.github.biezhi.wechat.model.WechatMessage;
  *       
  */
 public class WXChatConsole extends IMChatConsole {
-    
+    private static ImageDescriptor icon = IMPlugin
+            .getImageDescriptor("icons/wechat.png");
+            
     public WXChatConsole(String id, String name, String uin) {
         super(id, name, uin);
+        setImageDescriptor(icon);
     }
     
     public WXChatConsole(IContact contact) {
         super(contact);
+        setImageDescriptor(icon);
     }
     
     @Override

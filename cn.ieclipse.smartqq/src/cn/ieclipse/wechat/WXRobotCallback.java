@@ -10,6 +10,7 @@ import cn.ieclipse.smartim.model.impl.AbstractFrom;
 import cn.ieclipse.smartim.model.impl.AbstractMessage;
 import cn.ieclipse.smartim.preferences.RobotPreferencePage;
 import cn.ieclipse.wechat.console.WXChatConsole;
+import cn.ieclipse.wechat.views.WXContactView;
 import io.github.biezhi.wechat.api.WechatClient;
 import io.github.biezhi.wechat.model.GroupFrom;
 import io.github.biezhi.wechat.model.User;
@@ -20,6 +21,11 @@ public class WXRobotCallback extends IMRobotCallback {
     
     private WXChatConsole console;
     private WechatClient client;
+    private WXContactView fContactView;
+    
+    public WXRobotCallback(WXContactView fContactView) {
+        this.fContactView = fContactView;
+    }
     
     @Override
     public void onReceiveMessage(AbstractMessage message, AbstractFrom from) {

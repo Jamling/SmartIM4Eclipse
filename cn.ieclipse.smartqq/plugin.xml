@@ -12,14 +12,14 @@
             allowMultiple="false"
             category="cn.ieclipse.smartim"
             class="cn.ieclipse.smartqq.views.QQContactView"
-            icon="icons/review.png"
+            icon="icons/QQ.png"
             id="cn.ieclipse.smartqq.views.QQContactView"
             name="SmartQQ">
       </view>
       <view
             category="cn.ieclipse.smartim"
             class="cn.ieclipse.wechat.views.WXContactView"
-            icon="icons/review.png"
+            icon="icons/wechat.png"
             id="cn.ieclipse.wechat.views.WXContactView"
             name="Wechat"
             restorable="true">
@@ -41,7 +41,7 @@
       <consolePatternMatchListener
             class="cn.ieclipse.smartim.console.SenderMatchDelegate"
             id="cn.ieclipse.smartqq.consolePatternMatchListener1"
-            regex="\d{2}:\d{2}:\d{2} \S+: ">
+            regex="\d{2}:\d{2}:\d{2} [\s\S]+: ">
          <enablement>
             <instanceof
                   value="cn.ieclipse.smartim.console.IMChatConsole">
@@ -132,6 +132,9 @@
             class="cn.ieclipse.smartim.handlers.ReviewHandler"
             commandId="cn.ieclipse.smartqq.command.CodeReview">
       </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.decorators">
    </extension>
 
 </plugin>

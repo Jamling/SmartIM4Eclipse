@@ -45,6 +45,9 @@ public class SettingsPerferencePage extends FieldEditorPreferencePage
     public static final String NOTIFY_FRIEND = IMPlugin.PLUGIN_ID
             + ".notify.friend"; //$NON-NLS-1$
             
+    public static final String NOTIFY_UNREAD = IMPlugin.PLUGIN_ID
+            + ".notify.unread"; //$NON-NLS-1$
+            
     public SettingsPerferencePage() {
         super(FLAT);
         setPreferenceStore(IMPlugin.getDefault().getPreferenceStore());
@@ -64,6 +67,9 @@ public class SettingsPerferencePage extends FieldEditorPreferencePage
                 getFieldEditorParent()));
         addField(new IntegerFieldEditor(NOTIFY_DISMISS,
                 Messages.SettingsPerferencePage_notify_dismiss,
+                getFieldEditorParent()));
+        addField(new BooleanFieldEditor(NOTIFY_UNREAD,
+                Messages.SettingsPerferencePage_notify_unread,
                 getFieldEditorParent()));
     }
     

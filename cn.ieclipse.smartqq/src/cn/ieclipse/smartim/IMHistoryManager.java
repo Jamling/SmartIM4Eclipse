@@ -58,7 +58,7 @@ public class IMHistoryManager {
     public boolean save(AbstractSmartClient client, String uin, String rawMsg) {
         FileStorage fs = get(client, uin);
         boolean ret = fs.append(rawMsg);
-        ret = ret && fs.flush();
+        ret = ret && fs.isPersistent() && fs.flush();
         return ret;
     }
 }

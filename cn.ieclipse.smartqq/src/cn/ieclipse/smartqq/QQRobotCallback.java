@@ -3,7 +3,6 @@ package cn.ieclipse.smartqq;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import com.scienjus.smartqq.client.SmartQQClient;
-import com.scienjus.smartqq.model.QQMessage;
 import com.scienjus.smartqq.model.DiscussFrom;
 import com.scienjus.smartqq.model.DiscussInfo;
 import com.scienjus.smartqq.model.DiscussMessage;
@@ -13,9 +12,9 @@ import com.scienjus.smartqq.model.GroupFrom;
 import com.scienjus.smartqq.model.GroupInfo;
 import com.scienjus.smartqq.model.GroupMessage;
 import com.scienjus.smartqq.model.GroupUser;
+import com.scienjus.smartqq.model.QQMessage;
 import com.scienjus.smartqq.model.UserInfo;
 
-import cn.ieclipse.smartim.IMClientFactory;
 import cn.ieclipse.smartim.IMPlugin;
 import cn.ieclipse.smartim.IMRobotCallback;
 import cn.ieclipse.smartim.model.IFrom;
@@ -23,10 +22,16 @@ import cn.ieclipse.smartim.model.impl.AbstractFrom;
 import cn.ieclipse.smartim.model.impl.AbstractMessage;
 import cn.ieclipse.smartim.preferences.RobotPreferencePage;
 import cn.ieclipse.smartqq.console.QQChatConsole;
+import cn.ieclipse.smartqq.views.QQContactView;
 
 public class QQRobotCallback extends IMRobotCallback {
     
     private QQChatConsole console;
+    private QQContactView fContactView;
+    
+    public QQRobotCallback(QQContactView fContactView) {
+        this.fContactView = fContactView;
+    }
     
     @Override
     public void onReceiveMessage(AbstractMessage message, AbstractFrom from) {
@@ -52,6 +57,7 @@ public class QQRobotCallback extends IMRobotCallback {
         
         IPreferenceStore store = IMPlugin.getDefault().getPreferenceStore();
         String robotName = store.getString(RobotPreferencePage.ROBOT_NAME);
+        SmartQQClient client = fContactView.getClient();
         // auto reply friend
         if (from instanceof FriendFrom
                 && store.getBoolean(RobotPreferencePage.FRIEND_REPLY_ANY)) {
@@ -60,7 +66,7 @@ public class QQRobotCallback extends IMRobotCallback {
             if (reply != null) {
                 String input = robotName + reply;
                 if (console == null) {
-                    getClient().sendMessageToFriend(m.getUserId(), input);
+                    client.sendMessageToFriend(m.getUserId(), input);
                 }
                 else {
                     console.post(input);
@@ -86,7 +92,7 @@ public class QQRobotCallback extends IMRobotCallback {
                     console.post(robotName + input);
                 }
                 else {
-                    getClient().sendMessageToGroup(gf.getGroup().getId(),
+                    client.sendMessageToGroup(gf.getGroup().getId(),
                             robotName + input);
                 }
             }
@@ -104,11 +110,11 @@ public class QQRobotCallback extends IMRobotCallback {
                 }
                 else {
                     if (m instanceof GroupMessage) {
-                        getClient().sendMessageToGroup(
+                        client.sendMessageToGroup(
                                 ((GroupMessage) m).getGroupId(), input);
                     }
                     else if (m instanceof DiscussMessage) {
-                        getClient().sendMessageToDiscuss(
+                        client.sendMessageToDiscuss(
                                 ((DiscussMessage) m).getDiscussId(), input);
                     }
                 }
@@ -141,8 +147,7 @@ public class QQRobotCallback extends IMRobotCallback {
             String reply = getTuringReply(String.valueOf(m.getUserId()),
                     m.getContent());
             if (reply != null) {
-                String input = robotName + "@" + from.getName()
-                        + SEP + reply;
+                String input = robotName + "@" + from.getName() + SEP + reply;
                 if (console != null) {
                     console.post(input);
                 }
@@ -176,13 +181,12 @@ public class QQRobotCallback extends IMRobotCallback {
     }
     
     private UserInfo getAccount() {
-        UserInfo me = (UserInfo) IMClientFactory.getInstance().getQQClient()
-                .getAccount();
+        UserInfo me = getClient().getAccount();
         return me;
     }
     
     private SmartQQClient getClient() {
-        return (SmartQQClient) IMClientFactory.getInstance().getQQClient();
+        return fContactView.getClient();
     }
     
     private boolean isMySend(long uin) {

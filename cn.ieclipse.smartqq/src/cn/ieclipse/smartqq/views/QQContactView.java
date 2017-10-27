@@ -10,12 +10,11 @@ import com.scienjus.smartqq.client.SmartQQClient;
 import com.scienjus.smartqq.model.Friend;
 
 import cn.ieclipse.smartim.IMClientFactory;
-import cn.ieclipse.smartim.IMHistoryManager;
 import cn.ieclipse.smartim.IMPlugin;
-import cn.ieclipse.smartim.callback.SendCallback;
 import cn.ieclipse.smartim.common.IMUtils;
 import cn.ieclipse.smartim.console.IMChatConsole;
 import cn.ieclipse.smartim.views.IMContactView;
+import cn.ieclipse.smartqq.QQMidificationCallback;
 import cn.ieclipse.smartqq.QQReceiveCallback;
 import cn.ieclipse.smartqq.QQRobotCallback;
 import cn.ieclipse.smartqq.QQSendCallback;
@@ -42,8 +41,8 @@ public class QQContactView extends IMContactView {
         labelProvider = new FriendLabelProvider(this);
         doubleClicker = new QQDoubleClicker(this);
         
-        receiveCallback = new QQReceiveCallback();
-        robotCallback = new QQRobotCallback();
+        receiveCallback = new QQReceiveCallback(this);
+        robotCallback = new QQRobotCallback(this);
         sendCallback = new QQSendCallback(this);
     }
     
@@ -63,25 +62,34 @@ public class QQContactView extends IMContactView {
         initTrees(ftvRecent, ftvFriend, ftvGroup, ftvDiscuss);
     }
     
-    public void initContacts() {
+    protected void doLoadContacts() {
         client = getClient();
         if (client.isLogin()) {
             try {
-                IMPlugin.getDefault().log("初始化QQ");
                 client.init();
-                IMPlugin.getDefault().log("QQ初始化完成，联系人加载中...");
-                ftvFriend.setInput("friend");
-                ftvGroup.setInput("group");
-                ftvDiscuss.setInput("discuss");
-                ftvRecent.setInput("recent");
+                notifyLoadContacts(true);
                 client.setReceiveCallback(receiveCallback);
                 client.addReceiveCallback(robotCallback);
                 client.setSendCallback(sendCallback);
-                IMPlugin.getDefault().log("QQ联系人加载完成，消息监听中...");
+                client.setModificationCallbacdk(
+                        new QQMidificationCallback(this));
                 client.start();
             } catch (Exception e) {
                 IMPlugin.getDefault().log("SmartQQ初始化失败", e);
             }
+        }
+        else {
+            notifyLoadContacts(false);
+        }
+    }
+    
+    @Override
+    protected void onLoadContacts(boolean success) {
+        if (success) {
+            ftvFriend.setInput("friend");
+            ftvGroup.setInput("group");
+            ftvDiscuss.setInput("discuss");
+            ftvRecent.setInput("recent");
         }
         else {
             ftvFriend.setInput(null);
@@ -107,6 +115,7 @@ public class QQContactView extends IMContactView {
             }
         };
         testAction.setText("Test");
+        testAction = null;
     }
     
     @Override
@@ -114,4 +123,14 @@ public class QQContactView extends IMContactView {
         return (SmartQQClient) IMClientFactory.getInstance().getQQClient();
     }
     
+    @Override
+    protected void doUpdateContacts(int index) {
+        super.doUpdateContacts(index);
+        if (index == 0) {
+            boolean focus = ftvRecent.getTree().isFocusControl();
+            if (focus && !updateContactsOnlyFocus) {
+                ftvRecent.refresh(true);
+            }
+        }
+    }
 }

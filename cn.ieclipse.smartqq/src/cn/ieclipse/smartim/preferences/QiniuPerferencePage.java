@@ -28,7 +28,7 @@ public class QiniuPerferencePage extends FieldEditorPreferencePage
      * Create the preference page.
      */
     public QiniuPerferencePage() {
-        super(FLAT);
+        super(GRID);
         setPreferenceStore(IMPlugin.getDefault().getPreferenceStore());
         setDescription("因SmartQQ不支持文件上传，所以本插件先将文件上传到七牛云，然后再将文件的URL发送出去\n"
                 + "如果您未设置七牛云储存，发送的文件将上传到本人私有储存空间（temp.ieclipse.cn），上传的文件的大小及保留天数将有限制，建议您自己注册七牛云并"
@@ -45,11 +45,11 @@ public class QiniuPerferencePage extends FieldEditorPreferencePage
                 getFieldEditorParent()));
         ComboFieldEditor zone = new ComboFieldEditor(ZONE, "机房", ZONE_VALUE,
                 getFieldEditorParent());
+        addField(zone);
         addField(new StringFieldEditor(AK, "AccessKey *",
                 getFieldEditorParent()));
         addField(new StringFieldEditor(SK, "SecretKey *",
                 getFieldEditorParent()));
-        addField(zone);
         addField(new StringFieldEditor(BUCKET, "存储空间", getFieldEditorParent()));
         addField(new StringFieldEditor(DOMAIN, "空间域名", getFieldEditorParent()));
         addField(new BooleanFieldEditor(TS, "给上传的文件添加时间戳（下载时强制更新缓存）",

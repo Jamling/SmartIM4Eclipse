@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.TabFolder;
 import cn.ieclipse.smartim.IMClientFactory;
 import cn.ieclipse.smartim.IMPlugin;
 import cn.ieclipse.smartim.views.IMContactView;
+import cn.ieclipse.wechat.WXModificationCallback;
 import cn.ieclipse.wechat.WXReceiveCallback;
 import cn.ieclipse.wechat.WXRobotCallback;
 import cn.ieclipse.wechat.WXSendCallback;
@@ -46,15 +47,17 @@ public class WXContactView extends IMContactView {
     private TreeViewer ftvFriend;
     private TreeViewer ftvGroup;
     private TreeViewer ftvPublic;
+    private WXModificationCallback modificationCallback;
     
     public WXContactView() {
         labelProvider = new WXContactLabelProvider(this);
         contentProvider = new WXContactContentProvider(this, false);
         doubleClicker = new WXDoubleClicker(this);
         
-        receiveCallback = new WXReceiveCallback();
-        robotCallback = new WXRobotCallback();
+        receiveCallback = new WXReceiveCallback(this);
+        robotCallback = new WXRobotCallback(this);
         sendCallback = new WXSendCallback(this);
+        modificationCallback = new WXModificationCallback(this);
     }
     
     @Override
@@ -68,26 +71,48 @@ public class WXContactView extends IMContactView {
     }
     
     @Override
-    public void initContacts() {
+    public void doLoadContacts() {
         WechatClient client = (WechatClient) getClient();
         if (client.isLogin()) {
             try {
                 client.init();
-                ftvFriend.setInput("recent");
-                ftvGroup.setInput("friend");
-                ftvPublic.setInput("public");
+                notifyLoadContacts(true);
                 client.setReceiveCallback(receiveCallback);
                 client.setSendCallback(sendCallback);
                 client.addReceiveCallback(robotCallback);
+                client.setModificationCallbacdk(modificationCallback);
                 client.start();
             } catch (Exception e) {
                 IMPlugin.getDefault().log("微信初始化失败", e);
             }
         }
         else {
+            notifyLoadContacts(false);
+        }
+    }
+    
+    @Override
+    protected void onLoadContacts(boolean success) {
+        if (success) {
+            ftvFriend.setInput("recent");
+            ftvGroup.setInput("friend");
+            ftvPublic.setInput("public");
+        }
+        else {
             ftvFriend.setInput(null);
             ftvGroup.setInput(null);
             ftvPublic.setInput(null);
+        }
+    }
+    
+    @Override
+    protected void doUpdateContacts(int index) {
+        super.doUpdateContacts(index);
+        if (index == 0) {
+            boolean focus = ftvFriend.getTree().isFocusControl();
+            if (focus && !updateContactsOnlyFocus) {
+                ftvFriend.refresh(true);
+            }
         }
     }
     

@@ -30,7 +30,7 @@ public class RobotPreferencePage extends FieldEditorPreferencePage
             + ".friend.reply.any"; //$NON-NLS-1$
             
     public RobotPreferencePage() {
-        super(FLAT);
+        super(GRID);
         setPreferenceStore(IMPlugin.getDefault().getPreferenceStore());
         setDescription(
                 Messages.RobotPreferencePage_desc);

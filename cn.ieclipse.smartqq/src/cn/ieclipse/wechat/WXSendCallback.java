@@ -29,7 +29,7 @@ import io.github.biezhi.wechat.api.WechatClient;
  *       
  */
 public class WXSendCallback extends IMSendCallback {
-    WXContactView fContactView;
+    private WXContactView fContactView;
     
     public WXSendCallback(WXContactView fContactView) {
         this.fContactView = fContactView;

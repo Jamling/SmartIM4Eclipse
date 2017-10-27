@@ -65,6 +65,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
         store.setDefault(SettingsPerferencePage.NOTIFY_GROUP, false);
         store.setDefault(SettingsPerferencePage.NOTIFY_FRIEND, true);
         store.setDefault(SettingsPerferencePage.NOTIFY_DISMISS, 5);
+        store.setDefault(SettingsPerferencePage.NOTIFY_UNREAD, true);
     }
     
 }

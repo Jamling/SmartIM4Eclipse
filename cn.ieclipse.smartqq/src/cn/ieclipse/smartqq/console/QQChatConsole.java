@@ -3,6 +3,7 @@ package cn.ieclipse.smartqq.console;
 import java.io.File;
 
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.console.IConsole;
 
 import com.google.gson.JsonObject;
@@ -22,7 +23,6 @@ import com.scienjus.smartqq.model.QQMessage;
 import com.scienjus.smartqq.model.UserInfo;
 
 import cn.ieclipse.smartim.IMClientFactory;
-import cn.ieclipse.smartim.IMHistoryManager;
 import cn.ieclipse.smartim.IMPlugin;
 import cn.ieclipse.smartim.common.IMUtils;
 import cn.ieclipse.smartim.console.IMChatConsole;
@@ -32,12 +32,17 @@ import cn.ieclipse.smartim.preferences.QiniuPerferencePage;
 
 public class QQChatConsole extends IMChatConsole {
     
+    private static ImageDescriptor icon = IMPlugin
+            .getImageDescriptor("icons/QQ.png");
+            
     public QQChatConsole(String id, String name, String uin) {
         super(id, name, uin);
+        setImageDescriptor(icon);
     }
     
     public QQChatConsole(IContact contact) {
         super(contact);
+        setImageDescriptor(icon);
     }
     
     @Override

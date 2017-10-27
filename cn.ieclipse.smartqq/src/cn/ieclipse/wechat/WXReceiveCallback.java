@@ -25,7 +25,9 @@ import cn.ieclipse.smartim.model.impl.AbstractFrom;
 import cn.ieclipse.smartim.model.impl.AbstractMessage;
 import cn.ieclipse.smartim.preferences.SettingsPerferencePage;
 import cn.ieclipse.wechat.console.WXChatConsole;
+import cn.ieclipse.wechat.views.WXContactView;
 import io.github.biezhi.wechat.api.WechatClient;
+import io.github.biezhi.wechat.model.Contact;
 import io.github.biezhi.wechat.model.GroupFrom;
 import io.github.biezhi.wechat.model.UserFrom;
 import io.github.biezhi.wechat.model.WechatMessage;
@@ -39,22 +41,39 @@ import io.github.biezhi.wechat.model.WechatMessage;
  */
 public class WXReceiveCallback implements ReceiveCallback {
     private WXChatConsole lastConsole;
+    private WXContactView fContactView;
+    
+    public WXReceiveCallback(WXContactView fContactView) {
+        this.fContactView = fContactView;
+    }
     
     @Override
     public void onReceiveMessage(AbstractMessage message, AbstractFrom from) {
         
         if (from != null && from.getContact() != null) {
+            boolean unkown = false;
             boolean notify = IMPlugin.getDefault().getPreferenceStore()
                     .getBoolean(SettingsPerferencePage.NOTIFY_FRIEND);
             String uin = from.getContact().getUin();
+            Contact contact = (Contact) from.getContact();
+            contact.setLastMessage(message);
             if (from instanceof GroupFrom) {
+                GroupFrom gf = (GroupFrom) from;
+                unkown = gf.getMember() == null || gf.getMember().isUnknown();
                 notify = IMPlugin.getDefault().getPreferenceStore()
                         .getBoolean(SettingsPerferencePage.NOTIFY_GROUP);
             }
+            else {
+                unkown = from.getMember() == null;
+            }
+            WechatClient client = fContactView.getClient();
+            if (!unkown) {
+                IMHistoryManager.getInstance().save(client, uin,
+                        message.getRaw());
+            }
             
-            WechatClient client = IMClientFactory.getInstance()
-                    .getWechatClient();
-            IMHistoryManager.getInstance().save(client, uin, message.getRaw());
+            // IMHistoryManager.getInstance().save(client, uin,
+            // message.getRaw());
             
             if (notify) {
                 CharSequence content = (from instanceof UserFrom)
@@ -63,19 +82,23 @@ public class WXReceiveCallback implements ReceiveCallback {
                 Notifications.notify(WXChatConsole.class, from.getContact(),
                         from.getContact().getName(), content);
             }
-        }
-        
-        WXChatConsole console = IMPlugin.getDefault()
-                .findConsole(WXChatConsole.class, from.getContact(), false);
-        if (console != null) {
-            lastConsole = console;
-            String name = from.getName();
-            String msg = null;
-            if (message instanceof WechatMessage) {
-                WechatMessage m = (WechatMessage) message;
-                msg = IMUtils.formatMsg(m.CreateTime, name, m.getText());
+            
+            WXChatConsole console = IMPlugin.getDefault()
+                    .findConsole(WXChatConsole.class, from.getContact(), false);
+            if (console != null) {
+                lastConsole = console;
+                String name = from.getName();
+                String msg = null;
+                if (message instanceof WechatMessage) {
+                    WechatMessage m = (WechatMessage) message;
+                    msg = IMUtils.formatMsg(m.CreateTime, name, m.getText());
+                }
+                console.write(msg);
             }
-            console.write(msg);
+            else {
+                contact.increaceUnRead();
+                fContactView.notifyUpdateContacts(0, false);
+            }
         }
     }
     

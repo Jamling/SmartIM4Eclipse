@@ -1,12 +1,15 @@
 package cn.ieclipse.smartim.views;
 
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
+import cn.ieclipse.smartim.common.LetterImageFactory;
 import cn.ieclipse.smartim.model.IContact;
 import cn.ieclipse.smartim.model.VirtualCategory;
+import cn.ieclipse.smartim.model.impl.AbstractContact;
 
 public abstract class IMContactLabelProvider extends LabelProvider {
     
@@ -27,6 +30,14 @@ public abstract class IMContactLabelProvider extends LabelProvider {
     }
     
     public Image getImage(Object obj) {
+        if (obj instanceof AbstractContact) {
+            AbstractContact c = (AbstractContact) obj;
+            if (c.getUnread() > 0) {
+                int ch = Math.min(c.getUnread(), 9) + (int) '0';
+                return LetterImageFactory.create((char) ch,
+                        SWT.COLOR_RED);
+            }
+        }
         String imageKey = ISharedImages.IMG_OBJ_ELEMENT;
         if (obj instanceof VirtualCategory)
             imageKey = ISharedImages.IMG_OBJ_FOLDER;

@@ -26,6 +26,7 @@ public class Messages extends NLS {
     public static String SettingsPerferencePage_notify_enable;
     public static String SettingsPerferencePage_notify_friend;
     public static String SettingsPerferencePage_notify_group;
+    public static String SettingsPerferencePage_notify_unread;
     public static String SmartQQPreferencePage_desc;
     public static String SmartQQPreferencePage_github;
     

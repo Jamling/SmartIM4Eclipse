@@ -16,6 +16,7 @@
 package cn.ieclipse.wechat.views;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -45,7 +46,9 @@ public class WXContactContentProvider extends IMContactContentProvider {
     public Object[] getElements(Object inputElement) {
         WechatClient client = (WechatClient) fView.getClient();
         if ("recent".equals(inputElement)) {
-            return client.getRecentList().toArray();
+            List<Contact> list = client.getRecentList();
+            Collections.sort(list);
+            return list.toArray();
         }
         else if ("group".equals(inputElement)) {
             List<Contact> groups = client.getGroupList();
@@ -106,7 +109,8 @@ public class WXContactContentProvider extends IMContactContentProvider {
     public boolean hasChildren(Object element) {
         if (element instanceof Contact) {
             Contact contact = (Contact) element;
-            return !IMUtils.isEmpty(contact.MemberList);
+            // return !IMUtils.isEmpty(contact.MemberList);
+            return false;
         }
         else if (element instanceof VirtualCategory) {
             return ((VirtualCategory<?>) element).hasChildren();

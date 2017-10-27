@@ -16,6 +16,8 @@
 package cn.ieclipse.smartim.actions;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Shell;
 
 import cn.ieclipse.smartim.IMPlugin;
 import cn.ieclipse.smartim.views.IMContactView;
@@ -28,7 +30,7 @@ import cn.ieclipse.smartim.views.IMContactView;
  *       
  */
 public class BroadcastAction extends Action {
-    IMContactView contactView;
+    protected IMContactView contactView;
     
     public BroadcastAction(IMContactView contactView) {
         this.contactView = contactView;
@@ -39,6 +41,18 @@ public class BroadcastAction extends Action {
     
     @Override
     public void run() {
+        if (contactView != null) {
+            Shell shell = contactView.getSite().getShell();
+            if (contactView.getClient().isLogin()) {
+                openDialog(shell);
+            }
+            else {
+                MessageDialog.openError(shell, null, "已断开连接，请重新登录成功后再试");
+            }
+        }
     }
     
+    protected void openDialog(Shell shell) {
+    
+    }
 }

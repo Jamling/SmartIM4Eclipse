@@ -21,6 +21,7 @@ import org.eclipse.ui.part.IShowInTarget;
 import org.eclipse.ui.part.ShowInContext;
 import org.eclipse.ui.part.ViewPart;
 
+import cn.ieclipse.smartim.IMPlugin;
 import cn.ieclipse.smartim.IMRobotCallback;
 import cn.ieclipse.smartim.SmartClient;
 import cn.ieclipse.smartim.actions.BroadcastAction;
@@ -30,6 +31,7 @@ import cn.ieclipse.smartim.actions.SettingAction;
 import cn.ieclipse.smartim.callback.ModificationCallback;
 import cn.ieclipse.smartim.callback.ReceiveCallback;
 import cn.ieclipse.smartim.callback.SendCallback;
+import cn.ieclipse.smartim.preferences.SettingsPerferencePage;
 
 public abstract class IMContactView extends ViewPart implements IShowInTarget {
     
@@ -50,6 +52,7 @@ public abstract class IMContactView extends ViewPart implements IShowInTarget {
     protected IMRobotCallback robotCallback;
     protected SendCallback sendCallback;
     protected ModificationCallback modificationCallback;
+    protected boolean updateContactsOnlyFocus = false;
     
     /**
      * The constructor.
@@ -69,6 +72,41 @@ public abstract class IMContactView extends ViewPart implements IShowInTarget {
     }
     
     public void initContacts() {
+        new Thread() {
+            public void run() {
+                doLoadContacts();
+            }
+        }.start();
+    }
+    
+    protected abstract void doLoadContacts();
+    
+    protected abstract void onLoadContacts(boolean success);
+    
+    protected void notifyLoadContacts(final boolean success) {
+        IMPlugin.runOnUI(new Runnable() {
+            @Override
+            public void run() {
+                onLoadContacts(success);
+            }
+        });
+    }
+    
+    public void notifyUpdateContacts(final int index, boolean force) {
+        boolean notify = IMPlugin.getDefault().getPreferenceStore()
+                .getBoolean(SettingsPerferencePage.NOTIFY_UNREAD);
+        if (notify || force) {
+            IMPlugin.runOnUI(new Runnable() {
+                @Override
+                public void run() {
+                    doUpdateContacts(index);
+                }
+            });
+        }
+    }
+    
+    protected void doUpdateContacts(final int index) {
+    
     }
     
     private void hookContextMenu() {

@@ -13,35 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cn.ieclipse.smartqq.actions;
+package cn.ieclipse.smartqq;
 
-import org.eclipse.swt.widgets.Shell;
+import com.scienjus.smartqq.model.QQContact;
+import com.scienjus.smartqq.model.Recent;
 
-import cn.ieclipse.smartim.actions.BroadcastAction;
-import cn.ieclipse.smartim.views.IMContactView;
-import cn.ieclipse.smartqq.views.QQBroadcastDialog;
+import cn.ieclipse.smartim.callback.ModificationCallback;
+import cn.ieclipse.smartim.model.IContact;
 import cn.ieclipse.smartqq.views.QQContactView;
 
 /**
  * 类/接口描述
  * 
  * @author Jamling
- * @date 2017年10月19日
+ * @date 2017年10月26日
  *       
  */
-public class QQBroadcastAction extends BroadcastAction {
-    private QQContactView contactView;
+public class QQMidificationCallback implements ModificationCallback {
+    QQContactView fContactView;
     
-    public QQBroadcastAction(IMContactView contactView) {
-        super(contactView);
-        this.contactView = (QQContactView) contactView;
-        setText("QQ消息群发");
+    public QQMidificationCallback(QQContactView view) {
+        this.fContactView = view;
     }
     
     @Override
-    protected void openDialog(Shell shell) {
-        QQBroadcastDialog dialog = new QQBroadcastDialog(shell,
-                (QQContactView) contactView);
-        dialog.open();
+    public void onContactChanged(IContact contact) {
+        if (contact instanceof Recent || contact instanceof QQContact) {
+            fContactView.notifyUpdateContacts(0, true);
+        }
     }
+    
 }

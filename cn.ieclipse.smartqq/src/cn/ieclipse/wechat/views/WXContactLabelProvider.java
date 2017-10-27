@@ -39,13 +39,13 @@ public class WXContactLabelProvider extends IMContactLabelProvider {
     
     @Override
     public Image getImage(Object obj) {
-        if (obj instanceof Contact) {
-            Contact c = (Contact) obj;
-            boolean hasMember = IMUtils.isEmpty(c.MemberList);
-            if (hasMember) {
-                return LetterImageFactory.create('G', SWT.COLOR_DARK_BLUE);
-            }
-        }
+//        if (obj instanceof Contact) {
+//            Contact c = (Contact) obj;
+//            boolean hasMember = IMUtils.isEmpty(c.MemberList);
+//            if (hasMember) {
+//                return LetterImageFactory.create('G', SWT.COLOR_DARK_BLUE);
+//            }
+//        }
         return super.getImage(obj);
     }
 }
