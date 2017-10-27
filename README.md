@@ -19,6 +19,8 @@ Intellij IDEA上的插件请移步这里: https://github.com/Jamling/SmartQQ4Int
 |Feature           |Origin     | Eclipse    | IntelliJ    |
 | ---------------- |:---------:|:----------:|:-----------:|
 | 文本消息          | yes       |          X | X         |
+| 聊天记录          | yes       |          Y | X         |
+| 消息提醒          | O         |          Y | X         |
 | 表情              | yes (系统表情)|   X| X |
 | 图灵QQ机器人        | X       |          yes | X|
 | [发送文件](http://api.ieclipse.cn/smartqq/)        | X       |          yes | O 不支工程文件快捷发送|
