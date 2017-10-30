@@ -46,11 +46,11 @@ Intellij IDEA上的插件请移步这里: https://github.com/Jamling/SmartQQ4Int
 
 ## 使用
 
-1. 点击Windows->Show view，找到SmartQQ下的Smart双击打开Smart视图
+1. 点击Windows->Show view，找到SmartIM下的SmartQQ或Wechat双击打开SmartQQ或Wechat视图
 2. 点击视图工具栏或菜单栏中的同步图标进行登录
-3. 使用手机QQ扫描二维码
+3. 使用手机QQ/手机微信扫描二维码（SmartQQ视图使用手机QQ，Wechat视图使用手机微信扫一扫）
 4. 验证成功后，等待拉取最近消息，好友及群组列表
-5. 双击Smart视图中的好友或群，打开聊天窗口（聊天窗口为Console）
+5. 双击SmartIM视图中的好友或群，打开聊天窗口（聊天窗口为Console）
 6. 使用快捷键或点击I图标，激活输入窗口（不建议直接在console中输入，会导致同步时间）
 7. 输入聊天内容，并按快捷键（默认为Enter）发送聊天信息
 
@@ -62,7 +62,7 @@ Intellij IDEA上的插件请移步这里: https://github.com/Jamling/SmartQQ4Int
  - 点击聊天Console菜单（就是那个倒三角）选择 Send File 或 Send Project File 选择文件后发送
  - 对要发送的文件复制，然后粘贴到聊天窗口，再点击发送超链接，确认发送文件
 2. 消息群发
- - 在Smart视图中，点击Broadcast工具图标（就是那个发射塔的图标），输入内容并选择要发送的好友，群及讨论群，再点击确定
+ - 在SmartIM视图中，点击Broadcast工具图标（就是那个发射塔的图标），输入内容并选择要发送的好友，群及讨论群，再点击确定
 3. 代码评审（未来接入Gerrit）
  - 在编辑器中右键菜单中点击`Code Review`，输入对代码的评审注释，选择发送的对象，点击确定发送
  - 对方接收到代码评审消息，点击代码位置，直接跳转到本地相同的代码位置，然后修改吧。
@@ -82,8 +82,9 @@ Intellij IDEA上的插件请移步这里: https://github.com/Jamling/SmartQQ4Int
 
 ## 感谢
 
-SmartQQ Java API: https://github.com/ScienJus/smartqq
-
+- SmartQQ Java API: https://github.com/ScienJus/smartqq
+- Wechat Java API: https://github.com/biezhi/wechat-bot-api
+- SmartIM library: https://github.com/Jamling/SmartIM
 
 ## 问题提交
 
