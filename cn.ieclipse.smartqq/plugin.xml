@@ -40,8 +40,9 @@
          point="org.eclipse.ui.console.consolePatternMatchListeners">
       <consolePatternMatchListener
             class="cn.ieclipse.smartim.console.SenderMatchDelegate"
+            flags="Pattern.MULTILINE"
             id="cn.ieclipse.smartqq.consolePatternMatchListener1"
-            regex="\d{2}:\d{2}:\d{2} [\s\S]+: ">
+            regex="^\d{2}:\d{2}:\d{2} [^:]+: ">
          <enablement>
             <instanceof
                   value="cn.ieclipse.smartim.console.IMChatConsole">
@@ -61,7 +62,7 @@
             class="cn.ieclipse.smartim.console.ReviewMatchDelegate"
             id="cn.ieclipse.smartqq.consolePatternMatchListener3"
             qualifier="Code: "
-            regex="Code: [\S]+:[\d]+ ">
+            regex="Code: [\S ]+:[\d]+ ?">
          <enablement>
             <instanceof
                   value="cn.ieclipse.smartim.console.IMChatConsole">

@@ -1,8 +1,5 @@
 package cn.ieclipse.smartim.console;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.ui.console.IHyperlink;
 import org.eclipse.ui.console.IPatternMatchListenerDelegate;
@@ -35,15 +32,6 @@ public class ReviewMatchDelegate implements IPatternMatchListenerDelegate {
             // Code: \S:\d+
             fConsole.addHyperlink(link, offset + 6, length - 6);
         } catch (BadLocationException e) {
-        }
-    }
-    
-    public static void main(String[] args) {
-        String regex = "^Code: [\\S]+:[\\d]+ ";
-        String msg = "Code: /dfa/dfabc.file:100 ";
-        Matcher m = Pattern.compile(regex).matcher(msg);
-        if (m.find()) {
-            System.out.println(msg.substring(m.start(), m.end()));
         }
     }
 }

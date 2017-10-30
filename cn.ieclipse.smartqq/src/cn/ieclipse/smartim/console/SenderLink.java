@@ -97,11 +97,9 @@ public class SenderLink implements IHyperlink {
             
             int regionOffsetInLine = regionOffset - lineOffset;
             
-            int linkEnd = line.indexOf(')', regionOffsetInLine);
-            int linkStart = line.lastIndexOf(' ', regionOffsetInLine);
-            linkEnd = line.indexOf(':');
-            linkStart = 0;
-            return line.substring(0, linkEnd);
+            int linkStart = 9;
+            int linkEnd = line.indexOf(':', linkStart);
+            return line.substring(linkStart, linkEnd);
             
             // return line.substring(linkStart == -1 ? 0 : linkStart + 1,
             // linkEnd + 1);
