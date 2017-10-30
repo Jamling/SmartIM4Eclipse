@@ -13,7 +13,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.wb.swt.SWTResourceManager;
 
@@ -64,6 +63,13 @@ public class Notifications extends Shell {
      */
     public Notifications(Display display) {
         super(display, SWT.ON_TOP | SWT.CLOSE | SWT.TITLE);
+        try {
+            org.eclipse.swt.internal.win32.OS.SetWindowPos(this.handle,
+                    org.eclipse.swt.internal.win32.OS.HWND_TOPMOST, 0, 0, 0, 0,
+                    SWT.NULL);
+        } catch (Exception e) {
+            // do nothing
+        }
         setImage(SWTResourceManager.getImage(org.eclipse.ui.ide.IDE.class,
                 "/icons/full/elcl16/smartmode_co.png"));
         createContents();

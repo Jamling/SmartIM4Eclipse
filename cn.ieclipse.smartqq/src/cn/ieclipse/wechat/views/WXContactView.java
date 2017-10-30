@@ -110,7 +110,7 @@ public class WXContactView extends IMContactView {
         super.doUpdateContacts(index);
         if (index == 0) {
             boolean focus = ftvFriend.getTree().isFocusControl();
-            if (focus && !updateContactsOnlyFocus) {
+            if (focus || !updateContactsOnlyFocus) {
                 ftvFriend.refresh(true);
             }
         }

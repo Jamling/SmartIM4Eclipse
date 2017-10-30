@@ -96,7 +96,6 @@ public class FriendContentProvider extends IMContactContentProvider {
         List<Recent> recents = client.getRecentList();
         List<QQContact> list = client.getRecents2();
         Collections.sort(list);
-        System.out.println(list);
         return list;
     }
 }

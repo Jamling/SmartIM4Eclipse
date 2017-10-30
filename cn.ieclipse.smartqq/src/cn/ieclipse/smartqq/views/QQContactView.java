@@ -128,7 +128,7 @@ public class QQContactView extends IMContactView {
         super.doUpdateContacts(index);
         if (index == 0) {
             boolean focus = ftvRecent.getTree().isFocusControl();
-            if (focus && !updateContactsOnlyFocus) {
+            if (focus || !updateContactsOnlyFocus) {
                 ftvRecent.refresh(true);
             }
         }

@@ -15,7 +15,6 @@
  */
 package cn.ieclipse.wechat;
 
-import cn.ieclipse.smartim.IMClientFactory;
 import cn.ieclipse.smartim.IMHistoryManager;
 import cn.ieclipse.smartim.IMPlugin;
 import cn.ieclipse.smartim.callback.ReceiveCallback;
@@ -97,8 +96,9 @@ public class WXReceiveCallback implements ReceiveCallback {
             }
             else {
                 contact.increaceUnRead();
-                fContactView.notifyUpdateContacts(0, false);
             }
+            
+            fContactView.notifyUpdateContacts(0, false);
         }
     }
     

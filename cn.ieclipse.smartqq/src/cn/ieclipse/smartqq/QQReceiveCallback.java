@@ -110,8 +110,8 @@ public class QQReceiveCallback implements ReceiveCallback {
                 if (qqContact != null) {
                     qqContact.increaceUnRead();
                 }
-                fContactView.notifyUpdateContacts(0, false);
             }
+            fContactView.notifyUpdateContacts(0, false);
         }
     }
     
