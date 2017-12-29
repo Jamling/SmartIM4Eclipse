@@ -52,14 +52,14 @@ public class QQReceiveCallback implements ReceiveCallback {
     @Override
     public void onReceiveMessage(AbstractMessage message, AbstractFrom from) {
         if (from != null && from.getContact() != null) {
-            boolean unkown = false;
+            boolean unknown = false;
             boolean notify = IMPlugin.getDefault().getPreferenceStore()
                     .getBoolean(SettingsPerferencePage.NOTIFY_FRIEND);
             String uin = from.getContact().getUin();
             QQContact qqContact = null;
             if (from instanceof GroupFrom) {
                 GroupFrom gf = (GroupFrom) from;
-                unkown = (gf.getGroupUser() == null
+                unknown = (gf.getGroupUser() == null
                         || gf.getGroupUser().isUnknown());
                 uin = gf.getGroup().getUin();
                 notify = IMPlugin.getDefault().getPreferenceStore()
@@ -69,7 +69,7 @@ public class QQReceiveCallback implements ReceiveCallback {
             }
             else if (from instanceof DiscussFrom) {
                 DiscussFrom gf = (DiscussFrom) from;
-                unkown = (gf.getDiscussUser() == null
+                unknown = (gf.getDiscussUser() == null
                         || gf.getDiscussUser().isUnknown());
                 uin = gf.getDiscuss().getUin();
                 notify = IMPlugin.getDefault().getPreferenceStore()
@@ -77,18 +77,32 @@ public class QQReceiveCallback implements ReceiveCallback {
                 qqContact = fContactView.getClient()
                         .getGroup(gf.getDiscuss().getId());
             }
-            if (!unkown) {
+            if (!unknown) {
                 SmartQQClient client = IMClientFactory.getInstance()
                         .getQQClient();
                 IMHistoryManager.getInstance().save(client, uin,
                         message.getRaw());
             }
             if (notify) {
-                CharSequence content = (from instanceof FriendFrom)
-                        ? message.getText()
-                        : from.getName() + ":" + message.getText();
-                Notifications.notify(QQChatConsole.class, from.getContact(),
-                        from.getContact().getName(), content);
+                boolean hide = unknown && !IMPlugin.getDefault()
+                        .getPreferenceStore()
+                        .getBoolean(SettingsPerferencePage.NOTIFY_UNKNOWN);
+                try {
+                    hide = hide || from.getMember().getUin().equals(
+                            fContactView.getClient().getAccount().getUin());
+                } catch (Exception e) {
+                    IMPlugin.getDefault().log("", e);
+                }
+                if (hide) {
+                    // don't notify
+                }
+                else {
+                    CharSequence content = (from instanceof FriendFrom)
+                            ? message.getText()
+                            : from.getName() + ":" + message.getText();
+                    Notifications.notify(QQChatConsole.class, from.getContact(),
+                            from.getContact().getName(), content);
+                }
             }
             if (qqContact != null) {
                 qqContact.setLastMessage(message);

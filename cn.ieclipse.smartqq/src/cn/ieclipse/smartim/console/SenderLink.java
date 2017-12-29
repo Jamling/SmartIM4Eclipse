@@ -67,11 +67,13 @@ public class SenderLink implements IHyperlink {
         String linkText;
         try {
             linkText = getLinkText();
+            if (console != null) {
+                console.activeInput("@" + linkText + " ");
+            }
         } catch (CoreException e) {
             e.printStackTrace();
             return;
         }
-        
     }
     
     protected TextConsole getConsole() {

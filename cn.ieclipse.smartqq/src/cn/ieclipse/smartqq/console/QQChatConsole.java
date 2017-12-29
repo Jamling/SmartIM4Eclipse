@@ -29,6 +29,7 @@ import cn.ieclipse.smartim.console.IMChatConsole;
 import cn.ieclipse.smartim.model.IContact;
 import cn.ieclipse.smartim.model.impl.AbstractFrom;
 import cn.ieclipse.smartim.preferences.QiniuPerferencePage;
+import cn.ieclipse.util.FileUtils;
 
 public class QQChatConsole extends IMChatConsole {
     
@@ -146,11 +147,26 @@ public class QQChatConsole extends IMChatConsole {
         }
     }
     
+    private boolean isGroupChat() {
+        return (contact instanceof Group) || (contact instanceof GroupInfo)
+                || (contact instanceof Discuss)
+                || (contact instanceof DiscussInfo);
+    }
+    
+    @Override
+    public boolean hideMyInput() {
+        return super.hideMyInput() && isGroupChat();
+    }
+    
     public void sendFile(final String file) {
         final File f = new File(file);
         new Thread() {
             public void run() {
+                uploadLock = true;
                 try {
+                    if (f.length() > (1 << 10)) {
+                        write(String.format("%s 上传中，请稍候……", f.getName()));
+                    }
                     QNUploader uploader = IMPlugin.getDefault().getUploader();
                     IPreferenceStore store = IMPlugin.getDefault()
                             .getPreferenceStore();
@@ -180,6 +196,7 @@ public class QQChatConsole extends IMChatConsole {
                 } catch (Exception e) {
                     error("发送失败：" + e.getMessage());
                 }
+                uploadLock = false;
             };
         }.start();
         

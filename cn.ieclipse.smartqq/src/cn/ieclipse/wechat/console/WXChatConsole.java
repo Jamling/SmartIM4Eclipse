@@ -82,4 +82,13 @@ public class WXChatConsole extends IMChatConsole {
         return (WechatClient) IMClientFactory.getInstance().getWechatClient();
     }
     
+    @Override
+    public boolean hideMyInput() {
+        return false;
+    }
+    
+    @Override
+    public boolean enableUpload() {
+        return false;
+    }
 }

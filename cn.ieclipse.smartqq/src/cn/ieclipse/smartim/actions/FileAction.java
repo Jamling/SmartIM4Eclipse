@@ -44,6 +44,9 @@ public class FileAction extends Action {
     @Override
     public void run() {
         if (fConsole != null) {
+            if (!fConsole.enableUpload()) {
+                fConsole.error("暂不支持发送文件或文件正在发送中...");
+            }
             FileDialog dialog = new FileDialog(
                     fConsole.getPage().getSite().getShell(), SWT.OPEN);
             String file = dialog.open();

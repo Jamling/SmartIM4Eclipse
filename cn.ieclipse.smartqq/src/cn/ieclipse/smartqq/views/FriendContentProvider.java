@@ -95,7 +95,9 @@ public class FriendContentProvider extends IMContactContentProvider {
     public List<QQContact> getRecentTargets(SmartQQClient client) {
         List<Recent> recents = client.getRecentList();
         List<QQContact> list = client.getRecents2();
-        Collections.sort(list);
+        synchronized (this) {
+            Collections.sort(list);
+        }
         return list;
     }
 }

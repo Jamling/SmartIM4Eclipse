@@ -30,7 +30,8 @@ public class UrlLinkTest {
                 "http://abc.com", "http://t.cn/dfjdkf", "sftp://t.cn/我的",
                 "sftp://t.cn/我的 gogo", "sftp://t.cn/我的.abc",
                 "sftp://t.cn/我的.txt中", "ftp://t.cn/我的?n=我去", "ftp://t.cn/?n=我去",
-                "ftp://t.cn/我的?n=我去&b=33");
+                "ftp://t.cn/我的?n=我去&b=33", 
+                "http://abc/2/f1.0.2(9)-release.apk");
         for (String str : tests) {
             Matcher m = Pattern.compile(regex).matcher(str);
             if (m.find()) {

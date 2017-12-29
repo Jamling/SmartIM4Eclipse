@@ -47,7 +47,9 @@ public class WXContactContentProvider extends IMContactContentProvider {
         WechatClient client = (WechatClient) fView.getClient();
         if ("recent".equals(inputElement)) {
             List<Contact> list = client.getRecentList();
-            Collections.sort(list);
+            synchronized (this) {
+                Collections.sort(list);
+            }
             return list.toArray();
         }
         else if ("group".equals(inputElement)) {

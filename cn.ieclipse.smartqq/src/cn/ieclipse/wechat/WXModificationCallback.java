@@ -36,7 +36,7 @@ public class WXModificationCallback implements ModificationCallback {
     
     @Override
     public void onContactChanged(IContact contact) {
-        if (contact instanceof Contact) {
+        if (contact instanceof Contact || contact == null) {
             fContactView.notifyUpdateContacts(0, true);
         }
     }

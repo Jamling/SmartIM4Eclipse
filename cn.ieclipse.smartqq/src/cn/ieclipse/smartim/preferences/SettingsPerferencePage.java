@@ -44,9 +44,15 @@ public class SettingsPerferencePage extends FieldEditorPreferencePage
             
     public static final String NOTIFY_FRIEND = IMPlugin.PLUGIN_ID
             + ".notify.friend"; //$NON-NLS-1$
+    
+    public static final String NOTIFY_UNKNOWN = IMPlugin.PLUGIN_ID
+            + ".notify.unknown"; //$NON-NLS-1$
             
     public static final String NOTIFY_UNREAD = IMPlugin.PLUGIN_ID
             + ".notify.unread"; //$NON-NLS-1$
+    
+    public static final String HIDE_MY_INPUT = IMPlugin.PLUGIN_ID
+            + ".hide.myinput"; //$NON-NLS-1$
             
     public SettingsPerferencePage() {
         super(FLAT);
@@ -65,11 +71,17 @@ public class SettingsPerferencePage extends FieldEditorPreferencePage
         addField(new BooleanFieldEditor(NOTIFY_FRIEND,
                 Messages.SettingsPerferencePage_notify_friend,
                 getFieldEditorParent()));
+        addField(new BooleanFieldEditor(NOTIFY_UNKNOWN,
+                Messages.SettingsPerferencePage_notify_unknown,
+                getFieldEditorParent()));
         addField(new IntegerFieldEditor(NOTIFY_DISMISS,
                 Messages.SettingsPerferencePage_notify_dismiss,
                 getFieldEditorParent()));
         addField(new BooleanFieldEditor(NOTIFY_UNREAD,
                 Messages.SettingsPerferencePage_notify_unread,
+                getFieldEditorParent()));
+        addField(new BooleanFieldEditor(HIDE_MY_INPUT,
+                Messages.SettingsPerferencePage_hide_my_input,
                 getFieldEditorParent()));
     }
     

@@ -153,6 +153,16 @@ public class InputShell extends Shell {
         this.console = console;
     }
     
+    public IMChatConsole getConsole() {
+        return console;
+    }
+    
+    public void append(String text) {
+        if (text != null && this.text != null && !this.text.isDisposed()) {
+            this.text.append(text);
+        }
+    }
+    
     private static InputShell instance;
     
     public static InputShell getInstance(Shell parent) {

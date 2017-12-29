@@ -19,6 +19,8 @@ import cn.ieclipse.smartim.callback.SendCallback;
 import cn.ieclipse.smartim.common.IMUtils;
 import cn.ieclipse.smartim.common.Notifications;
 import cn.ieclipse.smartim.console.IMChatConsole;
+import cn.ieclipse.smartim.exception.HttpException;
+import cn.ieclipse.smartim.exception.LogicException;
 
 /**
  * 类/接口描述
@@ -49,15 +51,25 @@ public class IMSendCallback implements SendCallback {
         String s = IMUtils.isEmpty(msg) ? ""
                 : (msg.length() > 20 ? msg.toString().substring(0, 20) + "..."
                         : msg.toString());
+        String code = "";
+        if (t != null) {
+            if (t instanceof LogicException) {
+                code = String.format("api code=%d",
+                        ((LogicException) t).getCode());
+            } else if (t instanceof HttpException) {
+                code = String.format("http code=%d",
+                        ((HttpException) t).getCode());
+            }
+        }
         IMChatConsole console = IMPlugin.getDefault().getChatConsole(targetId,
                 true);
         if (console != null) {
-            console.error(String.format("%s 发送失败！", s));
+            console.error(String.format("%s 发送失败！%s", msg, code));
         }
         else {
             IMPlugin.getDefault()
                     .log(String.format("发送到%s的信息（%s）", targetId, s), t);
-            Notifications.notify("发送失败", String.format("%s 发送失败！", s));
+            Notifications.notify("发送失败", String.format("%s 发送失败！%s", s, code));
         }
     }
 }

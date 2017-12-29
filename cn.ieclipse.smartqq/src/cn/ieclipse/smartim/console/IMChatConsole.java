@@ -33,6 +33,7 @@ public abstract class IMChatConsole extends IOConsole {
     protected String uin;
     protected IContact contact;
     protected IMChatConsolePage page;
+    protected boolean uploadLock;
     private static ImageDescriptor icon = IMPlugin
             .getImageDescriptor("icons/review.png");
             
@@ -112,7 +113,16 @@ public abstract class IMChatConsole extends IOConsole {
         }
     }
     
+    public boolean hideMyInput() {
+        boolean hide = IMPlugin.getDefault().getPreferenceStore()
+                .getBoolean(SettingsPerferencePage.HIDE_MY_INPUT);
+        return hide;
+    }
+    
     public void writeMine(String input) {
+        if (hideMyInput()) {
+            return;
+        }
         String name = getClient().getAccount().getName();
         String msg = IMUtils.formatMsg(System.currentTimeMillis(), name, input);
         try {
@@ -140,6 +150,10 @@ public abstract class IMChatConsole extends IOConsole {
                 post(msg);
             };
         }.start();
+    }
+    
+    public boolean enableUpload() {
+        return !uploadLock;
     }
     
     public void sendFile(final String file) {
@@ -278,6 +292,19 @@ public abstract class IMChatConsole extends IOConsole {
         shell.open();
         shell.layout();
         shell.setVisible(true);
+    }
+    
+    public void activeInput(String msg) {
+        final StyledText text = getPage().getViewer().getTextWidget();
+        Shell pshell = text.getShell();
+        InputShell shell = InputShell.getInstance(pshell);
+        if (!shell.isVisible()) {
+            activeInput();
+            shell = InputShell.getInstance(pshell);
+        }
+        if (shell.getConsole() == this) {
+            shell.append(msg);
+        }
     }
     
     public TextConsolePage getPage() {
