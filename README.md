@@ -1,4 +1,6 @@
 [![GitHub release](https://img.shields.io/github/release/jamling/SmartQQ4Eclipse.svg?maxAge=3600)](https://github.com/Jamling/SmartQQ4Eclipse)
+[![Eclipse Marketplace](https://img.shields.io/eclipse-marketplace/v/SmartQQ.svg)](https://marketplace.eclipse.org/content/smartqq)
+[![Eclipse Marketplace](https://img.shields.io/eclipse-marketplace/dt/SmartQQ.svg)](https://marketplace.eclipse.org/content/smartqq)
 
 ## SmartQQ4Eclipse
 
