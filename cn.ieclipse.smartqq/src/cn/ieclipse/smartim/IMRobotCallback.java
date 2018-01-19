@@ -23,6 +23,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import cn.ieclipse.smartim.callback.ModificationCallback;
 import cn.ieclipse.smartim.callback.ReceiveCallback;
 import cn.ieclipse.smartim.preferences.RobotPreferencePage;
 import okhttp3.MediaType;
@@ -37,7 +38,7 @@ import okhttp3.RequestBody;
  * @date 2017年10月16日
  *       
  */
-public abstract class IMRobotCallback implements ReceiveCallback {
+public abstract class IMRobotCallback implements ReceiveCallback, ModificationCallback {
     public static final String SEP = " ";
     
     public static boolean isEnable() {
@@ -89,5 +90,4 @@ public abstract class IMRobotCallback implements ReceiveCallback {
         }
         return null;
     }
-    
 }
