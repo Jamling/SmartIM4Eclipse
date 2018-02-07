@@ -50,17 +50,17 @@ public class HotKeyPreferencePage extends FieldEditorPreferencePage
                 Messages.HotKeyPreferencePage_send, getFieldEditorParent());
         addField(send);
         
-        addField(new HotKeyFieldEditor(KEY_INPUT,
-                Messages.HotKeyPreferencePage_input, getFieldEditorParent()));
-        addField(new HotKeyFieldEditor(KEY_INPUT_ESC,
-                Messages.HotKeyPreferencePage_hide_input,
-                getFieldEditorParent()));
-        addField(new HotKeyFieldEditor(KEY_NEXT,
-                Messages.HotKeyPreferencePage_next_chat,
-                getFieldEditorParent()));
-        addField(new HotKeyFieldEditor(KEY_PREV,
-                Messages.HotKeyPreferencePage_prev_chat,
-                getFieldEditorParent()));
+//        addField(new HotKeyFieldEditor(KEY_INPUT,
+//                Messages.HotKeyPreferencePage_input, getFieldEditorParent()));
+//        addField(new HotKeyFieldEditor(KEY_INPUT_ESC,
+//                Messages.HotKeyPreferencePage_hide_input,
+//                getFieldEditorParent()));
+//        addField(new HotKeyFieldEditor(KEY_NEXT,
+//                Messages.HotKeyPreferencePage_next_chat,
+//                getFieldEditorParent()));
+//        addField(new HotKeyFieldEditor(KEY_PREV,
+//                Messages.HotKeyPreferencePage_prev_chat,
+//                getFieldEditorParent()));
         addField(new HotKeyFieldEditor(KEY_HIDE,
                 Messages.HotKeyPreferencePage_hide_chat,
                 getFieldEditorParent()));

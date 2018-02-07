@@ -40,8 +40,8 @@ public class QQRobotCallback extends IMRobotCallback {
             return;
         }
         try {
-            console = IMPlugin.getDefault().findConsole(QQChatConsole.class,
-                    contact, false);
+            console = (QQChatConsole) fContactView.findConsoleById(
+                    contact.getUin(), false);
             // TODO
         } catch (Exception e) {
             IMPlugin.getDefault().log("机器人回应异常", e);
@@ -54,8 +54,8 @@ public class QQRobotCallback extends IMRobotCallback {
             return;
         }
         try {
-            console = IMPlugin.getDefault().findConsole(QQChatConsole.class,
-                    from.getContact(), false);
+            console = (QQChatConsole) fContactView.findConsoleById(
+                    from.getContact().getUin(), false);
             answer(from, (QQMessage) message);
         } catch (Exception e) {
             IMPlugin.getDefault().log("机器人回应异常", e);

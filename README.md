@@ -12,11 +12,17 @@ Intellij IDEA上的插件请移步这里: https://github.com/Jamling/SmartQQ4Int
 
 ## 功能
 
-特色功能
+- [x] 收发文本消息
+- [x] 收发图片
+- [x] 收发文件
+- [x] 发送工程中的文件
+- [x] Code Review 发送代码位置及评语
+- [x] 超链接点击
+- [x] 热键设定
+- [x] 一键关闭
+- [x] 支持图灵机器人接入
 
-- 热键设定
-- 一键关闭
-- 支持图灵机器人接入
+**SmartQQ官方协议不支持收发图片和文件，扩展的文件收发由[第三方实现](http://api.ieclipse.cn/smartqq)**
 
 |Feature           |Origin     | Eclipse    | IntelliJ    |
 | ---------------- |:---------:|:----------:|:-----------:|
@@ -48,13 +54,12 @@ Intellij IDEA上的插件请移步这里: https://github.com/Jamling/SmartQQ4Int
 
 ## 使用
 
-1. 点击Windows->Show view，找到SmartIM下的SmartQQ或Wechat双击打开SmartQQ或Wechat视图
+1. 点击Windows->Show view->Others，找到SmartIM下的SmartQQ或Wechat双击打开SmartQQ或Wechat视图
 2. 点击视图工具栏或菜单栏中的同步图标进行登录
 3. 使用手机QQ/手机微信扫描二维码（SmartQQ视图使用手机QQ，Wechat视图使用手机微信扫一扫）
 4. 验证成功后，等待拉取最近消息，好友及群组列表
-5. 双击SmartIM视图中的好友或群，打开聊天窗口（聊天窗口为Console）
-6. 使用快捷键或点击I图标，激活输入窗口（不建议直接在console中输入，会导致同步时间）
-7. 输入聊天内容，并按快捷键（默认为Enter）发送聊天信息
+5. 双击SmartIM视图中的好友或群，打开聊天窗口
+6. 输入聊天内容，并按快捷键（默认为Enter）发送聊天信息
 
 ### 微信
 1. 如果微信无法生成二维码图片，提示javax.net.ssl.SSLProtocolException: handshake alert:  unrecognized_name，请给eclipse加上`-Djsse.enableSNIExtension=false`参数，可以在eclipse.ini中加，也可以在eclipse快捷方式目标位置中添加
@@ -73,12 +78,9 @@ Intellij IDEA上的插件请移步这里: https://github.com/Jamling/SmartQQ4Int
 
 注：在eclipse中，CR表示Enter键
 
-- 激活输入，默认CR，在console下面打开一个小窗口进行输入
 - 发送，默认CR (Enter键)，发送消息
-- 上/下一个聊天, 默认左/右箭头，也可以在console工具栏使用鼠标切换
-- 隐藏聊天，默认Alt + M，隐藏Contact视图，清空当前聊天内容
-- 关闭聊天，默认Alt + C，关闭Contact视图和所有的聊天窗口
-- 退出输入，默认ESC
+- 隐藏聊天，默认Alt + M，隐藏Contact视图
+- 关闭聊天，默认Alt + C，关闭当前聊天窗口
 
 注：快捷键有可能与eclipse中的热键冲突，请点击？打开首选项重新设置
 

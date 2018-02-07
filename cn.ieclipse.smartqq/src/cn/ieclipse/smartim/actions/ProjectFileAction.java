@@ -18,13 +18,13 @@ package cn.ieclipse.smartim.actions;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
+import org.eclipse.ui.ide.IDE;
 
 import cn.ieclipse.smartim.IMPlugin;
-import cn.ieclipse.smartim.console.IMChatConsole;
+import cn.ieclipse.smartim.htmlconsole.IMChatConsole;
 
 /**
  * 类/接口描述
@@ -33,17 +33,17 @@ import cn.ieclipse.smartim.console.IMChatConsole;
  * @date 2017年8月22日
  *       
  */
-public class ProjectFileAction extends Action {
-    private IMChatConsole fConsole;
+public class ProjectFileAction extends SendFileAction {
     
     public ProjectFileAction(IMChatConsole console) {
-        this.fConsole = console;
+        super(console);
         setText("Send Project File");
         setToolTipText(
                 "Send your project(workspace) file to " + fConsole.getName());
         // setImageDescriptor(
         // LetterImageFactory.createDescriptor('P', SWT.COLOR_DARK_GRAY));
-        setImageDescriptor(IMPlugin.getImageDescriptor("icons/project.png"));
+        setImageDescriptor(
+                IMPlugin.getSharedImage(IDE.SharedImages.IMG_OBJ_PROJECT));
     }
     
     @Override

@@ -90,9 +90,9 @@ public abstract class IMChatConsole extends IOConsole {
     public void loadHistories() {
         initStreams();
         SmartClient client = getClient();
-        if (client != null && client instanceof AbstractSmartClient) {
+        if (client != null) {
             List<String> ms = IMHistoryManager.getInstance()
-                    .load((AbstractSmartClient) client, getHistoryFile());
+                    .load(client, getHistoryFile());
             for (String raw : ms) {
                 if (!IMUtils.isEmpty(raw)) {
                     try {

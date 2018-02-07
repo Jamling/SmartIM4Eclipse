@@ -73,8 +73,8 @@ public class LetterImageFactory {
         private final int mHeight = 16;
         private final int mRadius = 4;
         private final int mBorderWidth = 1;
-        public static final int SHAPE_CIRCLE = 0;
-        public static final int SHAPE_RECTANGE = 1;
+        public static final int SHAPE_CIRCLE = 1;
+        public static final int SHAPE_RECTANGE = 2;
         
         public Product(char letter, int color, int shape, int bgColor) {
             this.mLetter = Character.toUpperCase(letter);
@@ -127,6 +127,9 @@ public class LetterImageFactory {
             }
             else if (this.mShape == SHAPE_RECTANGE) {
                 gc.drawRoundRectangle(0, 0, w, h, mRadius, mRadius);
+            }
+            else {
+                
             }
             
             Font font = display.getSystemFont();

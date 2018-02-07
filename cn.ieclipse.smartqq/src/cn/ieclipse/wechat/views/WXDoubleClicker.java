@@ -42,6 +42,6 @@ public class WXDoubleClicker extends IMContactDoubleClicker {
     }
     
     private void open(IContact contact) {
-        IMPlugin.getDefault().findConsole(WXChatConsole.class, contact, true);
+        //IMPlugin.getDefault().findConsole(WXChatConsole.class, contact, true);
     }
 }

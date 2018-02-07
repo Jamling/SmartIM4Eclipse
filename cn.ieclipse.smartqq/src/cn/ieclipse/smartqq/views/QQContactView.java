@@ -11,13 +11,16 @@ import com.scienjus.smartqq.model.Friend;
 
 import cn.ieclipse.smartim.IMClientFactory;
 import cn.ieclipse.smartim.IMPlugin;
+import cn.ieclipse.smartim.IMSendCallback;
+import cn.ieclipse.smartim.actions.MockConsoleAction;
 import cn.ieclipse.smartim.common.IMUtils;
-import cn.ieclipse.smartim.console.IMChatConsole;
+import cn.ieclipse.smartim.htmlconsole.IMChatConsole;
+import cn.ieclipse.smartim.model.IContact;
+import cn.ieclipse.smartim.views.IMContactDoubleClicker;
 import cn.ieclipse.smartim.views.IMContactView;
 import cn.ieclipse.smartqq.QQMidificationCallback;
 import cn.ieclipse.smartqq.QQReceiveCallback;
 import cn.ieclipse.smartqq.QQRobotCallback;
-import cn.ieclipse.smartqq.QQSendCallback;
 import cn.ieclipse.smartqq.actions.QQBroadcastAction;
 import cn.ieclipse.smartqq.console.QQChatConsole;
 
@@ -37,13 +40,14 @@ public class QQContactView extends IMContactView {
      * The constructor.
      */
     public QQContactView() {
+        viewId = ID;
         contentProvider = new FriendContentProvider(this, false);
         labelProvider = new FriendLabelProvider(this);
-        doubleClicker = new QQDoubleClicker(this);
+        doubleClicker = new IMContactDoubleClicker(this);
         
         receiveCallback = new QQReceiveCallback(this);
         robotCallback = new QQRobotCallback(this);
-        sendCallback = new QQSendCallback(this);
+        sendCallback = new IMSendCallback(this);
     }
     
     /**
@@ -52,8 +56,6 @@ public class QQContactView extends IMContactView {
      */
     public void createPartControl(Composite parent) {
         super.createPartControl(parent);
-        
-        TabFolder tabFolder = new TabFolder(parent, SWT.NONE);
         ftvRecent = createTab("Recents", tabFolder);
         ftvFriend = createTab("Friends", tabFolder);
         ftvGroup = createTab("Groups", tabFolder);
@@ -103,19 +105,6 @@ public class QQContactView extends IMContactView {
     protected void makeActions() {
         super.makeActions();
         broadcast = new QQBroadcastAction(this);
-        testAction = new Action() {
-            public void run() {
-                Friend f = new Friend();
-                f.setUserId(System.currentTimeMillis());
-                f.setMarkname("Test" + System.currentTimeMillis());
-                IMChatConsole console = IMPlugin.getDefault()
-                        .findConsole(QQChatConsole.class, f, true);
-                console.write(IMUtils.formatMsg(System.currentTimeMillis(),
-                        "明月", "我的未来不是梦http://www.baidu.com咕咕"));
-            }
-        };
-        testAction.setText("Test");
-        testAction = null;
     }
     
     @Override
@@ -132,5 +121,17 @@ public class QQContactView extends IMContactView {
                 ftvRecent.refresh(true);
             }
         }
+    }
+
+    @Override
+    public IMContactView createContactsUI() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public cn.ieclipse.smartim.htmlconsole.IMChatConsole createConsoleUI(
+            IContact contact) {
+        return new QQChatConsole(contact, this);
     }
 }

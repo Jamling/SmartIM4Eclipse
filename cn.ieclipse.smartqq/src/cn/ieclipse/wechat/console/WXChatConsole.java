@@ -15,15 +15,34 @@
  */
 package cn.ieclipse.wechat.console;
 
+import java.io.File;
+import java.net.URLConnection;
+import java.util.Arrays;
+
+import javax.swing.SwingUtilities;
+
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.SWT;
+
+import com.scienjus.smartqq.model.Discuss;
+import com.scienjus.smartqq.model.DiscussInfo;
+import com.scienjus.smartqq.model.Group;
+import com.scienjus.smartqq.model.GroupInfo;
 
 import cn.ieclipse.smartim.IMClientFactory;
+import cn.ieclipse.smartim.IMHistoryManager;
 import cn.ieclipse.smartim.IMPlugin;
 import cn.ieclipse.smartim.common.IMUtils;
-import cn.ieclipse.smartim.console.IMChatConsole;
+import cn.ieclipse.smartim.common.LetterImageFactory;
+import cn.ieclipse.smartim.htmlconsole.IMChatConsole;
 import cn.ieclipse.smartim.model.IContact;
 import cn.ieclipse.smartim.model.impl.AbstractFrom;
+import cn.ieclipse.smartim.views.IMContactView;
+import cn.ieclipse.util.FileUtils;
+import cn.ieclipse.util.StringUtils;
 import io.github.biezhi.wechat.api.WechatClient;
+import io.github.biezhi.wechat.model.Contact;
+import io.github.biezhi.wechat.model.UploadInfo;
 import io.github.biezhi.wechat.model.WechatMessage;
 
 /**
@@ -34,17 +53,26 @@ import io.github.biezhi.wechat.model.WechatMessage;
  *       
  */
 public class WXChatConsole extends IMChatConsole {
-    private static ImageDescriptor icon = IMPlugin
-            .getImageDescriptor("icons/wechat.png");
-            
-    public WXChatConsole(String id, String name, String uin) {
-        super(id, name, uin);
-        setImageDescriptor(icon);
-    }
     
-    public WXChatConsole(IContact contact) {
-        super(contact);
-        setImageDescriptor(icon);
+    public WXChatConsole(IContact target, IMContactView imPanel) {
+        super(target, imPanel);
+        char ch = 'F';
+        if (target instanceof Contact) {
+            Contact c = (Contact) target;
+            if (c.isPublic()) {
+                ch = 'P';
+            }
+            else if ((c.ContactFlag
+                    & Contact.CONTACTFLAG_CHATROOMCONTACT) != 0) {
+                ch = 'G';
+            }
+            else if ((c.ContactFlag & Contact.CONTACTFLAG_3RDAPPCONTACT) != 0) {
+                ch = 'S';
+            }
+        }
+        IMG_NORMAL = LetterImageFactory.create(ch, SWT.COLOR_BLACK);
+        IMG_SELECTED = LetterImageFactory.create(ch, SWT.COLOR_RED);
+        setImage(IMG_NORMAL);
     }
     
     @Override
@@ -88,7 +116,70 @@ public class WXChatConsole extends IMChatConsole {
     }
     
     @Override
-    public boolean enableUpload() {
-        return false;
+    public void sendFileInternal(final String file) {
+        // error("暂不支持，敬请关注 https://github.com/Jamling/SmartIM 或
+        // https://github.com/Jamling/SmartQQ4IntelliJ 最新动态");
+        final File f = new File(file);
+        final WechatClient client = getClient();
+        if (!checkClient(client)) {
+            return;
+        }
+        
+        String ext = FileUtils.getExtension(f.getPath()).toLowerCase();
+        String mimeType = URLConnection.guessContentTypeFromName(f.getName());
+        String media = "pic";
+        int type = WechatMessage.MSGTYPE_IMAGE;
+        String content = "";
+        if (Arrays.asList("png", "jpg", "jpeg", "bmp").contains(ext)) {
+            type = WechatMessage.MSGTYPE_IMAGE;
+            media = "pic";
+        }
+        else if ("gif".equals(ext)) {
+            type = WechatMessage.MSGTYPE_EMOTICON;
+            media = "doc";
+        }
+        else {
+            type = WechatMessage.MSGTYPE_FILE;
+            media = "doc";
+        }
+        
+        final UploadInfo uploadInfo = client.uploadMedia(f, mimeType, media);
+        
+        if (uploadInfo == null) {
+            error("上传失败");
+            return;
+        }
+        String link = StringUtils.file2url(file);
+        String input = null;
+        if (type == WechatMessage.MSGTYPE_EMOTICON
+                || type == WechatMessage.MSGTYPE_IMAGE) {
+            input = String.format("<img src=\"%s\" border=\"0\" alt=\"%s\"",
+                    link, file);
+            if (uploadInfo.CDNThumbImgWidth > 0) {
+                input += " width=\"" + uploadInfo.CDNThumbImgWidth + "\"";
+            }
+            if (uploadInfo.CDNThumbImgHeight > 0) {
+                input += " height=\"" + uploadInfo.CDNThumbImgHeight + "\"";
+            }
+        }
+        else {
+            input = String.format("<a href=\"%s\" title=\"%s\">%s</a>", link,
+                    file, file);
+            content = client.createFileMsgContent(f, uploadInfo.MediaId);
+        }
+        
+        final WechatMessage m = client.createMessage(type, content, contact);
+        m.text = input;
+        m.MediaId = uploadInfo.MediaId;
+        
+        client.sendMessage(m, contact);
+        
+        if (!hideMyInput()) {
+            String name = client.getAccount().getName();
+            String msg = IMUtils.formatHtmlMsg(true, false,
+                    System.currentTimeMillis(), name, m.text);
+            insertDocument(msg);
+            IMHistoryManager.getInstance().save(client, getUin(), msg);
+        }
     }
 }

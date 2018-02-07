@@ -19,6 +19,11 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
+import com.scienjus.smartqq.model.Friend;
+
+import cn.ieclipse.smartim.common.IMUtils;
+import cn.ieclipse.smartim.htmlconsole.IMChatConsole;
+import cn.ieclipse.smartim.htmlconsole.MockChatConsole;
 import cn.ieclipse.smartim.views.IMContactView;
 
 /**
@@ -28,23 +33,27 @@ import cn.ieclipse.smartim.views.IMContactView;
  * @date 2017年6月20日
  *       
  */
-public class DisconnectAction extends Action {
+public class MockConsoleAction extends Action {
     IMContactView contactView;
     
-    public DisconnectAction(IMContactView contactView) {
+    public MockConsoleAction(IMContactView contactView) {
         this.contactView = contactView;
-        setText("Close");
-        setToolTipText("Disconnect from server");
+        setText("Mock");
+        setToolTipText("Mock chat");
         setImageDescriptor(PlatformUI.getWorkbench().getSharedImages()
-                .getImageDescriptor(ISharedImages.IMG_ELCL_STOP));
+                .getImageDescriptor(ISharedImages.IMG_DEC_FIELD_WARNING));
     }
     
     @Override
     public void run() {
-//        IMPlugin.getDefault().closeAllChat();
-//        IMPlugin.setEnable(true);
-        if (contactView != null) {
-            contactView.close();
-        }
+        Friend f = new Friend();
+        f.setUserId(System.currentTimeMillis());
+        f.setMarkname("Test" + System.currentTimeMillis());
+        MockChatConsole console = new MockChatConsole(f, contactView);
+        contactView.getTabbedChat().setSelection(console);
+        contactView.randBling();
+        String msg = IMUtils.formatMsg(System.currentTimeMillis(), "明月",
+                "我的未来不是梦http://www.baidu.com咕咕");
+        console.write(msg);
     }
 }

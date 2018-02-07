@@ -23,7 +23,7 @@ import org.eclipse.ui.console.IConsolePageParticipant;
 import org.eclipse.ui.console.actions.CloseConsoleAction;
 import org.eclipse.ui.part.IPageBookViewPage;
 
-import cn.ieclipse.smartim.actions.FileAction;
+import cn.ieclipse.smartim.actions.SendFileAction;
 import cn.ieclipse.smartim.actions.NextChatAction;
 import cn.ieclipse.smartim.actions.PrevChatAction;
 import cn.ieclipse.smartim.actions.ProjectFileAction;
@@ -58,10 +58,10 @@ public class IMChatConsolePageParticipant implements IConsolePageParticipant {
         action = new NextChatAction((IMChatConsole) console);
         // actionBars.getToolBarManager().appendToGroup(group, action);
         actionBars.getMenuManager().add(action);
-        action = new FileAction((IMChatConsole) console);
+        //action = new SendFileAction((IMChatConsole) console);
         // actionBars.getToolBarManager().appendToGroup(group, action);
         actionBars.getMenuManager().add(action);
-        action = new ProjectFileAction((IMChatConsole) console);
+        //action = new ProjectFileAction((IMChatConsole) console);
         // actionBars.getToolBarManager().appendToGroup(group, action);
         actionBars.getMenuManager().add(action);
         

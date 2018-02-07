@@ -1,5 +1,8 @@
 package cn.ieclipse.smartim.views;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -11,11 +14,18 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.IShowInTarget;
 import org.eclipse.ui.part.ShowInContext;
@@ -23,15 +33,21 @@ import org.eclipse.ui.part.ViewPart;
 
 import cn.ieclipse.smartim.IMPlugin;
 import cn.ieclipse.smartim.IMRobotCallback;
+import cn.ieclipse.smartim.IMSendCallback;
 import cn.ieclipse.smartim.SmartClient;
 import cn.ieclipse.smartim.actions.BroadcastAction;
 import cn.ieclipse.smartim.actions.DisconnectAction;
 import cn.ieclipse.smartim.actions.LoginAction;
+import cn.ieclipse.smartim.actions.MockConsoleAction;
 import cn.ieclipse.smartim.actions.SettingAction;
 import cn.ieclipse.smartim.callback.ModificationCallback;
 import cn.ieclipse.smartim.callback.ReceiveCallback;
-import cn.ieclipse.smartim.callback.SendCallback;
+import cn.ieclipse.smartim.common.IDEUtils;
+import cn.ieclipse.smartim.htmlconsole.ClosableTabHost;
+import cn.ieclipse.smartim.htmlconsole.IMChatConsole;
+import cn.ieclipse.smartim.model.IContact;
 import cn.ieclipse.smartim.preferences.SettingsPerferencePage;
+import cn.ieclipse.smartqq.views.QQContactView;
 
 public abstract class IMContactView extends ViewPart implements IShowInTarget {
     
@@ -50,9 +66,15 @@ public abstract class IMContactView extends ViewPart implements IShowInTarget {
     
     protected ReceiveCallback receiveCallback;
     protected IMRobotCallback robotCallback;
-    protected SendCallback sendCallback;
+    protected IMSendCallback sendCallback;
     protected ModificationCallback modificationCallback;
     protected boolean updateContactsOnlyFocus = false;
+    
+    protected SashForm sashForm;
+    protected TabFolder tabFolder;
+    protected CTabFolder tabbedChat;
+    
+    protected String viewId;
     
     /**
      * The constructor.
@@ -69,6 +91,22 @@ public abstract class IMContactView extends ViewPart implements IShowInTarget {
         hookContextMenu();
         hookDoubleClickAction();
         contributeToActionBars();
+        
+        sashForm = new SashForm(parent, SWT.SMOOTH);
+        tabFolder = new TabFolder(sashForm, SWT.NONE);
+        tabbedChat = new ClosableTabHost(sashForm);
+        
+        sashForm.setBackground(
+                IMPlugin.getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
+        sashForm.setWeights(new int[] { 4, 10 });
+        sashForm.setSashWidth(6);
+    }
+    
+    @Override
+    public void dispose() {
+        getClient().close();
+        closeAllChat();
+        super.dispose();
     }
     
     public void initContacts() {
@@ -159,7 +197,7 @@ public abstract class IMContactView extends ViewPart implements IShowInTarget {
         settings = new SettingAction();
         exit = new DisconnectAction(this);
         broadcast = new BroadcastAction(this);
-        
+        testAction = new MockConsoleAction(this);
     }
     
     private void hookDoubleClickAction() {
@@ -200,6 +238,10 @@ public abstract class IMContactView extends ViewPart implements IShowInTarget {
         return tv;
     }
     
+    public CTabFolder getTabbedChat() {
+        return tabbedChat;
+    }
+    
     protected void initTrees(TreeViewer... treeViewers) {
         if (treeViewers != null) {
             for (TreeViewer tv : treeViewers) {
@@ -215,4 +257,103 @@ public abstract class IMContactView extends ViewPart implements IShowInTarget {
     };
     
     public abstract SmartClient getClient();
+    
+    public abstract IMContactView createContactsUI();
+    
+    public abstract IMChatConsole createConsoleUI(IContact contact);
+    
+    public void hide() {
+        if (viewId != null) {
+            IDEUtils.toggleViewPart(viewId, false);
+        }
+    }
+    
+    public void show() {
+        if (viewId != null) {
+            IDEUtils.toggleViewPart(viewId, true);
+        }
+    }
+    
+    public void randBling() {
+        IMPlugin.runOnUI(new Runnable() {
+            @Override
+            public void run() {
+                int size = tabbedChat.getItemCount();
+                int i = new Random().nextInt(size);
+                if (i >= 0 && tabbedChat instanceof ClosableTabHost) {
+                    ((ClosableTabHost) tabbedChat).bling(i, "Random");
+                }
+            }
+        });
+    }
+    
+    public void highlight(IMChatConsole console) {
+        IMPlugin.runOnUI(new Runnable() {
+            @Override
+            public void run() {
+                int i = tabbedChat.indexOf(console);
+                if (i >= 0 && tabbedChat instanceof ClosableTabHost) {
+                    ((ClosableTabHost) tabbedChat).bling(i, console.getName());
+                }
+            }
+        });
+    }
+    
+    public IMChatConsole findConsole(IContact contact, boolean add) {
+        return findConsoleById(contact.getUin(), add);
+    }
+    
+    public IMChatConsole findConsoleById(String id, boolean show) {
+        int count = tabbedChat.getItemCount();
+        for (int i = 0; i < count; i++) {
+            if (tabbedChat.getItem(i) instanceof IMChatConsole) {
+                IMChatConsole t = (IMChatConsole) tabbedChat.getItem(i);
+                if (id.equals(t.getUin())) {
+                    if (show) {
+                        tabbedChat.setSelection(i);
+                    }
+                    return t;
+                }
+            }
+        }
+        return null;
+    }
+    
+    public IMChatConsole openConsole(IContact contact) {
+        IMChatConsole console = findConsoleById(contact.getUin(), true);
+        if (console == null) {
+            console = createConsoleUI(contact);
+            tabbedChat.setSelection(console);
+        }
+        return console;
+    }
+    
+    public void close() {
+        getClient().close();
+        closeAllChat();
+        notifyLoadContacts(false);
+    }
+    
+    public void closeAllChat() {
+        CTabItem[] items = tabbedChat.getItems();
+        if (items != null) {
+            for (CTabItem item : items) {
+                item.dispose();
+            }
+        }
+    }
+    
+    public java.util.List<IMChatConsole> getConsoleList() {
+        java.util.List<IMChatConsole> list = new ArrayList<>();
+        if (tabbedChat != null) {
+            int count = tabbedChat.getItemCount();
+            for (int i = 0; i < count; i++) {
+                if (tabbedChat.getItem(i) instanceof IMChatConsole) {
+                    IMChatConsole t = (IMChatConsole) tabbedChat.getItem(i);
+                    list.add(t);
+                }
+            }
+        }
+        return list;
+    }
 }

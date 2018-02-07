@@ -27,7 +27,7 @@ public class ReviewLinkTest {
     public void testGetLinkText() {
         
         String input = "16:17:28 Send1: Code: /var/path/file:33";
-        input += "\n" + "16:17:38 Send 2: Code: \\C:\\\\path\\file:do.java:33 ";
+        input += "\n" + "16:17:38 Send 2: Code: \\TabComposite:\\\\path\\file:do.java:33 ";
         input += "\n" + "16:17:46 发送者: Code: /var/path path2/src.:33 ";
         Pattern p = Pattern.compile(regex, Pattern.MULTILINE);
         Matcher m = p.matcher(input);
@@ -37,7 +37,7 @@ public class ReviewLinkTest {
         }
         System.out.println(list);
         assertEquals("Code: /var/path/file:33", getLinkText(list.get(0)));
-        assertEquals("Code: \\C:\\\\path\\file:do.java:33 ", getLinkText(list.get(1)));
+        assertEquals("Code: \\TabComposite:\\\\path\\file:do.java:33 ", getLinkText(list.get(1)));
         assertEquals("Code: /var/path path2/src.:33 ", getLinkText(list.get(2)));
     }
     

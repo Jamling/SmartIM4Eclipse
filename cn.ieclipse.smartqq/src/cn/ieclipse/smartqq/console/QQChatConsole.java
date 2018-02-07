@@ -3,8 +3,7 @@ package cn.ieclipse.smartqq.console;
 import java.io.File;
 
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.console.IConsole;
+import org.eclipse.swt.SWT;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -16,7 +15,6 @@ import com.scienjus.smartqq.handler.msg.FriendMessageHandler;
 import com.scienjus.smartqq.handler.msg.GroupMessageHandler;
 import com.scienjus.smartqq.model.Discuss;
 import com.scienjus.smartqq.model.DiscussInfo;
-import com.scienjus.smartqq.model.Friend;
 import com.scienjus.smartqq.model.Group;
 import com.scienjus.smartqq.model.GroupInfo;
 import com.scienjus.smartqq.model.QQMessage;
@@ -25,25 +23,27 @@ import com.scienjus.smartqq.model.UserInfo;
 import cn.ieclipse.smartim.IMClientFactory;
 import cn.ieclipse.smartim.IMPlugin;
 import cn.ieclipse.smartim.common.IMUtils;
-import cn.ieclipse.smartim.console.IMChatConsole;
+import cn.ieclipse.smartim.common.LetterImageFactory;
+import cn.ieclipse.smartim.htmlconsole.IMChatConsole;
 import cn.ieclipse.smartim.model.IContact;
 import cn.ieclipse.smartim.model.impl.AbstractFrom;
 import cn.ieclipse.smartim.preferences.QiniuPerferencePage;
-import cn.ieclipse.util.FileUtils;
+import cn.ieclipse.smartim.views.IMContactView;
 
 public class QQChatConsole extends IMChatConsole {
     
-    private static ImageDescriptor icon = IMPlugin
-            .getImageDescriptor("icons/QQ.png");
-            
-    public QQChatConsole(String id, String name, String uin) {
-        super(id, name, uin);
-        setImageDescriptor(icon);
-    }
-    
-    public QQChatConsole(IContact contact) {
-        super(contact);
-        setImageDescriptor(icon);
+    public QQChatConsole(IContact target, IMContactView imPanel) {
+        super(target, imPanel);
+        char ch = 'F';
+        if (target instanceof Group || target instanceof GroupInfo) {
+            ch = 'G';
+        }
+        else if (target instanceof Discuss || target instanceof DiscussInfo) {
+            ch = 'D';
+        }
+        IMG_NORMAL = LetterImageFactory.create(ch, SWT.COLOR_BLACK);
+        IMG_SELECTED = LetterImageFactory.create(ch, SWT.COLOR_RED);
+        setImage(IMG_NORMAL);
     }
     
     @Override
@@ -73,70 +73,6 @@ public class QQChatConsole extends IMChatConsole {
         String name = from == null ? "未知用户" : from.getName();
         String msg = IMUtils.formatMsg(m.getTime(), name, m.getContent());
         write(msg);
-    }
-    
-    @Deprecated
-    public static QQChatConsole create(Object obj) {
-        if (obj instanceof Friend) {
-            Friend f = (Friend) obj;
-            return new QQChatConsole("F_" + f.getUserId(), f.getMarkname(),
-                    f.getUin());
-        }
-        else if (obj instanceof Group) {
-            Group g = (Group) obj;
-            return new QQChatConsole("G_" + g.getUin(), g.getName(),
-                    g.getUin());
-        }
-        else if (obj instanceof Discuss) {
-            Discuss d = (Discuss) obj;
-            return new QQChatConsole("D_" + d.getUin(), d.getName(),
-                    d.getUin());
-        }
-        else if (obj instanceof GroupInfo) {
-            GroupInfo g = (GroupInfo) obj;
-            return new QQChatConsole("G_" + g.getUin(), g.getName(),
-                    g.getUin());
-        }
-        else if (obj instanceof DiscussInfo) {
-            DiscussInfo g = (DiscussInfo) obj;
-            return new QQChatConsole("D_" + g.getUin(), g.getName(),
-                    g.getUin());
-        }
-        return null;
-    }
-    
-    private static long getContactId(Object obj) {
-        if (obj instanceof IContact) {
-            String uin = ((IContact) obj).getUin();
-            return Long.parseLong(uin);
-        }
-        return 0;
-    }
-    
-    @Deprecated
-    public static boolean isChatConsole(IConsole existing, Object obj) {
-        if (existing instanceof QQChatConsole) {
-            QQChatConsole console = ((QQChatConsole) existing);
-            String id = console.id;
-            String name = existing.getName();
-            
-            if (obj instanceof Friend) {
-                return ("F_" + getContactId(obj)).equals(id);
-            }
-            else if (obj instanceof Group) {
-                return ("G_" + getContactId(obj)).equals(id);
-            }
-            else if (obj instanceof GroupInfo) {
-                return ("G_" + getContactId(obj)).equals(id);
-            }
-            else if (obj instanceof Discuss) {
-                return ("D_" + ((Discuss) obj).getId()).equals(id);
-            }
-            else if (obj instanceof DiscussInfo) {
-                return ("D_" + getContactId(obj)).equals(id);
-            }
-        }
-        return false;
     }
     
     public void post(final String msg) {
@@ -191,14 +127,12 @@ public class QQChatConsole extends IMChatConsole {
                             "来自SmartQQ的文件: %s (大小%s), 点击链接%s查看",
                             IMUtils.getName(file),
                             IMUtils.formatFileSize(info.fsize), url);
-                    writeMine(msg);
-                    post(msg);
+                    send(msg);
                 } catch (Exception e) {
                     error("发送失败：" + e.getMessage());
                 }
                 uploadLock = false;
             };
         }.start();
-        
     }
 }

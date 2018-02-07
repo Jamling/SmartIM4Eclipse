@@ -40,7 +40,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
         store.setDefault(HotKeyPreferencePage.KEY_NEXT, "ARROW_RIGHT"); //$NON-NLS-1$
         store.setDefault(HotKeyPreferencePage.KEY_PREV, "ARROW_LEFT"); //$NON-NLS-1$
         store.setDefault(HotKeyPreferencePage.KEY_HIDE, "Alt + H"); //$NON-NLS-1$
-        store.setDefault(HotKeyPreferencePage.KEY_HIDE_CLOSE, "Alt + C"); //$NON-NLS-1$
+        store.setDefault(HotKeyPreferencePage.KEY_HIDE_CLOSE, "Alt + TabComposite"); //$NON-NLS-1$
         
         store.setDefault(RobotPreferencePage.ROBOT_ENABLE, false);
         store.setDefault(RobotPreferencePage.ROBOT_NAME,

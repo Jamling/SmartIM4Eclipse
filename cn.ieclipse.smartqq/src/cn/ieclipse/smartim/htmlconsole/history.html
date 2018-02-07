@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <title>SmartIM</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="http://cdn.bootcss.com/jquery/2.2.0/jquery.min.js"></script>
+  <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="http://dl.ieclipse.cn/r/smartim.css">
+  <link rel="stylesheet" href="http://dl.ieclipse.cn/r/smartim-face-min.css">
+  <style>
+   
+   img {max-width:100%;}
+   div.my {font-size: 1.2em; font-style: italic;}
+   div.error {color: red;}
+  </style>
+  <script>
+  function add_log(text, end) {
+	//console.log(text);
+    $('#root').append(text);
+    if (end) {
+      scrollToEnd();
+    }
+  }
+  
+  function scrollToEnd() {
+    var h = $(document).height() - $(window).height();
+    $(document).scrollTop(h); 
+  }
+  $(document).ready(function(){
+	prepared();
+  });
+  </script>
+</head>
+<body>
+  <div class="" id="root">
+  </div>
+<!--   <span class="emoji"></span>
+  <div class="emoji emoji2614"></div>
+  <span class="emoji emoji2614"></span>
+  <button onclick="add_log('ddd')">add</button> -->
+</body>
+</html>

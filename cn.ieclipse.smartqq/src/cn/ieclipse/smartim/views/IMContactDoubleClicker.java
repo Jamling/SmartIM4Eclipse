@@ -4,11 +4,10 @@ import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
-import cn.ieclipse.smartim.IMPlugin;
 import cn.ieclipse.smartim.model.IContact;
 import cn.ieclipse.smartim.model.impl.AbstractContact;
 
-public abstract class IMContactDoubleClicker implements IDoubleClickListener {
+public class IMContactDoubleClicker implements IDoubleClickListener {
     
     protected IMContactView fView;
     
@@ -31,5 +30,9 @@ public abstract class IMContactDoubleClicker implements IDoubleClickListener {
         }
     }
     
-    public abstract void click(Object obj);
+    public void click(Object obj) {
+        if (obj instanceof IContact) {
+            fView.openConsole((IContact) obj);
+        }
+    }
 }

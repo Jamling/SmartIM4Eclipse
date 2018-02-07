@@ -16,6 +16,7 @@
 package cn.ieclipse.smartim.dialogs;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.dialogs.Dialog;
@@ -26,6 +27,7 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -35,13 +37,15 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.console.ConsolePlugin;
-import org.eclipse.ui.console.IConsole;
-import org.eclipse.ui.console.IConsoleManager;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.wb.swt.SWTResourceManager;
 
-import cn.ieclipse.smartim.IMPlugin;
-import cn.ieclipse.smartim.console.IMChatConsole;
+import cn.ieclipse.smartim.htmlconsole.IMChatConsole;
+import cn.ieclipse.smartim.views.IMContactView;
+import cn.ieclipse.smartqq.views.QQContactView;
+import cn.ieclipse.wechat.views.WXContactView;
 import swing2swt.layout.FlowLayout;
 
 /**
@@ -97,51 +101,63 @@ public class ReviewDialog extends Dialog {
         styledText.setLayoutData(
                 new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
                 
-        Group composite = new Group(container, SWT.NONE);
-        composite.setText("Send to");
-        composite.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-        composite.setLayoutData(
-                new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
-                
         initData();
+        
+        Label lblNewLabel_2 = new Label(container, SWT.NONE);
+        lblNewLabel_2.setText("Send to");
+        
+        Composite composite = new Composite(container, SWT.NONE);
+        composite.setLayout(new FillLayout(SWT.VERTICAL));
+        composite.setLayoutData(
+                new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
         createSendTarget(composite);
         
         return container;
     }
     
-    private void createSendTarget(Group composite) {
-        IConsoleManager manager = ConsolePlugin.getDefault()
-                .getConsoleManager();
-                
-        IConsole[] existing = manager.getConsoles();
-        for (int i = 0; i < existing.length; i++) {
-            if (existing[i] instanceof IMChatConsole) {
-                final IMChatConsole console = (IMChatConsole) existing[i];
-                Button btn = new Button(composite, SWT.CHECK);
-                btn.setText(console.getName());
-                btn.setData(console);
-                btn.addSelectionListener(new SelectionAdapter() {
-                    @Override
-                    public void widgetSelected(SelectionEvent e) {
-                        Button source = (Button) e.getSource();
-                        if (source.getSelection()) {
-                            if (!consoles.contains(console)) {
-                                consoles.add(console);
+    private void createSendTarget(Composite composite) {
+        IWorkbenchPage page = PlatformUI.getWorkbench()
+                .getActiveWorkbenchWindow().getActivePage();
+        String[] ids = new String[] { QQContactView.ID, WXContactView.ID };
+        int count = 0;
+        for (String id : ids) {
+            IViewPart view = page.findView(id);
+            if (view != null) {
+                IMContactView contactView = (IMContactView) view;
+                List<IMChatConsole> chats = contactView.getConsoleList();
+                if (!chats.isEmpty()) {
+                    Group group = new Group(composite, SWT.NONE);
+                    group.setText(contactView.getTitle());
+                    group.setLayout(new FlowLayout(FlowLayout.LEFT));
+                    for (IMChatConsole console : chats) {
+                        Button btn = new Button(group, SWT.CHECK);
+                        btn.setText(console.getName());
+                        btn.setData(console);
+                        btn.addSelectionListener(new SelectionAdapter() {
+                            @Override
+                            public void widgetSelected(SelectionEvent e) {
+                                Button source = (Button) e.getSource();
+                                if (source.getSelection()) {
+                                    if (!consoles.contains(console)) {
+                                        consoles.add(console);
+                                    }
+                                }
+                                else {
+                                    consoles.remove(console);
+                                }
+                                getButton(IDialogConstants.OK_ID)
+                                        .setEnabled(!consoles.isEmpty());
                             }
-                        }
-                        else {
-                            consoles.remove(console);
-                        }
-                        getButton(IDialogConstants.OK_ID)
-                                .setEnabled(!consoles.isEmpty());
+                        });
                     }
-                });
-                
-                if (console == IMPlugin.getDefault().console) {
-                    consoles.add(console);
-                    btn.setSelection(true);
+                }
+                else {
+                    count++;
                 }
             }
+        }
+        if (count == ids.length) {
+            new Label(composite, SWT.NONE).setText("暂无聊天会话，无法发送！请先打开聊天会话窗口再试");
         }
     }
     
@@ -165,7 +181,7 @@ public class ReviewDialog extends Dialog {
         String msg = String.format("%s(Reviews: %s)", text.getText(),
                 styledText.getText());
         for (IMChatConsole console : consoles) {
-            console.sendMsg(msg);
+            console.send(msg);
         }
         super.okPressed();
     }

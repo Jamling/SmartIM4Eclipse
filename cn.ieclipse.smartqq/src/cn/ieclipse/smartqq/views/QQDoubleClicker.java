@@ -52,6 +52,6 @@ public class QQDoubleClicker extends IMContactDoubleClicker {
     }
     
     private void open(IContact contact) {
-        IMPlugin.getDefault().findConsole(QQChatConsole.class, contact, true);
+        // IMPlugin.getDefault().findConsole(QQChatConsole.class, contact, true);
     }
 }

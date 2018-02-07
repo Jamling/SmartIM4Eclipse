@@ -18,9 +18,10 @@ package cn.ieclipse.smartim;
 import cn.ieclipse.smartim.callback.SendCallback;
 import cn.ieclipse.smartim.common.IMUtils;
 import cn.ieclipse.smartim.common.Notifications;
-import cn.ieclipse.smartim.console.IMChatConsole;
 import cn.ieclipse.smartim.exception.HttpException;
 import cn.ieclipse.smartim.exception.LogicException;
+import cn.ieclipse.smartim.htmlconsole.IMChatConsole;
+import cn.ieclipse.smartim.views.IMContactView;
 
 /**
  * 类/接口描述
@@ -30,6 +31,11 @@ import cn.ieclipse.smartim.exception.LogicException;
  *       
  */
 public class IMSendCallback implements SendCallback {
+    protected IMContactView fContactView;
+    
+    public IMSendCallback(IMContactView contactView) {
+        this.fContactView = contactView;
+    }
     
     @Override
     public void onSendResult(int type, String targetId, CharSequence msg,
@@ -56,12 +62,13 @@ public class IMSendCallback implements SendCallback {
             if (t instanceof LogicException) {
                 code = String.format("api code=%d",
                         ((LogicException) t).getCode());
-            } else if (t instanceof HttpException) {
+            }
+            else if (t instanceof HttpException) {
                 code = String.format("http code=%d",
                         ((HttpException) t).getCode());
             }
         }
-        IMChatConsole console = IMPlugin.getDefault().getChatConsole(targetId,
+        IMChatConsole console = fContactView.findConsoleById(targetId,
                 true);
         if (console != null) {
             console.error(String.format("%s 发送失败！%s", msg, code));

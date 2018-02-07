@@ -15,17 +15,14 @@
  */
 package cn.ieclipse.wechat;
 
-import cn.ieclipse.smartim.IMHistoryManager;
 import cn.ieclipse.smartim.IMPlugin;
-import cn.ieclipse.smartim.callback.ReceiveCallback;
+import cn.ieclipse.smartim.IMReceiveCallback;
 import cn.ieclipse.smartim.common.IMUtils;
-import cn.ieclipse.smartim.common.Notifications;
 import cn.ieclipse.smartim.model.impl.AbstractFrom;
 import cn.ieclipse.smartim.model.impl.AbstractMessage;
 import cn.ieclipse.smartim.preferences.SettingsPerferencePage;
 import cn.ieclipse.wechat.console.WXChatConsole;
 import cn.ieclipse.wechat.views.WXContactView;
-import io.github.biezhi.wechat.api.WechatClient;
 import io.github.biezhi.wechat.model.Contact;
 import io.github.biezhi.wechat.model.GroupFrom;
 import io.github.biezhi.wechat.model.UserFrom;
@@ -38,11 +35,12 @@ import io.github.biezhi.wechat.model.WechatMessage;
  * @date 2017年10月14日
  *       
  */
-public class WXReceiveCallback implements ReceiveCallback {
+public class WXReceiveCallback extends IMReceiveCallback {
     private WXChatConsole lastConsole;
     private WXContactView fContactView;
     
     public WXReceiveCallback(WXContactView fContactView) {
+        super(fContactView);
         this.fContactView = fContactView;
     }
     
@@ -65,68 +63,44 @@ public class WXReceiveCallback implements ReceiveCallback {
             else {
                 unknown = from.getMember() == null;
             }
-            WechatClient client = fContactView.getClient();
-            if (!unknown) {
-                IMHistoryManager.getInstance().save(client, uin,
-                        message.getRaw());
-            }
-            
-            // IMHistoryManager.getInstance().save(client, uin,
-            // message.getRaw());
-            
-            if (notify) {
-                boolean hide = unknown && !IMPlugin.getDefault()
-                        .getPreferenceStore()
-                        .getBoolean(SettingsPerferencePage.NOTIFY_UNKNOWN);
-                try {
-                    hide = hide || from.getMember().getUin().equals(
-                            fContactView.getClient().getAccount().getUin());
-                } catch (Exception e) {
-                    IMPlugin.getDefault().log("", e);
-                }
-                if (hide) {
-                    // don't notify
-                }
-                else {
-                    CharSequence content = (from instanceof UserFrom)
-                            ? message.getText()
-                            : from.getName() + ":" + message.getText();
-                    Notifications.notify(WXChatConsole.class, from.getContact(),
-                            from.getContact().getName(), content);
-                }
-            }
-            
-            WXChatConsole console = IMPlugin.getDefault()
-                    .findConsole(WXChatConsole.class, from.getContact(), false);
-            if (console != null) {
-                lastConsole = console;
-                String name = from.getName();
-                String msg = null;
-                if (message instanceof WechatMessage) {
-                    WechatMessage m = (WechatMessage) message;
-                    msg = IMUtils.formatMsg(m.CreateTime, name, m.getText());
-                }
-                console.write(msg);
-            }
-            else {
-                contact.increaceUnRead();
-            }
-            
-            fContactView.notifyUpdateContacts(0, false);
+            handle(unknown, notify, message, from, contact);
         }
     }
     
     @Override
-    public void onReceiveError(Throwable e) {
-        if (e == null) {
-            return;
-        }
-        if (lastConsole != null) {
-            lastConsole.error(e);
-        }
-        else {
-            IMPlugin.getDefault().log("微信接收异常", e);
-        }
+    protected String getNotifyContent(AbstractMessage message,
+            AbstractFrom from) {
+        CharSequence content = (from instanceof UserFrom) ? message.getText()
+                : from.getName() + ":" + message.getText();
+        return content.toString();
     }
     
+    @Override
+    protected String getMsgContent(AbstractMessage message, AbstractFrom from) {
+        String name = from.getName();
+        String msg = null;
+        if (message instanceof WechatMessage) {
+            WechatMessage m = (WechatMessage) message;
+            String text = m.getText() == null ? null : m.getText().toString();
+            boolean encodeHtml = true;
+            if (m.MsgType != WechatMessage.MSGTYPE_TEXT) {
+                encodeHtml = false;
+                if (m.MsgType == WechatMessage.MSGTYPE_APP
+                        && m.AppMsgType == WechatMessage.APPMSGTYPE_ATTACH) {
+                    if (m.AppMsgInfo != null) {
+                        
+                    }
+                }
+            }
+            else {
+                if (from instanceof UserFrom) {
+                    Contact c = (Contact) from.getContact();
+                    encodeHtml = !c.isPublic();
+                }
+            }
+            msg = IMUtils.formatHtmlMsg(false, encodeHtml, m.CreateTime, name,
+                    text);
+        }
+        return msg;
+    }
 }

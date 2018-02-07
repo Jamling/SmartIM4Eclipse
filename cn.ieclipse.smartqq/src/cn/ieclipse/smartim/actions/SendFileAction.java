@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
-import cn.ieclipse.smartim.console.IMChatConsole;
+import cn.ieclipse.smartim.htmlconsole.IMChatConsole;
 
 /**
  * 类/接口描述
@@ -30,10 +30,14 @@ import cn.ieclipse.smartim.console.IMChatConsole;
  * @date 2017年8月14日
  *       
  */
-public class FileAction extends Action {
-    private IMChatConsole fConsole;
+public class SendFileAction extends Action {
+    protected IMChatConsole fConsole;
+    protected String[] filterNames;
+    protected String[] filterExtensions;
+    protected String dialogTitle;
     
-    public FileAction(IMChatConsole console) {
+    public SendFileAction(IMChatConsole console) {
+        super("", Action.AS_PUSH_BUTTON);
         this.fConsole = console;
         setText("Send File");
         setToolTipText("Send file or paste file to chat console");
@@ -45,10 +49,19 @@ public class FileAction extends Action {
     public void run() {
         if (fConsole != null) {
             if (!fConsole.enableUpload()) {
-                fConsole.error("暂不支持发送文件或文件正在发送中...");
+                fConsole.error("文件正在发送中，请不要频繁操作");
             }
-            FileDialog dialog = new FileDialog(
-                    fConsole.getPage().getSite().getShell(), SWT.OPEN);
+            FileDialog dialog = new FileDialog(fConsole.getControl().getShell(),
+                    SWT.OPEN);
+            if (filterExtensions != null) {
+                dialog.setFilterExtensions(filterExtensions);
+            }
+            if (filterNames != null) {
+                dialog.setFilterNames(filterNames);
+            }
+            if (dialogTitle != null) {
+                dialog.setText(dialogTitle);
+            }
             String file = dialog.open();
             if (file != null) {
                 fConsole.sendFile(file);

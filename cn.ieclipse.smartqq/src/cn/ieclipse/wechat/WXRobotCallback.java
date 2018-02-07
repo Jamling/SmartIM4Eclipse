@@ -40,8 +40,8 @@ public class WXRobotCallback extends IMRobotCallback {
         try {
             WechatMessage m = (WechatMessage) message;
             if (m.MsgType == WechatMessage.MSGTYPE_TEXT) {
-                console = IMPlugin.getDefault().findConsole(WXChatConsole.class,
-                        from.getContact(), false);
+                console = (WXChatConsole) fContactView.findConsoleById(
+                        from.getContact().getUin(), false);
                 answer(from, m);
             }
             else if (m.MsgType == WechatMessage.MSGTYPE_SYS) {

@@ -16,18 +16,20 @@
 package cn.ieclipse.wechat.views;
 
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.TabFolder;
 
 import cn.ieclipse.smartim.IMClientFactory;
 import cn.ieclipse.smartim.IMPlugin;
+import cn.ieclipse.smartim.IMSendCallback;
+import cn.ieclipse.smartim.htmlconsole.IMChatConsole;
+import cn.ieclipse.smartim.model.IContact;
+import cn.ieclipse.smartim.views.IMContactDoubleClicker;
 import cn.ieclipse.smartim.views.IMContactView;
 import cn.ieclipse.wechat.WXModificationCallback;
 import cn.ieclipse.wechat.WXReceiveCallback;
 import cn.ieclipse.wechat.WXRobotCallback;
-import cn.ieclipse.wechat.WXSendCallback;
 import cn.ieclipse.wechat.actions.WXBroadcastAction;
+import cn.ieclipse.wechat.console.WXChatConsole;
 import io.github.biezhi.wechat.api.WechatClient;
 
 /**
@@ -50,20 +52,20 @@ public class WXContactView extends IMContactView {
     private WXModificationCallback modificationCallback;
     
     public WXContactView() {
+        viewId = ID;
         labelProvider = new WXContactLabelProvider(this);
         contentProvider = new WXContactContentProvider(this, false);
-        doubleClicker = new WXDoubleClicker(this);
+        doubleClicker = new IMContactDoubleClicker(this);
         
         receiveCallback = new WXReceiveCallback(this);
         robotCallback = new WXRobotCallback(this);
-        sendCallback = new WXSendCallback(this);
+        sendCallback = new IMSendCallback(this);
         modificationCallback = new WXModificationCallback(this);
     }
     
     @Override
     public void createPartControl(Composite parent) {
         super.createPartControl(parent);
-        TabFolder tabFolder = new TabFolder(parent, SWT.NONE);
         ftvFriend = createTab("Chats", tabFolder);
         ftvGroup = createTab("Contacts", tabFolder);
         ftvPublic = createTab("Publics", tabFolder);
@@ -125,5 +127,16 @@ public class WXContactView extends IMContactView {
     @Override
     public WechatClient getClient() {
         return (WechatClient) IMClientFactory.getInstance().getWechatClient();
+    }
+    
+    @Override
+    public IMContactView createContactsUI() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
+    @Override
+    public IMChatConsole createConsoleUI(IContact contact) {
+        return new WXChatConsole(contact, this);
     }
 }
