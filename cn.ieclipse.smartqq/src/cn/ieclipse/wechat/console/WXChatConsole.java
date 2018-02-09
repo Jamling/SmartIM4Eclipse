@@ -19,19 +19,11 @@ import java.io.File;
 import java.net.URLConnection;
 import java.util.Arrays;
 
-import javax.swing.SwingUtilities;
-
-import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
-
-import com.scienjus.smartqq.model.Discuss;
-import com.scienjus.smartqq.model.DiscussInfo;
-import com.scienjus.smartqq.model.Group;
-import com.scienjus.smartqq.model.GroupInfo;
 
 import cn.ieclipse.smartim.IMClientFactory;
 import cn.ieclipse.smartim.IMHistoryManager;
-import cn.ieclipse.smartim.IMPlugin;
 import cn.ieclipse.smartim.common.IMUtils;
 import cn.ieclipse.smartim.common.LetterImageFactory;
 import cn.ieclipse.smartim.htmlconsole.IMChatConsole;
@@ -40,6 +32,7 @@ import cn.ieclipse.smartim.model.impl.AbstractFrom;
 import cn.ieclipse.smartim.views.IMContactView;
 import cn.ieclipse.util.FileUtils;
 import cn.ieclipse.util.StringUtils;
+import cn.ieclipse.wechat.WXUtils;
 import io.github.biezhi.wechat.api.WechatClient;
 import io.github.biezhi.wechat.model.Contact;
 import io.github.biezhi.wechat.model.UploadInfo;
@@ -56,23 +49,12 @@ public class WXChatConsole extends IMChatConsole {
     
     public WXChatConsole(IContact target, IMContactView imPanel) {
         super(target, imPanel);
-        char ch = 'F';
-        if (target instanceof Contact) {
-            Contact c = (Contact) target;
-            if (c.isPublic()) {
-                ch = 'P';
-            }
-            else if ((c.ContactFlag
-                    & Contact.CONTACTFLAG_CHATROOMCONTACT) != 0) {
-                ch = 'G';
-            }
-            else if ((c.ContactFlag & Contact.CONTACTFLAG_3RDAPPCONTACT) != 0) {
-                ch = 'S';
-            }
+        char ch = WXUtils.getContactChar(target);
+        if (ch > 0) {
+            IMG_NORMAL = LetterImageFactory.create(ch, SWT.COLOR_BLACK);
+            IMG_SELECTED = LetterImageFactory.create(ch, SWT.COLOR_RED);
+            setImage(IMG_NORMAL);
         }
-        IMG_NORMAL = LetterImageFactory.create(ch, SWT.COLOR_BLACK);
-        IMG_SELECTED = LetterImageFactory.create(ch, SWT.COLOR_RED);
-        setImage(IMG_NORMAL);
     }
     
     @Override
@@ -116,6 +98,16 @@ public class WXChatConsole extends IMChatConsole {
     }
     
     @Override
+    protected boolean hyperlinkActivated(String desc) {
+        if (desc.startsWith("weixin://")) {
+            MessageDialog.openWarning(getParent().getShell(), "不支持的协议",
+                    desc + "为微信专用协议，请使用手机微信打开");
+            return false;
+        }
+        return super.hyperlinkActivated(desc);
+    }
+    
+    @Override
     public void sendFileInternal(final String file) {
         // error("暂不支持，敬请关注 https://github.com/Jamling/SmartIM 或
         // https://github.com/Jamling/SmartQQ4IntelliJ 最新动态");
@@ -150,21 +142,24 @@ public class WXChatConsole extends IMChatConsole {
             return;
         }
         String link = StringUtils.file2url(file);
+        String label = file.replace('\\', '/');
         String input = null;
         if (type == WechatMessage.MSGTYPE_EMOTICON
                 || type == WechatMessage.MSGTYPE_IMAGE) {
             input = String.format("<img src=\"%s\" border=\"0\" alt=\"%s\"",
-                    link, file);
+                    link, label);
             if (uploadInfo.CDNThumbImgWidth > 0) {
                 input += " width=\"" + uploadInfo.CDNThumbImgWidth + "\"";
             }
             if (uploadInfo.CDNThumbImgHeight > 0) {
                 input += " height=\"" + uploadInfo.CDNThumbImgHeight + "\"";
             }
+            input = String.format("<a href=\"%s\" title=\"%s\">%s</a>", link,
+                    link, input);
         }
         else {
             input = String.format("<a href=\"%s\" title=\"%s\">%s</a>", link,
-                    file, file);
+                    label, label);
             content = client.createFileMsgContent(f, uploadInfo.MediaId);
         }
         

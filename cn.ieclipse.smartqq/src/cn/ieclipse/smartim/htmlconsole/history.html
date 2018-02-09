@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="http://dl.ieclipse.cn/r/smartim.css">
   <link rel="stylesheet" href="http://dl.ieclipse.cn/r/smartim-face-min.css">
   <style>
-   
+   body {padding: 0 1.5em 0 .5em;}
    img {max-width:100%;}
    div.my {font-size: 1.2em; font-style: italic;}
    div.error {color: red;}
@@ -24,22 +24,34 @@
       scrollToEnd();
     }
   }
+
+  function clear_log() {
+	$('#root').html('');
+  }
   
   function scrollToEnd() {
     var h = $(document).height() - $(window).height();
     $(document).scrollTop(h); 
   }
-  $(document).ready(function(){
-	prepared();
+  $(document).ready(function() {
+	try
+	{
+	  prepared();
+	}
+	catch (e)
+	{
+	}
+	
   });
   </script>
 </head>
 <body>
   <div class="" id="root">
+	
   </div>
-<!--   <span class="emoji"></span>
+<!-- <span class="emoji"></span>
   <div class="emoji emoji2614"></div>
   <span class="emoji emoji2614"></span>
-  <button onclick="add_log('ddd')">add</button> -->
+  <button onclick="add_log('dddd')">add</button> -->
 </body>
 </html>

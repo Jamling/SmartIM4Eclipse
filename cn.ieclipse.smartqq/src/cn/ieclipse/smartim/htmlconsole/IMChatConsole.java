@@ -6,23 +6,26 @@ import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 
 import cn.ieclipse.smartim.IMHistoryManager;
 import cn.ieclipse.smartim.IMPlugin;
 import cn.ieclipse.smartim.SmartClient;
+import cn.ieclipse.smartim.actions.ClearHistoryAction;
 import cn.ieclipse.smartim.actions.ProjectFileAction;
 import cn.ieclipse.smartim.actions.ScrollLockAction;
 import cn.ieclipse.smartim.actions.SendFileAction;
 import cn.ieclipse.smartim.actions.SendImageAction;
 import cn.ieclipse.smartim.common.IDEUtils;
 import cn.ieclipse.smartim.common.IMUtils;
+import cn.ieclipse.smartim.dialogs.OpenFileDialog;
 import cn.ieclipse.smartim.model.IContact;
 import cn.ieclipse.smartim.views.IMContactView;
 import cn.ieclipse.util.BareBonesBrowserLaunch;
+import io.github.biezhi.wechat.model.Contact;
 
 /**
  * Created by Jamling on 2017/7/1.
@@ -96,6 +99,17 @@ public abstract class IMChatConsole extends CTabItem {
                     }
                 }
             }
+        }
+    }
+    
+    public void clearHistories() {
+        IMHistoryManager.getInstance().clear(getClient(), getHistoryFile());
+        composite.clearHistory();
+    }
+    
+    public void clearUnread() {
+        if (contact != null && contact instanceof Contact) {
+            ((Contact) contact).clearUnRead();
         }
     }
     
@@ -174,7 +188,7 @@ public abstract class IMChatConsole extends CTabItem {
     // protected ChatHistoryPane top;
     // protected ChatInputPane bottom;
     protected Browser historyWidget;
-    protected StyledText inputWidget;
+    protected Text inputWidget;
     protected Button btnSend;
     TabComposite composite;
     
@@ -194,6 +208,7 @@ public abstract class IMChatConsole extends CTabItem {
         manager.add(new SendImageAction(this));
         manager.add(new SendFileAction(this));
         manager.add(new ProjectFileAction(this));
+        manager.add(new ClearHistoryAction(this));
         manager.add(new ScrollLockAction(this));
         manager.update(true);
     }
@@ -233,10 +248,13 @@ public abstract class IMChatConsole extends CTabItem {
             IDEUtils.open(file, line);
         }
         else if (desc.startsWith("file://")) {
-            BareBonesBrowserLaunch.openURL(desc);
+            if (!OpenFileDialog.open(getParent().getShell(), desc)) {
+                BareBonesBrowserLaunch.openURL(desc);
+            }
         }
         else {
-            BareBonesBrowserLaunch.openURL(desc);
+            if (!IDEUtils.openInternalBrowser(desc, true))
+                BareBonesBrowserLaunch.openURL(desc);
         }
         return false;
     }

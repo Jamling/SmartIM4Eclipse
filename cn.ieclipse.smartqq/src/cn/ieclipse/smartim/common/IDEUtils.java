@@ -1,5 +1,8 @@
 package cn.ieclipse.smartim.common;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -15,6 +18,7 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
@@ -49,7 +53,7 @@ public class IDEUtils {
             }
         } catch (Exception e) {
             String msg = String.format("unable to open %s", file);
-            IMPlugin.getDefault().log(msg);
+            IMPlugin.getDefault().log(msg, e);
             Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
                     .getShell();
             MessageDialog.openWarning(shell, null,
@@ -74,5 +78,31 @@ public class IDEUtils {
         if (view != null) {
             page.hideView(view);
         }
+    }
+    
+    public static boolean openInternalBrowser(String url, boolean external) {
+        boolean ret = false;
+        IWorkbenchBrowserSupport support = PlatformUI.getWorkbench()
+                .getBrowserSupport();
+        boolean ext = external || !support.isInternalWebBrowserAvailable();
+        try {
+            if (!ext) {
+                int style = IWorkbenchBrowserSupport.LOCATION_BAR
+                        | IWorkbenchBrowserSupport.NAVIGATION_BAR
+                        | IWorkbenchBrowserSupport.AS_EDITOR;
+                support.createBrowser(style, IMPlugin.PLUGIN_ID, null, null)
+                        .openURL(new URL(url));
+                ret = true;
+            }
+            else {
+                support.getExternalBrowser().openURL(new URL(url));
+                ret = true;
+            }
+        } catch (PartInitException e) {
+            e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return ret;
     }
 }

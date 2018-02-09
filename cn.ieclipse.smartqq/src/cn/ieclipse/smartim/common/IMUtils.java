@@ -27,7 +27,6 @@ import java.util.regex.Pattern;
 
 import cn.ieclipse.util.FileUtils;
 import cn.ieclipse.util.StringUtils;
-import io.github.biezhi.wechat.handler.msg.File2String;
 
 /**
  * 类/接口描述
@@ -107,21 +106,6 @@ public class IMUtils {
         return String.format(
                 "<div class=\"%s\"><span class=\"time\">%s</span> <a href=\"user://%s\">%s</a>: %s</div>",
                 clz, t, name, name, content);
-    }
-    
-    public static String file2string(Class clazz, String name) {
-        try {
-            InputStream is = clazz.getResourceAsStream(name);
-            // FileInputStream fis = new FileInputStream(f);
-            byte[] buffer = new byte[is.available()];
-            is.read(buffer);
-            is.close();
-            
-            return new String(buffer);
-        } catch (Exception e) {
-        
-        }
-        return null;
     }
     
     private static String autoReviewLink(String input) {

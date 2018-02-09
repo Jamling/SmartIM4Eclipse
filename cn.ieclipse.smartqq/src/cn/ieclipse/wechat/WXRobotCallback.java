@@ -1,10 +1,14 @@
 package cn.ieclipse.wechat;
 
+import java.util.Map;
+
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import cn.ieclipse.smartim.IMClientFactory;
+import cn.ieclipse.smartim.IMHistoryManager;
 import cn.ieclipse.smartim.IMPlugin;
 import cn.ieclipse.smartim.IMRobotCallback;
+import cn.ieclipse.smartim.common.IMUtils;
 import cn.ieclipse.smartim.model.IContact;
 import cn.ieclipse.smartim.model.impl.AbstractFrom;
 import cn.ieclipse.smartim.model.impl.AbstractMessage;
@@ -13,8 +17,8 @@ import cn.ieclipse.util.StringUtils;
 import cn.ieclipse.wechat.console.WXChatConsole;
 import cn.ieclipse.wechat.views.WXContactView;
 import io.github.biezhi.wechat.api.WechatClient;
+import io.github.biezhi.wechat.model.Contact;
 import io.github.biezhi.wechat.model.GroupFrom;
-import io.github.biezhi.wechat.model.User;
 import io.github.biezhi.wechat.model.UserFrom;
 import io.github.biezhi.wechat.model.WechatMessage;
 
@@ -33,6 +37,9 @@ public class WXRobotCallback extends IMRobotCallback {
         if (!isEnable()) {
             return;
         }
+        if (from.isOut()) {
+            return;
+        }
         client = getClient();
         if (!client.isLogin()) {
             return;
@@ -40,8 +47,8 @@ public class WXRobotCallback extends IMRobotCallback {
         try {
             WechatMessage m = (WechatMessage) message;
             if (m.MsgType == WechatMessage.MSGTYPE_TEXT) {
-                console = (WXChatConsole) fContactView.findConsoleById(
-                        from.getContact().getUin(), false);
+                console = (WXChatConsole) fContactView
+                        .findConsoleById(from.getContact().getUin(), false);
                 answer(from, m);
             }
             else if (m.MsgType == WechatMessage.MSGTYPE_SYS) {
@@ -60,10 +67,10 @@ public class WXRobotCallback extends IMRobotCallback {
                         if (welcome != null && !welcome.isEmpty()
                                 && gf != null) {
                             String input = welcome;
-                            input = input.replaceAll("{memo}", "");
-                            input = input.replaceAll("{user}", "@" + n + " ");
+                            input = input.replace("{memo}", "");
+                            input = input.replace("{user}", "@" + n + " ");
                             if (console != null) {
-                                console.post(robotName + input);
+                                console.send(robotName + input);
                             }
                             else {
                                 send(from, robotName + input);
@@ -90,22 +97,19 @@ public class WXRobotCallback extends IMRobotCallback {
     }
     
     public void answer(AbstractFrom from, WechatMessage m) {
-        
         IPreferenceStore store = IMPlugin.getDefault().getPreferenceStore();
-        String robotName = store.getString(RobotPreferencePage.ROBOT_NAME);
+        String robotName = getRobotName();
         // auto reply friend
         if (from instanceof UserFrom) {
             if (store.getBoolean(RobotPreferencePage.FRIEND_REPLY_ANY)) {
-                String reply = getTuringReply(String.valueOf(m.FromUserName),
-                        m.getText().toString());
+                Contact contact = (Contact) from.getContact();
+                if (contact.isSpecial() || contact.is3rdApp()) {
+                    return;
+                }
+                String reply = getReply(m.getText().toString(), contact, null);
                 if (reply != null) {
                     String input = robotName + reply;
-                    if (console == null) {
-                        send(from, input);
-                    }
-                    else {
-                        console.post(input);
-                    }
+                    send(from, input);
                 }
             }
         }
@@ -118,35 +122,24 @@ public class WXRobotCallback extends IMRobotCallback {
                 if (welcome != null && !welcome.isEmpty() && gf != null) {
                     String input = welcome;
                     if (gf.getMember() != null) {
-                        input = input.replaceAll("{memo}", "");
-                        input = input.replaceAll("{user}",
+                        input = input.replace("{memo}", "");
+                        input = input.replace("{user}",
                                 gf.getMember().getName());
                     }
-                    if (console != null) {
-                        console.post(robotName + input);
-                    }
-                    else {
-                        send(from, robotName + input);
-                    }
+                    input = robotName + input;
+                    send(from, input);
                 }
             } // end newbie
               // @
-            if (atMe(from, m)) {
-                String n = "@" + getClient().getAccount().getName();
-                //String n1 = "@" + gf.getContact()
-                String msg = m.getText().toString().replaceAll(n, "").trim();
-                msg = msg.replaceAll(" ", "").trim();
-                String reply = getTuringReply(String.valueOf(m.FromUserName),
-                        msg);
+            String name = getMyGroupName(from, m);
+            String text = m.getText().toString();
+            if (text.contains("@" + name)) {
+                text = text.replace("@" + name, "");
+                String reply = getReply(text, gf.getMember(), gf.getName());
                 if (reply != null) {
                     String input = robotName + "@" + from.getMember().getName()
                             + SEP + reply;
-                    if (console != null) {
-                        console.post(input);
-                    }
-                    else {
-                        send(from, input);
-                    }
+                    send(from, input);
                 }
                 return;
             } // end @
@@ -168,35 +161,89 @@ public class WXRobotCallback extends IMRobotCallback {
                     }
                 }
                 
-                String reply = getTuringReply(String.valueOf(m.FromUserName),
-                        m.getText().toString());
+                String reply = getReply(text, gf.getMember(), gf.getName());
                 if (reply != null) {
                     String input = robotName + "@" + from.getName() + SEP
                             + reply;
-                    if (console != null) {
-                        console.post(input);
-                    }
+                    send(null, input);
                 }
             } // end any
         } // end group
     }
     
+    private String getMyGroupName(AbstractFrom from, WechatMessage m) {
+        Contact c = (Contact) from.getContact();
+        Contact gu = c.getMember(getAccount().getUin());
+        String name;
+        if (gu != null) {
+            name = gu.getName();
+        }
+        else {
+            name = getAccount().getName();
+        }
+        return name;
+    }
+    
+    private Map<String, Object> getParams(String text, Contact contact,
+            String groupId) {
+        String key = getTuringApiKey();
+        if (StringUtils.isEmpty(key)) {
+            return null;
+        }
+        TuringRequestV2Builder builder = new TuringRequestV2Builder(key);
+        builder.setText(text);
+        String uid = encodeUid(contact.getName());
+        String uname = contact.getName();
+        String gid = groupId == null ? null : encodeUid(groupId);
+        builder.setUserInfo(uid, uname, gid);
+        builder.setLocation(contact.City, contact.Province, null);
+        return builder.build();
+    }
+    
+    private String getReply(String text, Contact contact, String groupId) {
+        Map<String, Object> params = getParams(text, contact, groupId);
+        if (params != null) {
+            return getTuringReply(TURING_API_V2, params);
+        }
+        return null;
+    }
+    
     private boolean atMe(AbstractFrom from, WechatMessage m) {
         String text = (String) m.getText();
-        if (text.contains("@" + getClient().getAccount().getName())) {
+        Contact c = (Contact) from.getContact();
+        Contact gu = c.getMember(getAccount().getUin());
+        String name;
+        if (gu != null) {
+            name = gu.getName();
+        }
+        else {
+            name = getAccount().getName();
+        }
+        if (text.contains("@" + name)) {
             return true;
         }
         return false;
     }
     
-    private User getAccount() {
+    private Contact getAccount() {
         IContact me = client.getAccount();
-        return (User) me;
+        return (Contact) me;
     }
     
     private void send(AbstractFrom from, String message) {
-        WechatMessage msg = client.createMessage(0, message, from.getContact());
-        client.sendMessage(msg, from.getContact());
+        if (console != null) {
+            console.send(message);
+        }
+        else if (from != null) {
+            WechatMessage msg = client.createMessage(0, message,
+                    from.getContact());
+            client.sendMessage(msg, from.getContact());
+            String name = getAccount().getName();
+            String log = IMUtils.formatHtmlMyMsg(System.currentTimeMillis(),
+                    name, message);
+            IMHistoryManager.getInstance().save(client,
+                    from.getContact().getUin(), log);
+        }
     }
     
     private WechatClient getClient() {
@@ -204,7 +251,7 @@ public class WXRobotCallback extends IMRobotCallback {
     }
     
     private boolean isMySend(String uin) {
-        User me = getAccount();
+        Contact me = getAccount();
         if (me != null && me.getUin().equals(uin)) {
             return true;
         }

@@ -49,7 +49,7 @@ public class IMSendCallback implements SendCallback {
     }
     
     protected void onSuccess(int type, String targetId, CharSequence msg) {
-    
+        fContactView.notifyUpdateContacts(0, true);
     }
     
     protected void onFailure(int type, String targetId, CharSequence msg,

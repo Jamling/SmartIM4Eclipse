@@ -30,6 +30,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -46,7 +47,6 @@ import cn.ieclipse.smartim.htmlconsole.IMChatConsole;
 import cn.ieclipse.smartim.views.IMContactView;
 import cn.ieclipse.smartqq.views.QQContactView;
 import cn.ieclipse.wechat.views.WXContactView;
-import swing2swt.layout.FlowLayout;
 
 /**
  * 类/接口描述
@@ -128,7 +128,7 @@ public class ReviewDialog extends Dialog {
                 if (!chats.isEmpty()) {
                     Group group = new Group(composite, SWT.NONE);
                     group.setText(contactView.getTitle());
-                    group.setLayout(new FlowLayout(FlowLayout.LEFT));
+                    group.setLayout(new RowLayout());
                     for (IMChatConsole console : chats) {
                         Button btn = new Button(group, SWT.CHECK);
                         btn.setText(console.getName());

@@ -187,7 +187,7 @@ public abstract class IMContactView extends ViewPart implements IShowInTarget {
         manager.add(broadcast);
         manager.add(settings);
         if (testAction != null) {
-            manager.add(testAction);
+            // manager.add(testAction);
         }
         // drillDownAdapter.addNavigationActions(manager);
     }

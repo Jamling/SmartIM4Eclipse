@@ -21,7 +21,6 @@ import cn.ieclipse.smartim.common.IMUtils;
 import cn.ieclipse.smartim.model.impl.AbstractFrom;
 import cn.ieclipse.smartim.model.impl.AbstractMessage;
 import cn.ieclipse.smartim.preferences.SettingsPerferencePage;
-import cn.ieclipse.wechat.console.WXChatConsole;
 import cn.ieclipse.wechat.views.WXContactView;
 import io.github.biezhi.wechat.model.Contact;
 import io.github.biezhi.wechat.model.GroupFrom;
@@ -36,24 +35,19 @@ import io.github.biezhi.wechat.model.WechatMessage;
  *       
  */
 public class WXReceiveCallback extends IMReceiveCallback {
-    private WXChatConsole lastConsole;
-    private WXContactView fContactView;
     
     public WXReceiveCallback(WXContactView fContactView) {
         super(fContactView);
-        this.fContactView = fContactView;
     }
     
     @Override
     public void onReceiveMessage(AbstractMessage message, AbstractFrom from) {
-        
         if (from != null && from.getContact() != null) {
             boolean unknown = false;
             boolean notify = IMPlugin.getDefault().getPreferenceStore()
                     .getBoolean(SettingsPerferencePage.NOTIFY_FRIEND);
             String uin = from.getContact().getUin();
             Contact contact = (Contact) from.getContact();
-            contact.setLastMessage(message);
             if (from instanceof GroupFrom) {
                 GroupFrom gf = (GroupFrom) from;
                 unknown = gf.getMember() == null || gf.getMember().isUnknown();
@@ -71,24 +65,27 @@ public class WXReceiveCallback extends IMReceiveCallback {
     protected String getNotifyContent(AbstractMessage message,
             AbstractFrom from) {
         CharSequence content = (from instanceof UserFrom) ? message.getText()
-                : from.getName() + ":" + message.getText();
+                : from.isOut() ? from.getTarget().getName()
+                        : from.getName() + ":" + message.getText();
         return content.toString();
     }
     
     @Override
     protected String getMsgContent(AbstractMessage message, AbstractFrom from) {
-        String name = from.getName();
+        String name = from.isOut() ? from.getTarget().getName()
+                : from.getName();
         String msg = null;
         if (message instanceof WechatMessage) {
             WechatMessage m = (WechatMessage) message;
             String text = m.getText() == null ? null : m.getText().toString();
             boolean encodeHtml = true;
+            boolean my = from.isOut() ? true : false;
             if (m.MsgType != WechatMessage.MSGTYPE_TEXT) {
                 encodeHtml = false;
                 if (m.MsgType == WechatMessage.MSGTYPE_APP
                         && m.AppMsgType == WechatMessage.APPMSGTYPE_ATTACH) {
                     if (m.AppMsgInfo != null) {
-                        
+                    
                     }
                 }
             }
@@ -98,8 +95,9 @@ public class WXReceiveCallback extends IMReceiveCallback {
                     encodeHtml = !c.isPublic();
                 }
             }
-            msg = IMUtils.formatHtmlMsg(false, encodeHtml, m.CreateTime, name,
+            msg = IMUtils.formatHtmlMsg(my, encodeHtml, m.CreateTime, name,
                     text);
+            msg = WXUtils.decodeEmoji(msg);
         }
         return msg;
     }

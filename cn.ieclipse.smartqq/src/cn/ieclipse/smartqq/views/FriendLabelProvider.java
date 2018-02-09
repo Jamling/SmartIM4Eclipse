@@ -2,12 +2,9 @@ package cn.ieclipse.smartqq.views;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 
 import com.scienjus.smartqq.client.SmartQQClient;
 import com.scienjus.smartqq.model.Category;
-import com.scienjus.smartqq.model.QQContact;
 import com.scienjus.smartqq.model.Recent;
 
 import cn.ieclipse.smartim.common.LetterImageFactory;
@@ -42,7 +39,8 @@ public class FriendLabelProvider extends IMContactLabelProvider {
         return super.getText(obj);
     }
     
-    public Image getImage(Object obj) {
+    @Override
+    public Image getContactImage(Object obj) {
         if (obj instanceof Recent) {
             int type = ((Recent) obj).getType();
             if (type == 0) {
@@ -55,18 +53,6 @@ public class FriendLabelProvider extends IMContactLabelProvider {
                 return LetterImageFactory.create('D', SWT.COLOR_DARK_CYAN);
             }
         }
-        else if (obj instanceof QQContact) {
-            QQContact c = (QQContact) obj;
-            if (c.getUnread() > 0) {
-                int ch = Math.min(c.getUnread(), 9) + (int) '0';
-                return LetterImageFactory.create((char) ch,
-                        SWT.COLOR_RED);
-            }
-        }
-        String imageKey = ISharedImages.IMG_OBJ_ELEMENT;
-        if (obj instanceof Category) {
-            imageKey = ISharedImages.IMG_OBJ_FOLDER;
-        }
-        return PlatformUI.getWorkbench().getSharedImages().getImage(imageKey);
+        return null;
     }
 }

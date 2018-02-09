@@ -46,5 +46,8 @@ public class MockChatConsole extends IMChatConsole {
         if (!hideMyInput()) {
             insertDocument(msg);
         }
+        String msg2 = IMUtils.formatHtmlMsg(false, false,
+                System.currentTimeMillis(), "Me", input);
+        write(msg2);
     }
 }

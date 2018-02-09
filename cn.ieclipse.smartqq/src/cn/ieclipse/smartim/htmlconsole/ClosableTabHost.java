@@ -42,6 +42,7 @@ public class ClosableTabHost extends CTabFolder {
                 if (e.item instanceof IMChatConsole) {
                     IMChatConsole item = (IMChatConsole) e.item;
                     item.setImage(item.IMG_NORMAL);
+                    item.clearUnread();
                 }
             }
         });

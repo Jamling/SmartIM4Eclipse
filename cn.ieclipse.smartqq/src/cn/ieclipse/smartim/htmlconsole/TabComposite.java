@@ -8,12 +8,13 @@ import org.eclipse.swt.browser.LocationListener;
 import org.eclipse.swt.browser.ProgressEvent;
 import org.eclipse.swt.browser.ProgressListener;
 import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Point;
@@ -23,21 +24,22 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import cn.ieclipse.smartim.IMPlugin;
-import cn.ieclipse.smartim.common.IMUtils;
 import cn.ieclipse.smartim.htmlconsole.JSBridge.Callback;
 import cn.ieclipse.smartim.preferences.HotKeyFieldEditor;
 import cn.ieclipse.smartim.preferences.HotKeyPreferencePage;
+import cn.ieclipse.util.StringUtils;
 
 public class TabComposite extends Composite {
     
-    int minHeight = 20;
     private ToolBar toolBar;
+    private SashForm sashForm;
     private Browser browser;
-    private StyledText text;
+    private Text text;
     private IMChatConsole console;
     private boolean prepared = false;
     
@@ -68,22 +70,26 @@ public class TabComposite extends Composite {
         toolBar.setLayoutData(
                 new GridData(SWT.CENTER, SWT.FILL, false, false, 1, 1));
                 
-        SashForm sashForm = new SashForm(this, SWT.SMOOTH | SWT.VERTICAL);
+        sashForm = new SashForm(this, SWT.VERTICAL);
         sashForm.setLayoutData(
                 new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
         sashForm.setSashWidth(6);
         
         browser = new Browser(sashForm, SWT.NONE);
         
-        text = new StyledText(sashForm, SWT.WRAP);
-        minHeight = text.getLineHeight() * text.getLineCount();
+        text = new Text(sashForm, SWT.WRAP | SWT.MULTI | SWT.V_SCROLL);
+        text.addModifyListener(new ModifyListener() {
+            @Override
+            public void modifyText(ModifyEvent e) {
+                // text.setTopIndex(text.getLineCount());
+                resize(true);
+            }
+        });
         
         sashForm.addControlListener(new ControlListener() {
-            
             @Override
             public void controlResized(ControlEvent e) {
-                Point p = sashForm.getSize();
-                sashForm.setWeights(new int[] { p.y - minHeight, minHeight });
+                resize(false);
             }
             
             @Override
@@ -101,14 +107,17 @@ public class TabComposite extends Composite {
         text.setBackground(
                 SWTResourceManager.getColor(SWT.COLOR_WIDGET_HIGHLIGHT_SHADOW));
         text.setToolTipText("请在此输入内容");
+        // text.setText("正在加载聊天内容，在完成前请不要发送任何消息");
         
         browser.setJavascriptEnabled(true);
         boolean f = browser.setText(
-                IMUtils.file2string(IMChatConsole.class, "history.html"), true);
+                StringUtils.file2string(IMChatConsole.class, "history.html"),
+                true);
         new JSBridge(browser, "prepared").setCallback(new Callback() {
             @Override
             public Object onFunction(Object[] args) {
                 prepared = true;
+                text.setText("");
                 return null;
             }
         });
@@ -151,14 +160,25 @@ public class TabComposite extends Composite {
                             "document.oncontextmenu = function() {return false;}");
             }
         });
-        
+    }
+    
+    private void resize(boolean auto) {
+        Point p = sashForm.getSize();
+        int minHeight = Math.min(getInputHeight(), p.y - 20);
+        sashForm.setWeights(new int[] { p.y - minHeight, minHeight });
+        if (auto) {
+            text.setTopIndex(Integer.MAX_VALUE);
+        }
+    }
+    
+    private int getInputHeight() {
+        return text.getLineCount() * text.getLineHeight() + 2;
     }
     
     private KeyListener inputListener = new KeyAdapter() {
         @Override
         public void keyPressed(KeyEvent e) {
             String key = HotKeyFieldEditor.keyEvent2String(e);
-            System.out.println(key);
             IPreferenceStore store = IMPlugin.getDefault().getPreferenceStore();
             if (key.equals(store.getString(HotKeyPreferencePage.KEY_SEND))) {
                 e.doit = false;
@@ -213,7 +233,7 @@ public class TabComposite extends Composite {
         return browser;
     }
     
-    public StyledText getInputWidget() {
+    public Text getInputWidget() {
         return text;
     }
     
@@ -263,8 +283,7 @@ public class TabComposite extends Composite {
             checkBrowser();
         }
         // System.out.println("prepared:" + prepared);
-        String text = msg.replaceAll("'", "&apos;").replaceAll("\r?\n",
-                "<br/>");
+        String text = msg.replace("'", "&apos;").replaceAll("\r?\n", "");
         StringBuilder sb = new StringBuilder();
         sb.append("add_log('");
         sb.append(text);
@@ -283,7 +302,14 @@ public class TabComposite extends Composite {
     }
     
     public void appendHistory(String text) {
-        browser.execute(text);
+        if (!browser.execute(text)) {
+            addHistory("<div class=\"error\">添加到聊天记录失败，可能是因为消息中包含某些特殊字符引</div>",
+                    true);
+        }
+    }
+    
+    public void clearHistory() {
+        browser.execute("clear_log()");
     }
     
     public static void main(String[] args) {

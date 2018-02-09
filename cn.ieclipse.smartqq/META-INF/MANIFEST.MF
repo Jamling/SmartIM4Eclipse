@@ -15,7 +15,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.net,
  org.slf4j.api,
  ch.qos.logback.classic,
- ch.qos.logback.core
+ ch.qos.logback.core,
+ org.eclipse.ui.browser,
+ cn.ieclipse.pde.explorer;bundle-version="4.1.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
@@ -28,4 +30,5 @@ Bundle-ClassPath: .,
  libs/core-0.0.1.jar,
  libs/smartqq-0.0.1.jar,
  libs/wechat-0.0.1.jar,
- libs/dom4j-1.6.1.jar
+ libs/dom4j-1.6.1.jar,
+ swing2swt.jar

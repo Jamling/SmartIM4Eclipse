@@ -29,15 +29,22 @@ public abstract class IMContactLabelProvider extends LabelProvider {
         return null;
     }
     
+    public abstract Image getContactImage(Object target);
+    
     public Image getImage(Object obj) {
         if (obj instanceof AbstractContact) {
             AbstractContact c = (AbstractContact) obj;
             if (c.getUnread() > 0) {
                 int ch = Math.min(c.getUnread(), 9) + (int) '0';
-                return LetterImageFactory.create((char) ch,
-                        SWT.COLOR_RED);
+                return LetterImageFactory.create((char) ch, SWT.COLOR_RED);
             }
         }
+        
+        Image img = getContactImage(obj);
+        if (img != null) {
+            return img;
+        }
+        
         String imageKey = ISharedImages.IMG_OBJ_ELEMENT;
         if (obj instanceof VirtualCategory)
             imageKey = ISharedImages.IMG_OBJ_FOLDER;
