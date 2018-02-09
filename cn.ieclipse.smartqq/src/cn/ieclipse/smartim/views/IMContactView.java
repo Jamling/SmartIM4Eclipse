@@ -21,11 +21,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchActionConstants;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.IShowInTarget;
 import org.eclipse.ui.part.ShowInContext;
@@ -47,7 +43,6 @@ import cn.ieclipse.smartim.htmlconsole.ClosableTabHost;
 import cn.ieclipse.smartim.htmlconsole.IMChatConsole;
 import cn.ieclipse.smartim.model.IContact;
 import cn.ieclipse.smartim.preferences.SettingsPerferencePage;
-import cn.ieclipse.smartqq.views.QQContactView;
 
 public abstract class IMContactView extends ViewPart implements IShowInTarget {
     
@@ -287,7 +282,7 @@ public abstract class IMContactView extends ViewPart implements IShowInTarget {
         });
     }
     
-    public void highlight(IMChatConsole console) {
+    public void highlight(final IMChatConsole console) {
         IMPlugin.runOnUI(new Runnable() {
             @Override
             public void run() {

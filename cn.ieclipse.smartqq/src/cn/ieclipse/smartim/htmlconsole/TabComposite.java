@@ -284,7 +284,7 @@ public class TabComposite extends Composite {
         }
         // System.out.println("prepared:" + prepared);
         String text = msg.replace("'", "&apos;").replaceAll("\r?\n", "");
-        StringBuilder sb = new StringBuilder();
+        final StringBuilder sb = new StringBuilder();
         sb.append("add_log('");
         sb.append(text);
         sb.append("'");

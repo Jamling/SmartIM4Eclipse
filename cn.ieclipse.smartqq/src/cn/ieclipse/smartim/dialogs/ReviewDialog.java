@@ -129,7 +129,7 @@ public class ReviewDialog extends Dialog {
                     Group group = new Group(composite, SWT.NONE);
                     group.setText(contactView.getTitle());
                     group.setLayout(new RowLayout());
-                    for (IMChatConsole console : chats) {
+                    for (final IMChatConsole console : chats) {
                         Button btn = new Button(group, SWT.CHECK);
                         btn.setText(console.getName());
                         btn.setData(console);
