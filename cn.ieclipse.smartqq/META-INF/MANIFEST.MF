@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: SmartQQ
 Bundle-SymbolicName: cn.ieclipse.smartqq;singleton:=true
-Bundle-Version: 3.0.0
+Bundle-Version: 3.0.1
 Bundle-Activator: cn.ieclipse.smartim.IMPlugin
 Bundle-Vendor: ieclipse.cn
 Require-Bundle: org.eclipse.ui,

@@ -113,14 +113,15 @@ public class TabComposite extends Composite {
         boolean f = browser.setText(
                 StringUtils.file2string(IMChatConsole.class, "history.html"),
                 true);
-        new JSBridge(browser, "prepared").setCallback(new Callback() {
-            @Override
-            public Object onFunction(Object[] args) {
-                prepared = true;
-                text.setText("");
-                return null;
-            }
-        });
+        // 4.6以上的eclipse版本会有问题
+        // new JSBridge(browser, "prepared").setCallback(new Callback() {
+        // @Override
+        // public Object onFunction(Object[] args) {
+        // prepared = true;
+        // text.setText("");
+        // return null;
+        // }
+        // });
         browser.addProgressListener(new ProgressListener() {
             
             @Override
@@ -149,8 +150,7 @@ public class TabComposite extends Composite {
             
             @Override
             public void changed(LocationEvent event) {
-                // TODO Auto-generated method stub
-                
+                System.out.println(event);
             }
         });
         browser.addMouseListener(new MouseAdapter() {
@@ -262,6 +262,7 @@ public class TabComposite extends Composite {
                         }
                         count--;
                         if (count <= 0) {
+                            prepared = true;
                             break;
                         }
                     }
@@ -303,8 +304,10 @@ public class TabComposite extends Composite {
     
     public void appendHistory(String text) {
         if (!browser.execute(text)) {
-            addHistory("<div class=\"error\">添加到聊天记录失败，可能是因为消息中包含某些特殊字符引</div>",
-                    true);
+            if (!browser.execute(
+                    "add_log('<div class=\"error\">添加到聊天记录失败，可能是因为消息中包含某些特殊字符引</div>', true)")) {
+                IMPlugin.getDefault().log("SmartQQ无法写入聊天日志");
+            }
         }
     }
     
