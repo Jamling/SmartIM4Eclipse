@@ -15,6 +15,7 @@ import com.scienjus.smartqq.handler.msg.FriendMessageHandler;
 import com.scienjus.smartqq.handler.msg.GroupMessageHandler;
 import com.scienjus.smartqq.model.Discuss;
 import com.scienjus.smartqq.model.DiscussInfo;
+import com.scienjus.smartqq.model.Friend;
 import com.scienjus.smartqq.model.Group;
 import com.scienjus.smartqq.model.GroupInfo;
 import com.scienjus.smartqq.model.QQMessage;
@@ -28,6 +29,7 @@ import cn.ieclipse.smartim.htmlconsole.IMChatConsole;
 import cn.ieclipse.smartim.model.IContact;
 import cn.ieclipse.smartim.model.impl.AbstractFrom;
 import cn.ieclipse.smartim.preferences.QiniuPerferencePage;
+import cn.ieclipse.smartim.preferences.SettingsPerferencePage;
 import cn.ieclipse.smartim.views.IMContactView;
 
 public class QQChatConsole extends IMChatConsole {
@@ -91,7 +93,12 @@ public class QQChatConsole extends IMChatConsole {
     
     @Override
     public boolean hideMyInput() {
-        return super.hideMyInput() && isGroupChat();
+        if (contact instanceof Friend) {
+            return false;
+        }
+        boolean hide = IMPlugin.getDefault().getPreferenceStore()
+                .getBoolean(SettingsPerferencePage.HIDE_MY_INPUT);
+        return hide;
     }
     
     public void sendFile(final String file) {
