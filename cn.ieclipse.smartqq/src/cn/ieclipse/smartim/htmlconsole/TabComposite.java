@@ -17,6 +17,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -29,7 +30,6 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import cn.ieclipse.smartim.IMPlugin;
-import cn.ieclipse.smartim.htmlconsole.JSBridge.Callback;
 import cn.ieclipse.smartim.preferences.HotKeyFieldEditor;
 import cn.ieclipse.smartim.preferences.HotKeyPreferencePage;
 import cn.ieclipse.util.StringUtils;
@@ -158,6 +158,21 @@ public class TabComposite extends Composite {
                 if (event.button == 3)
                     browser.execute(
                             "document.oncontextmenu = function() {return false;}");
+            }
+        });
+        browser.addMouseMoveListener(new MouseMoveListener() {
+            @Override
+            public void mouseMove(MouseEvent e) {
+                if (e.widget == browser) {
+                    browser.forceFocus();
+                }
+            }
+        });
+        text.addMouseMoveListener(new MouseMoveListener() {
+            
+            @Override
+            public void mouseMove(MouseEvent e) {
+                text.forceFocus();
             }
         });
     }
