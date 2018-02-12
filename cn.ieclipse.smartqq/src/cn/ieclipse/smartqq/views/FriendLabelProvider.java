@@ -8,9 +8,11 @@ import com.scienjus.smartqq.model.Category;
 import com.scienjus.smartqq.model.Recent;
 
 import cn.ieclipse.smartim.common.LetterImageFactory;
+import cn.ieclipse.smartim.model.IContact;
 import cn.ieclipse.smartim.model.VirtualCategory;
 import cn.ieclipse.smartim.views.IMContactLabelProvider;
 import cn.ieclipse.smartim.views.IMContactView;
+import cn.ieclipse.smartqq.QQUtils;
 
 public class FriendLabelProvider extends IMContactLabelProvider {
     
@@ -51,6 +53,19 @@ public class FriendLabelProvider extends IMContactLabelProvider {
             }
             else if (type == 2) {
                 return LetterImageFactory.create('D', SWT.COLOR_DARK_CYAN);
+            }
+        }
+        if (obj instanceof IContact) {
+            IContact target = (IContact) obj;
+            char ch = QQUtils.getContactChar(target);
+            if (ch == 'F') {
+                return LetterImageFactory.create(ch, SWT.COLOR_DARK_GREEN);
+            }
+            else if (ch == 'G') {
+                return LetterImageFactory.create(ch, SWT.COLOR_DARK_BLUE);
+            }
+            else if (ch == 'D') {
+                return LetterImageFactory.create(ch, SWT.COLOR_DARK_CYAN);
             }
         }
         return null;

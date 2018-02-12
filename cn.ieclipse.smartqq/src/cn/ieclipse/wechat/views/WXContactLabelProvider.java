@@ -43,7 +43,18 @@ public class WXContactLabelProvider extends IMContactLabelProvider {
             Contact c = (Contact) obj;
             char ch = WXUtils.getContactChar(c);
             if (ch > 0) {
-                return LetterImageFactory.create(ch, SWT.COLOR_DARK_GREEN);
+                if (ch == 'F') {
+                    return LetterImageFactory.create(ch, SWT.COLOR_DARK_GREEN);
+                }
+                else if (ch == 'G') {
+                    return LetterImageFactory.create(ch, SWT.COLOR_DARK_BLUE);
+                }
+                else if (ch == 'P') {
+                    return LetterImageFactory.create(ch, SWT.COLOR_DARK_CYAN);
+                }
+                else if (ch == 'S') {
+                    return LetterImageFactory.create(ch, SWT.COLOR_DARK_RED);
+                }
             }
         }
         return null;

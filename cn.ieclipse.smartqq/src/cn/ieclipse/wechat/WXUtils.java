@@ -21,7 +21,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import cn.ieclipse.smartim.model.IContact;
-import cn.ieclipse.util.FileUtils;
 import cn.ieclipse.util.StringUtils;
 import io.github.biezhi.wechat.model.Contact;
 

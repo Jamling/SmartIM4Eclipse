@@ -31,18 +31,13 @@ import cn.ieclipse.smartim.model.impl.AbstractFrom;
 import cn.ieclipse.smartim.preferences.QiniuPerferencePage;
 import cn.ieclipse.smartim.preferences.SettingsPerferencePage;
 import cn.ieclipse.smartim.views.IMContactView;
+import cn.ieclipse.smartqq.QQUtils;
 
 public class QQChatConsole extends IMChatConsole {
     
     public QQChatConsole(IContact target, IMContactView imPanel) {
         super(target, imPanel);
-        char ch = 'F';
-        if (target instanceof Group || target instanceof GroupInfo) {
-            ch = 'G';
-        }
-        else if (target instanceof Discuss || target instanceof DiscussInfo) {
-            ch = 'D';
-        }
+        char ch = QQUtils.getContactChar(target);
         IMG_NORMAL = LetterImageFactory.create(ch, SWT.COLOR_BLACK);
         IMG_SELECTED = LetterImageFactory.create(ch, SWT.COLOR_RED);
         setImage(IMG_NORMAL);
