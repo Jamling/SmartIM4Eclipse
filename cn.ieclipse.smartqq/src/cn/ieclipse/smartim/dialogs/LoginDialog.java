@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
@@ -54,10 +55,9 @@ public class LoginDialog extends Dialog {
         qrcode.setLayoutData(
                 new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1));
                 
-        text = new Text(container, SWT.READ_ONLY | SWT.WRAP);
+        text = new Text(container, SWT.READ_ONLY | SWT.WRAP | SWT.MULTI);
         text.setForeground(SWTResourceManager.getColor(SWT.COLOR_RED));
-        text.setLayoutData(
-                new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+        text.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true, 1, 1));
         new Thread() {
             public void run() {
                 doLogin();
@@ -125,7 +125,7 @@ public class LoginDialog extends Dialog {
                                 qrcode.setBounds(p3);
                             }
                             qrcode.setImage(image);
-
+                            
                             getShell().pack();
                         } catch (FileNotFoundException e) {
                             if (text == null || text.isDisposed()) {
@@ -150,7 +150,9 @@ public class LoginDialog extends Dialog {
                             if (text == null || text.isDisposed()) {
                                 return;
                             }
-                            text.setText(e == null ? "" : e.toString());
+                            text.setText(e == null ? "" : e.getMessage());
+                            MessageDialog.openWarning(text.getShell(), "登录失败",
+                                    e.toString() + "\n请在Error Log中查看详情");
                             IMPlugin.getDefault().log("登录失败", e);
                         }
                     }

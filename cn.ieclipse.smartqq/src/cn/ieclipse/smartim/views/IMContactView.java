@@ -36,6 +36,7 @@ import cn.ieclipse.smartim.actions.DisconnectAction;
 import cn.ieclipse.smartim.actions.LoginAction;
 import cn.ieclipse.smartim.actions.MockConsoleAction;
 import cn.ieclipse.smartim.actions.SettingAction;
+import cn.ieclipse.smartim.actions.ToggleContactsAction;
 import cn.ieclipse.smartim.callback.ModificationCallback;
 import cn.ieclipse.smartim.callback.ReceiveCallback;
 import cn.ieclipse.smartim.common.IDEUtils;
@@ -50,6 +51,7 @@ public abstract class IMContactView extends ViewPart implements IShowInTarget {
     protected Action login;
     protected Action settings;
     protected Action exit;
+    protected Action toggleLeft;
     protected Action broadcast;
     protected Action testAction;
     
@@ -168,6 +170,7 @@ public abstract class IMContactView extends ViewPart implements IShowInTarget {
         manager.add(login);
         manager.add(exit);
         manager.add(new Separator());
+        manager.add(toggleLeft);
         manager.add(broadcast);
         manager.add(settings);
         // drillDownAdapter.addNavigationActions(manager);
@@ -179,6 +182,7 @@ public abstract class IMContactView extends ViewPart implements IShowInTarget {
         manager.add(login);
         manager.add(exit);
         manager.add(new Separator());
+        manager.add(toggleLeft);
         manager.add(broadcast);
         manager.add(settings);
         if (testAction != null) {
@@ -191,6 +195,7 @@ public abstract class IMContactView extends ViewPart implements IShowInTarget {
         login = new LoginAction(this);
         settings = new SettingAction();
         exit = new DisconnectAction(this);
+        toggleLeft = new ToggleContactsAction(this);
         broadcast = new BroadcastAction(this);
         testAction = new MockConsoleAction(this);
     }
@@ -267,6 +272,20 @@ public abstract class IMContactView extends ViewPart implements IShowInTarget {
         if (viewId != null) {
             IDEUtils.toggleViewPart(viewId, true);
         }
+    }
+    
+    public void toggleContacts() {
+        String key = "old_weights";
+        Object old = sashForm.getData(key);
+        if (old == null) {
+            sashForm.setData(key, sashForm.getWeights());
+            sashForm.setWeights(new int[] { 0, 1 });
+        }
+        else {
+            sashForm.setData(key, null);
+            sashForm.setWeights((int[]) old);
+        }
+        sashForm.layout();
     }
     
     public void randBling() {

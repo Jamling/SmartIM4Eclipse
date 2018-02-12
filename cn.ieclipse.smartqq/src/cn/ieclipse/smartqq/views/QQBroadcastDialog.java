@@ -23,8 +23,14 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.TreeItem;
 
 import com.scienjus.smartqq.client.SmartQQClient;
+import com.scienjus.smartqq.model.Discuss;
+import com.scienjus.smartqq.model.Friend;
+import com.scienjus.smartqq.model.Group;
 
+import cn.ieclipse.smartim.actions.BroadcastAction;
 import cn.ieclipse.smartim.common.IMUtils;
+import cn.ieclipse.smartim.model.IContact;
+import cn.ieclipse.smartim.model.IMessage;
 
 public class QQBroadcastDialog extends Dialog {
     private Text text;
@@ -181,8 +187,7 @@ public class QQBroadcastDialog extends Dialog {
         target.addAll(Arrays.asList(ftvDiscuss.getCheckedElements()));
         new Thread() {
             public void run() {
-                ((SmartQQClient) qQContactView.getClient()).broadcast(text,
-                        target.toArray());
+                sendInternal(text, target);
             };
         }.start();
         super.okPressed();
@@ -200,5 +205,42 @@ public class QQBroadcastDialog extends Dialog {
     protected void configureShell(Shell newShell) {
         super.configureShell(newShell);
         newShell.setText("QQ消息群发");
+    }
+    
+    private void sendInternal(String text, List<Object> targets) {
+        // ((SmartQQClient) qQContactView.getClient()).broadcast(text,
+        // targets.toArray());
+        SmartQQClient client = qQContactView.getClient();
+        int ret = 0;
+        if (targets != null) {
+            for (Object obj : targets) {
+                if (obj != null && obj instanceof IContact) {
+                    IContact target = (IContact) obj;
+                    try {
+                        IMessage m = createMessage(text, target, client);
+                        client.sendMessage(m, target);
+                        ret++;
+                    } catch (Exception e) {
+                    
+                    }
+                }
+            }
+        }
+    }
+    
+    private IMessage createMessage(String text, IContact target,
+            SmartQQClient client) {
+        IMessage m = null;
+        if (!client.isClose()) {
+            if (target instanceof Friend) {
+                m = client.createMessage(text, target);
+            }
+            else if (target instanceof Group || target instanceof Discuss) {
+                String msg = text.replace(BroadcastAction.groupMacro,
+                        target.getName());
+                m = client.createMessage(msg, target);
+            }
+        }
+        return m;
     }
 }

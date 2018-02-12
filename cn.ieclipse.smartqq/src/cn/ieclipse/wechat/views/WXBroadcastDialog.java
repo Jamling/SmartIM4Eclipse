@@ -23,10 +23,17 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.TreeItem;
 
 import com.scienjus.smartqq.client.SmartQQClient;
+import com.scienjus.smartqq.model.Discuss;
+import com.scienjus.smartqq.model.Friend;
+import com.scienjus.smartqq.model.Group;
 
+import cn.ieclipse.smartim.actions.BroadcastAction;
 import cn.ieclipse.smartim.common.IMUtils;
-import cn.ieclipse.smartqq.views.FriendContentProvider;
-import cn.ieclipse.smartqq.views.FriendLabelProvider;
+import cn.ieclipse.smartim.model.IContact;
+import cn.ieclipse.smartim.model.IMessage;
+import io.github.biezhi.wechat.api.WechatClient;
+import io.github.biezhi.wechat.model.Contact;
+import io.github.biezhi.wechat.model.WechatMessage;
 
 public class WXBroadcastDialog extends Dialog {
     private Text text;
@@ -167,7 +174,7 @@ public class WXBroadcastDialog extends Dialog {
         target.addAll(Arrays.asList(ftvGroup.getCheckedElements()));
         new Thread() {
             public void run() {
-                contactView.getClient().broadcast(text, target.toArray());
+                sendInternal(text, target);
             };
         }.start();
         super.okPressed();
@@ -185,5 +192,36 @@ public class WXBroadcastDialog extends Dialog {
     protected void configureShell(Shell newShell) {
         super.configureShell(newShell);
         newShell.setText("微信群发");
+    }
+    
+    private void sendInternal(String text, List<Object> targets) {
+        WechatClient client = contactView.getClient();
+        int ret = 0;
+        if (targets != null) {
+            for (Object obj : targets) {
+                if (obj != null && obj instanceof Contact) {
+                    Contact target = (Contact) obj;
+                    try {
+                        IMessage m = createMessage(text, target, client);
+                        client.sendMessage(m, target);
+                        ret++;
+                    } catch (Exception e) {
+                    
+                    }
+                }
+            }
+        }
+    }
+    
+    private IMessage createMessage(String text, Contact target,
+            WechatClient client) {
+        IMessage m = null;
+        if (!client.isClose()) {
+            String msg = target.isGroup()
+                    ? text.replace(BroadcastAction.groupMacro, target.getName())
+                    : text;
+            m = client.createMessage(WechatMessage.MSGTYPE_TEXT, msg, target);
+        }
+        return m;
     }
 }

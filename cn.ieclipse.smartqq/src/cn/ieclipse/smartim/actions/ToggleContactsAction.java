@@ -16,8 +16,8 @@
 package cn.ieclipse.smartim.actions;
 
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.Shell;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.ISharedImages;
 
 import cn.ieclipse.smartim.IMPlugin;
 import cn.ieclipse.smartim.views.IMContactView;
@@ -26,36 +26,23 @@ import cn.ieclipse.smartim.views.IMContactView;
  * 类/接口描述
  * 
  * @author Jamling
- * @date 2017年8月22日
+ * @date 2018年2月11日
  *       
  */
-public class BroadcastAction extends Action {
+public class ToggleContactsAction extends Action {
     protected IMContactView contactView;
     
-    public BroadcastAction(IMContactView contactView) {
+    public ToggleContactsAction(IMContactView contactView) {
         this.contactView = contactView;
-        setText("&BroadCast");
-        setToolTipText("Broadcast message to SmartQQ group/discuss/friends");
-        setImageDescriptor(IMPlugin.getImageDescriptor("icons/broadcast.png"));
+        setText("&Toggle Contacts");
+        setToolTipText("Toggle contacts");
+        setImageDescriptor(IMPlugin.getImageDescriptor("icons/eye-slash.png"));
     }
     
     @Override
     public void run() {
         if (contactView != null) {
-            Shell shell = contactView.getSite().getShell();
-            if (contactView.getClient().isLogin()) {
-                openDialog(shell);
-            }
-            else {
-                MessageDialog.openError(shell, null, "已断开连接，请重新登录成功后再试");
-            }
+            contactView.toggleContacts();
         }
     }
-    
-    protected void openDialog(Shell shell) {
-    
-    }
-    
-    public static String groupMacro = "{group}";
-    public static String memberMacro = "{member}";
 }
