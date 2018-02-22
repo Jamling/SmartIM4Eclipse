@@ -150,7 +150,11 @@ public class LoginDialog extends Dialog {
                             if (text == null || text.isDisposed()) {
                                 return;
                             }
-                            text.setText(e == null ? "" : e.getMessage());
+                            text.setText(
+                                    e == null ? ""
+                                            : e.getMessage() == null
+                                                    ? e.toString()
+                                                    : e.getMessage());
                             MessageDialog.openWarning(text.getShell(), "登录失败",
                                     e.toString() + "\n请在Error Log中查看详情");
                             IMPlugin.getDefault().log("登录失败", e);
