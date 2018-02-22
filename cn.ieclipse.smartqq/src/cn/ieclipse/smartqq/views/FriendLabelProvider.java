@@ -2,11 +2,13 @@ package cn.ieclipse.smartqq.views;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.ISharedImages;
 
 import com.scienjus.smartqq.client.SmartQQClient;
 import com.scienjus.smartqq.model.Category;
 import com.scienjus.smartqq.model.Recent;
 
+import cn.ieclipse.smartim.IMPlugin;
 import cn.ieclipse.smartim.common.LetterImageFactory;
 import cn.ieclipse.smartim.model.IContact;
 import cn.ieclipse.smartim.model.VirtualCategory;
@@ -54,6 +56,10 @@ public class FriendLabelProvider extends IMContactLabelProvider {
             else if (type == 2) {
                 return LetterImageFactory.create('D', SWT.COLOR_DARK_CYAN);
             }
+        }
+        else if (obj instanceof Category) {
+            return IMPlugin.getSharedImage(ISharedImages.IMG_OBJ_FOLDER)
+                    .createImage();
         }
         if (obj instanceof IContact) {
             IContact target = (IContact) obj;

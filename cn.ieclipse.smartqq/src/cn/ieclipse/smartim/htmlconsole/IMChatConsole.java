@@ -253,8 +253,9 @@ public abstract class IMChatConsole extends CTabItem {
             }
         }
         else {
-            if (!IDEUtils.openInternalBrowser(desc, true))
+            if (!IDEUtils.openInternalBrowser(desc, false)) {
                 BareBonesBrowserLaunch.openURL(desc);
+            }
         }
         return false;
     }
