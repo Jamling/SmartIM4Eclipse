@@ -18,7 +18,6 @@ package cn.ieclipse.smartqq;
 import com.scienjus.smartqq.model.DiscussFrom;
 import com.scienjus.smartqq.model.FriendFrom;
 import com.scienjus.smartqq.model.GroupFrom;
-import com.scienjus.smartqq.model.QQContact;
 import com.scienjus.smartqq.model.QQMessage;
 
 import cn.ieclipse.smartim.IMPlugin;
@@ -29,7 +28,6 @@ import cn.ieclipse.smartim.model.impl.AbstractContact;
 import cn.ieclipse.smartim.model.impl.AbstractFrom;
 import cn.ieclipse.smartim.model.impl.AbstractMessage;
 import cn.ieclipse.smartim.preferences.SettingsPerferencePage;
-import cn.ieclipse.smartqq.console.QQChatConsole;
 import cn.ieclipse.smartqq.views.QQContactView;
 
 /**

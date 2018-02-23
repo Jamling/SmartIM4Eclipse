@@ -2,6 +2,7 @@ package cn.ieclipse.smartim.common;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTError;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
@@ -99,7 +100,12 @@ public class LetterImageFactory {
             
             Image image = new Image(display, mWidth, mHeight);
             
-            GC gc = new GC(image);
+            GC gc = null;
+            try {
+                gc = new GC(image);
+            } catch (SWTError e) {
+                return null;
+            }
             gc.setAdvanced(true);
             gc.setAntialias(SWT.ON);
             gc.setTextAntialias(SWT.ON);

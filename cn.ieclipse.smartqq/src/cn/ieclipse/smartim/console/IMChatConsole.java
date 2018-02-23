@@ -19,7 +19,6 @@ import org.eclipse.ui.console.TextConsolePage;
 import org.eclipse.ui.part.IPageBookViewPage;
 import org.eclipse.wb.swt.SWTResourceManager;
 
-import cn.ieclipse.smartim.AbstractSmartClient;
 import cn.ieclipse.smartim.IMHistoryManager;
 import cn.ieclipse.smartim.IMPlugin;
 import cn.ieclipse.smartim.SmartClient;

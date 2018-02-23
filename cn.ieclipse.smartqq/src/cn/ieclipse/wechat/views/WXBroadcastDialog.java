@@ -22,14 +22,8 @@ import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.TreeItem;
 
-import com.scienjus.smartqq.client.SmartQQClient;
-import com.scienjus.smartqq.model.Discuss;
-import com.scienjus.smartqq.model.Friend;
-import com.scienjus.smartqq.model.Group;
-
 import cn.ieclipse.smartim.actions.BroadcastAction;
 import cn.ieclipse.smartim.common.IMUtils;
-import cn.ieclipse.smartim.model.IContact;
 import cn.ieclipse.smartim.model.IMessage;
 import io.github.biezhi.wechat.api.WechatClient;
 import io.github.biezhi.wechat.model.Contact;

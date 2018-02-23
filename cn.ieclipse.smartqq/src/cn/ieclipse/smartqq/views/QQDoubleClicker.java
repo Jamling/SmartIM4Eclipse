@@ -18,11 +18,9 @@ package cn.ieclipse.smartqq.views;
 import com.scienjus.smartqq.client.SmartQQClient;
 import com.scienjus.smartqq.model.Recent;
 
-import cn.ieclipse.smartim.IMPlugin;
 import cn.ieclipse.smartim.model.IContact;
 import cn.ieclipse.smartim.views.IMContactDoubleClicker;
 import cn.ieclipse.smartim.views.IMContactView;
-import cn.ieclipse.smartqq.console.QQChatConsole;
 
 /**
  * 类/接口描述

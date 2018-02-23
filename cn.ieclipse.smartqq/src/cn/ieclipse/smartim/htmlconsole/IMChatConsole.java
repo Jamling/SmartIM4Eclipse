@@ -23,9 +23,9 @@ import cn.ieclipse.smartim.common.IDEUtils;
 import cn.ieclipse.smartim.common.IMUtils;
 import cn.ieclipse.smartim.dialogs.OpenFileDialog;
 import cn.ieclipse.smartim.model.IContact;
+import cn.ieclipse.smartim.model.impl.AbstractContact;
 import cn.ieclipse.smartim.views.IMContactView;
 import cn.ieclipse.util.BareBonesBrowserLaunch;
-import io.github.biezhi.wechat.model.Contact;
 
 /**
  * Created by Jamling on 2017/7/1.
@@ -108,8 +108,8 @@ public abstract class IMChatConsole extends CTabItem {
     }
     
     public void clearUnread() {
-        if (contact != null && contact instanceof Contact) {
-            ((Contact) contact).clearUnRead();
+        if (contact != null && contact instanceof AbstractContact) {
+            ((AbstractContact) contact).clearUnRead();
         }
     }
     

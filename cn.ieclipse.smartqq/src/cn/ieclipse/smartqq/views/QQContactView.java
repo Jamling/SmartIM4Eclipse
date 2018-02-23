@@ -1,20 +1,13 @@
 package cn.ieclipse.smartqq.views;
 
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.TabFolder;
 
 import com.scienjus.smartqq.client.SmartQQClient;
-import com.scienjus.smartqq.model.Friend;
 
 import cn.ieclipse.smartim.IMClientFactory;
 import cn.ieclipse.smartim.IMPlugin;
 import cn.ieclipse.smartim.IMSendCallback;
-import cn.ieclipse.smartim.actions.MockConsoleAction;
-import cn.ieclipse.smartim.common.IMUtils;
-import cn.ieclipse.smartim.htmlconsole.IMChatConsole;
 import cn.ieclipse.smartim.model.IContact;
 import cn.ieclipse.smartim.views.IMContactDoubleClicker;
 import cn.ieclipse.smartim.views.IMContactView;

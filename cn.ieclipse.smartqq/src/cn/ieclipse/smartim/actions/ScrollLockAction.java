@@ -1,11 +1,6 @@
 package cn.ieclipse.smartim.actions;
 
-import java.awt.event.ActionEvent;
-
 import org.eclipse.jface.action.Action;
-import org.eclipse.swt.SWT;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 
 import cn.ieclipse.smartim.IMPlugin;
 import cn.ieclipse.smartim.htmlconsole.IMChatConsole;

@@ -96,45 +96,29 @@ public class QQChatConsole extends IMChatConsole {
         return hide;
     }
     
-    public void sendFile(final String file) {
+    public void sendFileInternal(final String file) throws Exception {
         final File f = new File(file);
-        new Thread() {
-            public void run() {
-                uploadLock = true;
-                try {
-                    if (f.length() > (1 << 10)) {
-                        write(String.format("%s 上传中，请稍候……", f.getName()));
-                    }
-                    QNUploader uploader = IMPlugin.getDefault().getUploader();
-                    IPreferenceStore store = IMPlugin.getDefault()
-                            .getPreferenceStore();
-                    String ak = store.getString(QiniuPerferencePage.AK);
-                    String sk = store.getString(QiniuPerferencePage.SK);
-                    String bucket = store.getString(QiniuPerferencePage.BUCKET);
-                    String domain = store.getString(QiniuPerferencePage.DOMAIN);
-                    String qq = ((UserInfo) getClient().getAccount())
-                            .getAccount();
-                    boolean enable = store
-                            .getBoolean(QiniuPerferencePage.ENABLE);
-                    boolean ts = store.getBoolean(QiniuPerferencePage.TS);
-                    if (!enable) {
-                        ak = "";
-                        sk = "";
-                    }
-                    UploadInfo info = uploader.upload(qq, f, ak, sk, bucket,
-                            null);
-                    String url = info.getUrl(domain, ts);
-                    
-                    String msg = String.format(
-                            "来自SmartQQ的文件: %s (大小%s), 点击链接%s查看",
-                            IMUtils.getName(file),
-                            IMUtils.formatFileSize(info.fsize), url);
-                    send(msg);
-                } catch (Exception e) {
-                    error("发送失败：" + e.getMessage());
-                }
-                uploadLock = false;
-            };
-        }.start();
+        if (f.length() > (1 << 10)) {
+            write(String.format("%s 上传中，请稍候……", f.getName()));
+        }
+        QNUploader uploader = IMPlugin.getDefault().getUploader();
+        IPreferenceStore store = IMPlugin.getDefault().getPreferenceStore();
+        String ak = store.getString(QiniuPerferencePage.AK);
+        String sk = store.getString(QiniuPerferencePage.SK);
+        String bucket = store.getString(QiniuPerferencePage.BUCKET);
+        String domain = store.getString(QiniuPerferencePage.DOMAIN);
+        String qq = ((UserInfo) getClient().getAccount()).getAccount();
+        boolean enable = store.getBoolean(QiniuPerferencePage.ENABLE);
+        boolean ts = store.getBoolean(QiniuPerferencePage.TS);
+        if (!enable) {
+            ak = "";
+            sk = "";
+        }
+        UploadInfo info = uploader.upload(qq, f, ak, sk, bucket, null);
+        String url = info.getUrl(domain, ts);
+        
+        String msg = String.format("来自SmartQQ的文件: %s (大小%s), 点击链接%s 查看",
+                IMUtils.getName(file), IMUtils.formatFileSize(info.fsize), url);
+        send(msg);
     }
 }

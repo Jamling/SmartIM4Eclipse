@@ -23,10 +23,8 @@ import org.eclipse.ui.console.IConsolePageParticipant;
 import org.eclipse.ui.console.actions.CloseConsoleAction;
 import org.eclipse.ui.part.IPageBookViewPage;
 
-import cn.ieclipse.smartim.actions.SendFileAction;
 import cn.ieclipse.smartim.actions.NextChatAction;
 import cn.ieclipse.smartim.actions.PrevChatAction;
-import cn.ieclipse.smartim.actions.ProjectFileAction;
 import cn.ieclipse.smartim.actions.SendAction;
 
 /**

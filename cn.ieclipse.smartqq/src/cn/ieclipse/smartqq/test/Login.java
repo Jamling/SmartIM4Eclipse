@@ -6,7 +6,6 @@ package cn.ieclipse.smartqq.test;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-import cn.ieclipse.smartim.IMPlugin;
 import cn.ieclipse.smartim.dialogs.LoginDialog;
 
 /**

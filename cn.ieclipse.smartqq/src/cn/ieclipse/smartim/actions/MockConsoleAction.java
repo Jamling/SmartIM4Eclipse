@@ -22,7 +22,6 @@ import org.eclipse.ui.PlatformUI;
 import com.scienjus.smartqq.model.Friend;
 
 import cn.ieclipse.smartim.common.IMUtils;
-import cn.ieclipse.smartim.htmlconsole.IMChatConsole;
 import cn.ieclipse.smartim.htmlconsole.MockChatConsole;
 import cn.ieclipse.smartim.views.IMContactView;
 
@@ -52,7 +51,7 @@ public class MockConsoleAction extends Action {
         MockChatConsole console = new MockChatConsole(f, contactView);
         contactView.getTabbedChat().setSelection(console);
         contactView.randBling();
-        String msg = IMUtils.formatMsg(System.currentTimeMillis(), "明月",
+        String msg = IMUtils.formatHtmlMsg(System.currentTimeMillis(), "明月",
                 "我的未来不是梦http://www.baidu.com咕咕");
         console.write(msg);
     }

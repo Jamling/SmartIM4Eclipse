@@ -16,7 +16,6 @@
 package cn.ieclipse.smartim.common;
 
 import java.io.File;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;

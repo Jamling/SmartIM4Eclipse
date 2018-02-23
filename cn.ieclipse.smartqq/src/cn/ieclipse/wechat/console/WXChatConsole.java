@@ -34,7 +34,6 @@ import cn.ieclipse.util.FileUtils;
 import cn.ieclipse.util.StringUtils;
 import cn.ieclipse.wechat.WXUtils;
 import io.github.biezhi.wechat.api.WechatClient;
-import io.github.biezhi.wechat.model.Contact;
 import io.github.biezhi.wechat.model.UploadInfo;
 import io.github.biezhi.wechat.model.WechatMessage;
 

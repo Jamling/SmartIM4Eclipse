@@ -15,11 +15,6 @@
  */
 package cn.ieclipse.smartqq;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import com.scienjus.smartqq.model.Discuss;
 import com.scienjus.smartqq.model.DiscussInfo;
 import com.scienjus.smartqq.model.Group;
@@ -27,8 +22,6 @@ import com.scienjus.smartqq.model.GroupInfo;
 
 import cn.ieclipse.smartim.common.IMUtils;
 import cn.ieclipse.smartim.model.IContact;
-import cn.ieclipse.util.StringUtils;
-import io.github.biezhi.wechat.model.Contact;
 
 /**
  * 类/接口描述

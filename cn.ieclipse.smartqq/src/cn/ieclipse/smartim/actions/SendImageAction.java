@@ -1,8 +1,5 @@
 package cn.ieclipse.smartim.actions;
 
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
-
 import cn.ieclipse.smartim.IMPlugin;
 import cn.ieclipse.smartim.htmlconsole.IMChatConsole;
 
