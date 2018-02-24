@@ -38,8 +38,7 @@ public class QQBroadcastAction extends BroadcastAction {
     
     @Override
     protected void openDialog(Shell shell) {
-        QQBroadcastDialog dialog = new QQBroadcastDialog(shell,
-                (QQContactView) contactView);
+        QQBroadcastDialog dialog = new QQBroadcastDialog(shell, contactView);
         dialog.open();
     }
 }

@@ -15,11 +15,8 @@
  */
 package cn.ieclipse.smartim.actions;
 
-import org.eclipse.jface.action.Action;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
-
 import cn.ieclipse.smartim.views.IMContactView;
+import icons.SmartIcons;
 
 /**
  * 类/接口描述
@@ -28,23 +25,19 @@ import cn.ieclipse.smartim.views.IMContactView;
  * @date 2017年6月20日
  *       
  */
-public class DisconnectAction extends Action {
-    IMContactView contactView;
+public class DisconnectAction extends IMPanelAction {
     
     public DisconnectAction(IMContactView contactView) {
-        this.contactView = contactView;
+        super(contactView);
         setText("Close");
         setToolTipText("Disconnect from server");
-        setImageDescriptor(PlatformUI.getWorkbench().getSharedImages()
-                .getImageDescriptor(ISharedImages.IMG_ELCL_STOP));
+        setImageDescriptor(SmartIcons.signout);
     }
     
     @Override
     public void run() {
-//        IMPlugin.getDefault().closeAllChat();
-//        IMPlugin.setEnable(true);
-        if (contactView != null) {
-            contactView.close();
+        if (fContactView != null) {
+            fContactView.close();
         }
     }
 }

@@ -15,15 +15,12 @@
  */
 package cn.ieclipse.smartim.actions;
 
-import org.eclipse.jface.action.Action;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
-
 import com.scienjus.smartqq.model.Friend;
 
 import cn.ieclipse.smartim.common.IMUtils;
 import cn.ieclipse.smartim.htmlconsole.MockChatConsole;
 import cn.ieclipse.smartim.views.IMContactView;
+import icons.SmartIcons;
 
 /**
  * 类/接口描述
@@ -32,15 +29,13 @@ import cn.ieclipse.smartim.views.IMContactView;
  * @date 2017年6月20日
  *       
  */
-public class MockConsoleAction extends Action {
-    IMContactView contactView;
+public class MockConsoleAction extends IMPanelAction {
     
     public MockConsoleAction(IMContactView contactView) {
-        this.contactView = contactView;
+        super(contactView);
         setText("Mock");
         setToolTipText("Mock chat");
-        setImageDescriptor(PlatformUI.getWorkbench().getSharedImages()
-                .getImageDescriptor(ISharedImages.IMG_DEC_FIELD_WARNING));
+        setImageDescriptor(SmartIcons.test);
     }
     
     @Override
@@ -48,9 +43,9 @@ public class MockConsoleAction extends Action {
         Friend f = new Friend();
         f.setUserId(System.currentTimeMillis());
         f.setMarkname("Test" + System.currentTimeMillis());
-        MockChatConsole console = new MockChatConsole(f, contactView);
-        contactView.getTabbedChat().setSelection(console);
-        contactView.randBling();
+        MockChatConsole console = new MockChatConsole(f, fContactView);
+        fContactView.getTabbedChat().setSelection(console);
+        fContactView.randBling();
         String msg = IMUtils.formatHtmlMsg(System.currentTimeMillis(), "明月",
                 "我的未来不是梦http://www.baidu.com咕咕");
         console.write(msg);

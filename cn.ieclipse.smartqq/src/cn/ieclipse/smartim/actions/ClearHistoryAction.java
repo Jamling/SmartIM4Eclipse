@@ -15,11 +15,8 @@
  */
 package cn.ieclipse.smartim.actions;
 
-import org.eclipse.jface.action.Action;
-import org.eclipse.ui.console.ConsolePlugin;
-import org.eclipse.ui.internal.console.IInternalConsoleConstants;
-
 import cn.ieclipse.smartim.htmlconsole.IMChatConsole;
+import icons.SmartIcons;
 
 /**
  * 清除聊天记录
@@ -28,16 +25,13 @@ import cn.ieclipse.smartim.htmlconsole.IMChatConsole;
  * @date 2018年2月8日
  *       
  */
-public class ClearHistoryAction extends Action {
-    protected IMChatConsole fConsole;
+public class ClearHistoryAction extends IMChatAction {
     
     public ClearHistoryAction(IMChatConsole console) {
-        super("", Action.AS_PUSH_BUTTON);
-        this.fConsole = console;
+        super(console);
         setText("Clear");
         setToolTipText("Clear history");
-        setImageDescriptor(ConsolePlugin
-                .getImageDescriptor(IInternalConsoleConstants.IMG_ELCL_CLEAR));
+        setImageDescriptor(SmartIcons.clear);
     }
     
     @Override

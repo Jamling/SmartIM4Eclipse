@@ -13,32 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cn.ieclipse.wechat;
+package cn.ieclipse.smartim.actions;
 
-import org.eclipse.swt.widgets.Shell;
+import org.eclipse.jface.action.Action;
 
-import cn.ieclipse.smartim.actions.BroadcastAction;
-import cn.ieclipse.smartim.views.IMContactView;
+import cn.ieclipse.smartim.htmlconsole.IMChatConsole;
 
 /**
  * 类/接口描述
  * 
  * @author Jamling
- * @date 2017年10月19日
+ * @date 2018年2月24日
  *       
  */
-public class WXBroadcastAction extends BroadcastAction {
-    private WXContactView contactView;
+public class IMChatAction extends Action {
+    protected IMChatConsole fConsole;
     
-    public WXBroadcastAction(IMContactView contactView) {
-        super(contactView);
-        this.contactView = (WXContactView) contactView;
-        setText("群发微信消息");
+    public IMChatAction(IMChatConsole console) {
+        this.fConsole = console;
     }
     
-    @Override
-    protected void openDialog(Shell shell) {
-        WXBroadcastDialog dialog = new WXBroadcastDialog(shell, contactView);
-        dialog.open();
+    public IMChatAction(IMChatConsole console, String name, int style) {
+        super(name, style);
+        this.fConsole = console;
     }
 }

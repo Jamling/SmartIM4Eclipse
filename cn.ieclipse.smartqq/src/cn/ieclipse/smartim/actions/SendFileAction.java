@@ -15,13 +15,11 @@
  */
 package cn.ieclipse.smartim.actions;
 
-import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 
 import cn.ieclipse.smartim.htmlconsole.IMChatConsole;
+import icons.SmartIcons;
 
 /**
  * 类/接口描述
@@ -30,19 +28,16 @@ import cn.ieclipse.smartim.htmlconsole.IMChatConsole;
  * @date 2017年8月14日
  *       
  */
-public class SendFileAction extends Action {
-    protected IMChatConsole fConsole;
+public class SendFileAction extends IMChatAction {
     protected String[] filterNames;
     protected String[] filterExtensions;
     protected String dialogTitle;
     
     public SendFileAction(IMChatConsole console) {
-        super("", Action.AS_PUSH_BUTTON);
-        this.fConsole = console;
+        super(console);
         setText("Send File");
         setToolTipText("Send file or paste file to chat console");
-        setImageDescriptor(PlatformUI.getWorkbench().getSharedImages()
-                .getImageDescriptor(ISharedImages.IMG_OBJ_FILE));
+        setImageDescriptor(SmartIcons.file);
     }
     
     @Override

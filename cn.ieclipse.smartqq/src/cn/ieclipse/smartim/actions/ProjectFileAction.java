@@ -21,10 +21,9 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
-import org.eclipse.ui.ide.IDE;
 
-import cn.ieclipse.smartim.IMPlugin;
 import cn.ieclipse.smartim.htmlconsole.IMChatConsole;
+import icons.SmartIcons;
 
 /**
  * 类/接口描述
@@ -40,10 +39,7 @@ public class ProjectFileAction extends SendFileAction {
         setText("Send Project File");
         setToolTipText(
                 "Send your project(workspace) file to " + fConsole.getName());
-        // setImageDescriptor(
-        // LetterImageFactory.createDescriptor('P', SWT.COLOR_DARK_GRAY));
-        setImageDescriptor(
-                IMPlugin.getSharedImage(IDE.SharedImages.IMG_OBJ_PROJECT));
+        setImageDescriptor(SmartIcons.projectFile);
     }
     
     @Override

@@ -15,13 +15,12 @@
  */
 package cn.ieclipse.smartim.actions;
 
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
 
-import cn.ieclipse.smartim.IMPlugin;
 import cn.ieclipse.smartim.dialogs.LoginDialog;
 import cn.ieclipse.smartim.views.IMContactView;
+import icons.SmartIcons;
 
 /**
  * 类/接口描述
@@ -30,34 +29,30 @@ import cn.ieclipse.smartim.views.IMContactView;
  * @date 2017年6月20日
  *       
  */
-public class LoginAction extends Action {
-    private IMContactView fView;
+public class LoginAction extends IMPanelAction {
     
     public LoginAction(IMContactView view) {
-        super();
+        super(view);
         setText("Login");
         setToolTipText("Click to show qrcode");
-        // setImageDescriptor(PlatformUI.getWorkbench().getSharedImages()
-        // .getImageDescriptor(ISharedImages.IMG_ELCL_SYNCED));
-        setImageDescriptor(IMPlugin.getImageDescriptor("icons/qrcode.png"));
-        this.fView = view;
+        setImageDescriptor(SmartIcons.signin);
     }
     
     @Override
     public void run() {
-        if (fView != null) {
-            Shell shell = fView.getSite().getShell();
+        if (fContactView != null) {
+            Shell shell = fContactView.getSite().getShell();
             boolean ok = true;
-            if (fView.getClient().isLogin()) {
+            if (fContactView.getClient().isLogin()) {
                 ok = MessageDialog.openConfirm(shell, null,
                         "您已处于登录状态，确定要重新登录吗？");
             }
             if (ok) {
                 LoginDialog dialog = new LoginDialog(shell);
-                dialog.setClient(fView.getClient());
+                dialog.setClient(fContactView.getClient());
                 dialog.open();
             }
-            fView.initContacts();
+            fContactView.initContacts();
         }
     }
 }

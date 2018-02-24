@@ -15,10 +15,8 @@
  */
 package cn.ieclipse.smartim.actions;
 
-import org.eclipse.jface.action.Action;
-
-import cn.ieclipse.smartim.IMPlugin;
 import cn.ieclipse.smartim.views.IMContactView;
+import icons.SmartIcons;
 
 /**
  * 类/接口描述
@@ -27,20 +25,19 @@ import cn.ieclipse.smartim.views.IMContactView;
  * @date 2018年2月11日
  *       
  */
-public class ToggleContactsAction extends Action {
-    protected IMContactView contactView;
+public class ToggleContactsAction extends IMPanelAction {
     
     public ToggleContactsAction(IMContactView contactView) {
-        this.contactView = contactView;
+        super(contactView);
         setText("&Toggle Contacts");
         setToolTipText("Toggle contacts");
-        setImageDescriptor(IMPlugin.getImageDescriptor("icons/eye-slash.png"));
+        setImageDescriptor(SmartIcons.hide);
     }
     
     @Override
     public void run() {
-        if (contactView != null) {
-            contactView.toggleContacts();
+        if (fContactView != null) {
+            fContactView.toggleContacts();
         }
     }
 }

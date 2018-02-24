@@ -15,12 +15,11 @@
  */
 package cn.ieclipse.smartim.actions;
 
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
 
-import cn.ieclipse.smartim.IMPlugin;
 import cn.ieclipse.smartim.views.IMContactView;
+import icons.SmartIcons;
 
 /**
  * 类/接口描述
@@ -29,21 +28,19 @@ import cn.ieclipse.smartim.views.IMContactView;
  * @date 2017年8月22日
  *       
  */
-public class BroadcastAction extends Action {
-    protected IMContactView contactView;
-    
+public class BroadcastAction extends IMPanelAction {
     public BroadcastAction(IMContactView contactView) {
-        this.contactView = contactView;
+        super(contactView);
         setText("&BroadCast");
         setToolTipText("Broadcast message to SmartQQ group/discuss/friends");
-        setImageDescriptor(IMPlugin.getImageDescriptor("icons/broadcast.png"));
+        setImageDescriptor(SmartIcons.broadcast);
     }
     
     @Override
     public void run() {
-        if (contactView != null) {
-            Shell shell = contactView.getSite().getShell();
-            if (contactView.getClient().isLogin()) {
+        if (fContactView != null) {
+            Shell shell = fContactView.getSite().getShell();
+            if (fContactView.getClient().isLogin()) {
                 openDialog(shell);
             }
             else {

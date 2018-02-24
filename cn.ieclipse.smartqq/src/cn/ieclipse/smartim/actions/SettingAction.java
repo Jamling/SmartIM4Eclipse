@@ -15,9 +15,7 @@
  */
 package cn.ieclipse.smartim.actions;
 
-import org.eclipse.jface.action.Action;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.PreferencesUtil;
 
@@ -26,6 +24,8 @@ import cn.ieclipse.smartim.preferences.QiniuPerferencePage;
 import cn.ieclipse.smartim.preferences.RobotPreferencePage;
 import cn.ieclipse.smartim.preferences.SettingsPerferencePage;
 import cn.ieclipse.smartim.preferences.SmartQQPreferencePage;
+import cn.ieclipse.smartim.views.IMContactView;
+import icons.SmartIcons;
 
 /**
  * 类/接口描述
@@ -34,12 +34,12 @@ import cn.ieclipse.smartim.preferences.SmartQQPreferencePage;
  * @date 2017年6月20日
  *       
  */
-public class SettingAction extends Action {
-    public SettingAction() {
+public class SettingAction extends IMPanelAction {
+    public SettingAction(IMContactView contactView) {
+        super(contactView);
         setText("Settings");
         setToolTipText("Settings & Helps");
-        setImageDescriptor(PlatformUI.getWorkbench().getSharedImages()
-                .getImageDescriptor(ISharedImages.IMG_LCL_LINKTO_HELP));
+        setImageDescriptor(SmartIcons.settings);
     }
     
     @Override

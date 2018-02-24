@@ -2,21 +2,19 @@ package cn.ieclipse.smartim.actions;
 
 import org.eclipse.jface.action.Action;
 
-import cn.ieclipse.smartim.IMPlugin;
 import cn.ieclipse.smartim.htmlconsole.IMChatConsole;
+import icons.SmartIcons;
 
-public class ScrollLockAction extends Action {
-    IMChatConsole console;
+public class ScrollLockAction extends IMChatAction {
     
     public ScrollLockAction(IMChatConsole console) {
-        super("", Action.AS_CHECK_BOX);
+        super(console, "Scroll Lock", Action.AS_CHECK_BOX);
         this.setToolTipText("Scroll Lock");
-        this.console = console;
-        setImageDescriptor(IMPlugin.getImageDescriptor("icons/lock_co.png"));
+        setImageDescriptor(SmartIcons.lock);
     }
     
     @Override
     public void run() {
-        console.setScrollLock(isChecked());
+        fConsole.setScrollLock(isChecked());
     }
 }
