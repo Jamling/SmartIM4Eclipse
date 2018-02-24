@@ -1,4 +1,4 @@
-package cn.ieclipse.smartqq.views;
+package cn.ieclipse.smartqq;
 
 import java.util.Collections;
 import java.util.List;
@@ -16,9 +16,9 @@ import cn.ieclipse.smartim.model.VirtualCategory;
 import cn.ieclipse.smartim.views.IMContactContentProvider;
 import cn.ieclipse.smartim.views.IMContactView;
 
-public class FriendContentProvider extends IMContactContentProvider {
+public class QQContentProvider extends IMContactContentProvider {
     
-    public FriendContentProvider(IMContactView view, boolean check) {
+    public QQContentProvider(IMContactView view, boolean check) {
         super(view, check);
     }
     

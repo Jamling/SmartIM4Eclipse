@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cn.ieclipse.wechat.views;
+package cn.ieclipse.wechat;
 
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
@@ -25,11 +25,6 @@ import cn.ieclipse.smartim.htmlconsole.IMChatConsole;
 import cn.ieclipse.smartim.model.IContact;
 import cn.ieclipse.smartim.views.IMContactDoubleClicker;
 import cn.ieclipse.smartim.views.IMContactView;
-import cn.ieclipse.wechat.WXModificationCallback;
-import cn.ieclipse.wechat.WXReceiveCallback;
-import cn.ieclipse.wechat.WXRobotCallback;
-import cn.ieclipse.wechat.actions.WXBroadcastAction;
-import cn.ieclipse.wechat.console.WXChatConsole;
 import io.github.biezhi.wechat.api.WechatClient;
 
 /**

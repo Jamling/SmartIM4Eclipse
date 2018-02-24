@@ -21,7 +21,6 @@ import cn.ieclipse.smartim.common.IMUtils;
 import cn.ieclipse.smartim.model.impl.AbstractFrom;
 import cn.ieclipse.smartim.model.impl.AbstractMessage;
 import cn.ieclipse.smartim.preferences.SettingsPerferencePage;
-import cn.ieclipse.wechat.views.WXContactView;
 import io.github.biezhi.wechat.model.Contact;
 import io.github.biezhi.wechat.model.GroupFrom;
 import io.github.biezhi.wechat.model.UserFrom;

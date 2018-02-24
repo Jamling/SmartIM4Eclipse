@@ -1,4 +1,4 @@
-package cn.ieclipse.smartqq.views;
+package cn.ieclipse.smartqq;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
@@ -14,11 +14,10 @@ import cn.ieclipse.smartim.model.IContact;
 import cn.ieclipse.smartim.model.VirtualCategory;
 import cn.ieclipse.smartim.views.IMContactLabelProvider;
 import cn.ieclipse.smartim.views.IMContactView;
-import cn.ieclipse.smartqq.QQUtils;
 
-public class FriendLabelProvider extends IMContactLabelProvider {
+public class QQLabelProvider extends IMContactLabelProvider {
     
-    public FriendLabelProvider(IMContactView view) {
+    public QQLabelProvider(IMContactView view) {
         super(view);
     }
     

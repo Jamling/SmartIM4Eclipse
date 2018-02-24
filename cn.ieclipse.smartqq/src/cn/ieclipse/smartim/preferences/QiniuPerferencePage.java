@@ -30,9 +30,7 @@ public class QiniuPerferencePage extends FieldEditorPreferencePage
     public QiniuPerferencePage() {
         super(GRID);
         setPreferenceStore(IMPlugin.getDefault().getPreferenceStore());
-        setDescription("因SmartQQ不支持文件上传，所以本插件先将文件上传到七牛云，然后再将文件的URL发送出去\n"
-                + "如果您未设置七牛云储存，发送的文件将上传到本人私有储存空间（temp.ieclipse.cn），上传的文件的大小及保留天数将有限制，建议您自己注册七牛云并"
-                + "\n注：如果使用您自己的七牛云，带*的accessKey和secretKey必填，否则不生效哦");
+        setDescription("SmartQQ文件传输详情请参考http://api.ieclipse.cn/smartqq\r\n如果您未设置七牛云储存，发送的文件将上传到本人私有储存空间（temp.ieclipse.cn，文件大小有限制而且非永久保存），建议您注册七牛云来实现文件传输\r\n注：如果使用您自己的七牛云，带*的accessKey和secretKey必填，否则不生效哦");
     }
     
     /**

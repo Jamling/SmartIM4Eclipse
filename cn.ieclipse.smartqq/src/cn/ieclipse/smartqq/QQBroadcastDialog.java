@@ -1,4 +1,4 @@
-package cn.ieclipse.wechat.views;
+package cn.ieclipse.smartqq;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,28 +22,33 @@ import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.TreeItem;
 
+import com.scienjus.smartqq.client.SmartQQClient;
+import com.scienjus.smartqq.model.Discuss;
+import com.scienjus.smartqq.model.Friend;
+import com.scienjus.smartqq.model.Group;
+
 import cn.ieclipse.smartim.actions.BroadcastAction;
 import cn.ieclipse.smartim.common.IMUtils;
+import cn.ieclipse.smartim.model.IContact;
 import cn.ieclipse.smartim.model.IMessage;
-import io.github.biezhi.wechat.api.WechatClient;
-import io.github.biezhi.wechat.model.Contact;
-import io.github.biezhi.wechat.model.WechatMessage;
 
-public class WXBroadcastDialog extends Dialog {
+public class QQBroadcastDialog extends Dialog {
     private Text text;
     private CheckboxTreeViewer ftvFriend;
+    private CheckboxTreeViewer ftvRecent;
     private CheckboxTreeViewer ftvGroup;
+    private CheckboxTreeViewer ftvDiscuss;
     
-    private WXContactView contactView;
+    private QQContactView qQContactView;
     
     /**
      * Create the dialog.
      * 
      * @param parentShell
      */
-    public WXBroadcastDialog(Shell parentShell, WXContactView contactView) {
+    public QQBroadcastDialog(Shell parentShell, QQContactView qQContactView) {
         super(parentShell);
-        this.contactView = contactView;
+        this.qQContactView = qQContactView;
     }
     
     /**
@@ -87,20 +92,33 @@ public class WXBroadcastDialog extends Dialog {
         composite3.setLayout(new TreeColumnLayout());
         ftvGroup = new CheckboxTreeViewer(composite3, SWT.NONE);
         
+        TabItem tiDiscuss = new TabItem(tabFolder, SWT.NONE);
+        tiDiscuss.setText("Discuss");
+        Composite composite4 = new Composite(tabFolder, SWT.NONE);
+        tiDiscuss.setControl(composite4);
+        composite4.setLayout(new TreeColumnLayout());
+        ftvDiscuss = new CheckboxTreeViewer(composite4, SWT.NONE);
+        
         ftvFriend.setContentProvider(
-                new WXContactContentProvider(contactView, true));
-        ftvFriend.setLabelProvider(new WXContactLabelProvider(contactView));
+                new QQContentProvider(qQContactView, true));
+        ftvFriend.setLabelProvider(new QQLabelProvider(qQContactView));
         ftvGroup.setContentProvider(
-                new WXContactContentProvider(contactView, true));
-        ftvGroup.setLabelProvider(new WXContactLabelProvider(contactView));
+                new QQContentProvider(qQContactView, true));
+        ftvGroup.setLabelProvider(new QQLabelProvider(qQContactView));
+        ftvDiscuss.setContentProvider(
+                new QQContentProvider(qQContactView, true));
+        ftvDiscuss.setLabelProvider(new QQLabelProvider(qQContactView));
         
         ftvFriend.setInput("friend");
         ftvGroup.setInput("group");
+        ftvDiscuss.setInput("discuss");
         
         ftvFriend.addCheckStateListener(checkListener);
         ftvGroup.addCheckStateListener(checkListener);
+        ftvDiscuss.addCheckStateListener(checkListener);
         
         ftvGroup.expandAll();
+        ftvDiscuss.expandAll();
         
         return container;
     }
@@ -166,6 +184,7 @@ public class WXBroadcastDialog extends Dialog {
         final List<Object> target = new ArrayList<>();
         target.addAll(Arrays.asList(ftvFriend.getCheckedElements()));
         target.addAll(Arrays.asList(ftvGroup.getCheckedElements()));
+        target.addAll(Arrays.asList(ftvDiscuss.getCheckedElements()));
         new Thread() {
             public void run() {
                 sendInternal(text, target);
@@ -185,16 +204,18 @@ public class WXBroadcastDialog extends Dialog {
     @Override
     protected void configureShell(Shell newShell) {
         super.configureShell(newShell);
-        newShell.setText("微信群发");
+        newShell.setText("QQ消息群发");
     }
     
     private void sendInternal(String text, List<Object> targets) {
-        WechatClient client = contactView.getClient();
+        // ((SmartQQClient) qQContactView.getClient()).broadcast(text,
+        // targets.toArray());
+        SmartQQClient client = qQContactView.getClient();
         int ret = 0;
         if (targets != null) {
             for (Object obj : targets) {
-                if (obj != null && obj instanceof Contact) {
-                    Contact target = (Contact) obj;
+                if (obj != null && obj instanceof IContact) {
+                    IContact target = (IContact) obj;
                     try {
                         IMessage m = createMessage(text, target, client);
                         client.sendMessage(m, target);
@@ -207,14 +228,18 @@ public class WXBroadcastDialog extends Dialog {
         }
     }
     
-    private IMessage createMessage(String text, Contact target,
-            WechatClient client) {
+    private IMessage createMessage(String text, IContact target,
+            SmartQQClient client) {
         IMessage m = null;
         if (!client.isClose()) {
-            String msg = target.isGroup()
-                    ? text.replace(BroadcastAction.groupMacro, target.getName())
-                    : text;
-            m = client.createMessage(WechatMessage.MSGTYPE_TEXT, msg, target);
+            if (target instanceof Friend) {
+                m = client.createMessage(text, target);
+            }
+            else if (target instanceof Group || target instanceof Discuss) {
+                String msg = text.replace(BroadcastAction.groupMacro,
+                        target.getName());
+                m = client.createMessage(msg, target);
+            }
         }
         return m;
     }

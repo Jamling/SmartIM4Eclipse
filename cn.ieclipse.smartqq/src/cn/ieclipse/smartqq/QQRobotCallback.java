@@ -25,8 +25,6 @@ import cn.ieclipse.smartim.model.IFrom;
 import cn.ieclipse.smartim.model.impl.AbstractFrom;
 import cn.ieclipse.smartim.model.impl.AbstractMessage;
 import cn.ieclipse.smartim.preferences.RobotPreferencePage;
-import cn.ieclipse.smartqq.console.QQChatConsole;
-import cn.ieclipse.smartqq.views.QQContactView;
 import cn.ieclipse.util.StringUtils;
 
 public class QQRobotCallback extends IMRobotCallback {

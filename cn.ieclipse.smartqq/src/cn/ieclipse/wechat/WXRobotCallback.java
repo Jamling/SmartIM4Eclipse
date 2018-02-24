@@ -14,8 +14,6 @@ import cn.ieclipse.smartim.model.impl.AbstractFrom;
 import cn.ieclipse.smartim.model.impl.AbstractMessage;
 import cn.ieclipse.smartim.preferences.RobotPreferencePage;
 import cn.ieclipse.util.StringUtils;
-import cn.ieclipse.wechat.console.WXChatConsole;
-import cn.ieclipse.wechat.views.WXContactView;
 import io.github.biezhi.wechat.api.WechatClient;
 import io.github.biezhi.wechat.model.Contact;
 import io.github.biezhi.wechat.model.GroupFrom;

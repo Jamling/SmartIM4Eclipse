@@ -11,14 +11,14 @@
       <view
             allowMultiple="false"
             category="cn.ieclipse.smartim"
-            class="cn.ieclipse.smartqq.views.QQContactView"
+            class="cn.ieclipse.smartqq.QQContactView"
             icon="icons/QQ.png"
             id="cn.ieclipse.smartqq.views.QQContactView"
             name="SmartQQ">
       </view>
       <view
             category="cn.ieclipse.smartim"
-            class="cn.ieclipse.wechat.views.WXContactView"
+            class="cn.ieclipse.wechat.WXContactView"
             icon="icons/wechat.png"
             id="cn.ieclipse.wechat.views.WXContactView"
             name="Wechat"

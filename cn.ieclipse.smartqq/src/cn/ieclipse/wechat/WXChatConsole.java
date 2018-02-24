@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cn.ieclipse.wechat.console;
+package cn.ieclipse.wechat;
 
 import java.io.File;
 import java.net.URLConnection;
@@ -32,7 +32,6 @@ import cn.ieclipse.smartim.model.impl.AbstractFrom;
 import cn.ieclipse.smartim.views.IMContactView;
 import cn.ieclipse.util.FileUtils;
 import cn.ieclipse.util.StringUtils;
-import cn.ieclipse.wechat.WXUtils;
 import io.github.biezhi.wechat.api.WechatClient;
 import io.github.biezhi.wechat.model.UploadInfo;
 import io.github.biezhi.wechat.model.WechatMessage;

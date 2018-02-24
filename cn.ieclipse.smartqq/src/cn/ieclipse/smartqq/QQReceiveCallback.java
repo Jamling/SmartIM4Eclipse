@@ -28,7 +28,6 @@ import cn.ieclipse.smartim.model.impl.AbstractContact;
 import cn.ieclipse.smartim.model.impl.AbstractFrom;
 import cn.ieclipse.smartim.model.impl.AbstractMessage;
 import cn.ieclipse.smartim.preferences.SettingsPerferencePage;
-import cn.ieclipse.smartqq.views.QQContactView;
 
 /**
  * 类/接口描述

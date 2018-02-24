@@ -1,4 +1,4 @@
-package cn.ieclipse.smartqq.views;
+package cn.ieclipse.smartqq;
 
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
@@ -11,11 +11,6 @@ import cn.ieclipse.smartim.IMSendCallback;
 import cn.ieclipse.smartim.model.IContact;
 import cn.ieclipse.smartim.views.IMContactDoubleClicker;
 import cn.ieclipse.smartim.views.IMContactView;
-import cn.ieclipse.smartqq.QQMidificationCallback;
-import cn.ieclipse.smartqq.QQReceiveCallback;
-import cn.ieclipse.smartqq.QQRobotCallback;
-import cn.ieclipse.smartqq.actions.QQBroadcastAction;
-import cn.ieclipse.smartqq.console.QQChatConsole;
 
 public class QQContactView extends IMContactView {
     
@@ -34,8 +29,8 @@ public class QQContactView extends IMContactView {
      */
     public QQContactView() {
         viewId = ID;
-        contentProvider = new FriendContentProvider(this, false);
-        labelProvider = new FriendLabelProvider(this);
+        contentProvider = new QQContentProvider(this, false);
+        labelProvider = new QQLabelProvider(this);
         doubleClicker = new IMContactDoubleClicker(this);
         
         receiveCallback = new QQReceiveCallback(this);

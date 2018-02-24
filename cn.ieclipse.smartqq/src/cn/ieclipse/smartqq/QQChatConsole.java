@@ -1,4 +1,4 @@
-package cn.ieclipse.smartqq.console;
+package cn.ieclipse.smartqq;
 
 import java.io.File;
 
@@ -31,7 +31,6 @@ import cn.ieclipse.smartim.model.impl.AbstractFrom;
 import cn.ieclipse.smartim.preferences.QiniuPerferencePage;
 import cn.ieclipse.smartim.preferences.SettingsPerferencePage;
 import cn.ieclipse.smartim.views.IMContactView;
-import cn.ieclipse.smartqq.QQUtils;
 
 public class QQChatConsole extends IMChatConsole {
     

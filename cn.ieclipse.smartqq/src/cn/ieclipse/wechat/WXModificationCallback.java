@@ -17,7 +17,6 @@ package cn.ieclipse.wechat;
 
 import cn.ieclipse.smartim.callback.ModificationCallback;
 import cn.ieclipse.smartim.model.IContact;
-import cn.ieclipse.wechat.views.WXContactView;
 import io.github.biezhi.wechat.model.Contact;
 
 /**

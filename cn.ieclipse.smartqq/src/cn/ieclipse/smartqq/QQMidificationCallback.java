@@ -20,7 +20,6 @@ import com.scienjus.smartqq.model.Recent;
 
 import cn.ieclipse.smartim.callback.ModificationCallback;
 import cn.ieclipse.smartim.model.IContact;
-import cn.ieclipse.smartqq.views.QQContactView;
 
 /**
  * 类/接口描述

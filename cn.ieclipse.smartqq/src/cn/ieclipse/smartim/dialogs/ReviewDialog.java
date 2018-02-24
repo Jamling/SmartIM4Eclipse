@@ -45,8 +45,8 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 import cn.ieclipse.smartim.htmlconsole.IMChatConsole;
 import cn.ieclipse.smartim.views.IMContactView;
-import cn.ieclipse.smartqq.views.QQContactView;
-import cn.ieclipse.wechat.views.WXContactView;
+import cn.ieclipse.smartqq.QQContactView;
+import cn.ieclipse.wechat.WXContactView;
 
 /**
  * 类/接口描述

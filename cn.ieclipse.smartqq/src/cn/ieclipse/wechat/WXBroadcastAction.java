@@ -13,14 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cn.ieclipse.smartqq.actions;
+package cn.ieclipse.wechat;
 
 import org.eclipse.swt.widgets.Shell;
 
 import cn.ieclipse.smartim.actions.BroadcastAction;
 import cn.ieclipse.smartim.views.IMContactView;
-import cn.ieclipse.smartqq.views.QQBroadcastDialog;
-import cn.ieclipse.smartqq.views.QQContactView;
 
 /**
  * 类/接口描述
@@ -29,19 +27,19 @@ import cn.ieclipse.smartqq.views.QQContactView;
  * @date 2017年10月19日
  *       
  */
-public class QQBroadcastAction extends BroadcastAction {
-    private QQContactView contactView;
+public class WXBroadcastAction extends BroadcastAction {
+    WXContactView contactView;
     
-    public QQBroadcastAction(IMContactView contactView) {
+    public WXBroadcastAction(IMContactView contactView) {
         super(contactView);
-        this.contactView = (QQContactView) contactView;
-        setText("QQ消息群发");
+        this.contactView = (WXContactView) contactView;
+        setText("群发微信消息");
     }
     
     @Override
     protected void openDialog(Shell shell) {
-        QQBroadcastDialog dialog = new QQBroadcastDialog(shell,
-                (QQContactView) contactView);
+        WXBroadcastDialog dialog = new WXBroadcastDialog(shell,
+                (WXContactView) contactView);
         dialog.open();
     }
 }

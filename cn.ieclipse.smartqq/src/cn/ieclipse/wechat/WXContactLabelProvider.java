@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cn.ieclipse.wechat.views;
+package cn.ieclipse.wechat;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
@@ -21,7 +21,6 @@ import org.eclipse.swt.graphics.Image;
 import cn.ieclipse.smartim.common.LetterImageFactory;
 import cn.ieclipse.smartim.views.IMContactLabelProvider;
 import cn.ieclipse.smartim.views.IMContactView;
-import cn.ieclipse.wechat.WXUtils;
 import io.github.biezhi.wechat.model.Contact;
 
 /**
