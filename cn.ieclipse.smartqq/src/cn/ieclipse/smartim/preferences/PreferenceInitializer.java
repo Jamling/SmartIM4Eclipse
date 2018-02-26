@@ -52,6 +52,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
                 Messages.PreferenceInitializer_robot_group_welcome);
         store.setDefault(RobotPreferencePage.GROUP_REPLY_ANY, false);
         store.setDefault(RobotPreferencePage.FRIEND_REPLY_ANY, false);
+        store.setDefault(RobotPreferencePage.ROBOT_EMPTY, "");
         
         store.setDefault(QiniuPerferencePage.ENABLE, false);
         store.setDefault(QiniuPerferencePage.TS, false);
@@ -68,6 +69,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
         store.setDefault(SettingsPerferencePage.NOTIFY_UNREAD, true);
         store.setDefault(SettingsPerferencePage.NOTIFY_UNKNOWN, false);
         store.setDefault(SettingsPerferencePage.HIDE_MY_INPUT, true);
+        store.setDefault(SettingsPerferencePage.LOG_HISTORY, true);
     }
     
 }

@@ -20,9 +20,11 @@ public class Messages extends NLS {
     public static String RobotPreferencePage_name;
     public static String RobotPreferencePage_reply_friend;
     public static String RobotPreferencePage_reply_member;
+    public static String RobotPreferencePage_robot_empty;
     public static String RobotPreferencePage_turing_key;
     public static String SettingsPerferencePage_desc;
     public static String SettingsPerferencePage_hide_my_input;
+    public static String SettingsPerferencePage_log_history;
     public static String SettingsPerferencePage_notify_dismiss;
     public static String SettingsPerferencePage_notify_enable;
     public static String SettingsPerferencePage_notify_friend;

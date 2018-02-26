@@ -26,6 +26,7 @@ import cn.ieclipse.smartim.model.IContact;
 import cn.ieclipse.smartim.model.impl.AbstractContact;
 import cn.ieclipse.smartim.views.IMContactView;
 import cn.ieclipse.util.BareBonesBrowserLaunch;
+import cn.ieclipse.util.EncodeUtils;
 
 /**
  * Created by Jamling on 2017/7/1.
@@ -71,7 +72,7 @@ public abstract class IMChatConsole extends CTabItem {
     public abstract void post(final String msg);
     
     public String getHistoryFile() {
-        return uin;
+        return EncodeUtils.getMd5(contact.getName());
     }
     
     public String getUin() {
@@ -139,7 +140,7 @@ public abstract class IMChatConsole extends CTabItem {
                 input);
         if (!hideMyInput()) {
             insertDocument(msg);
-            IMHistoryManager.getInstance().save(client, getUin(), msg);
+            IMHistoryManager.getInstance().save(client, getHistoryFile(), msg);
         }
         new Thread() {
             @Override
@@ -157,7 +158,7 @@ public abstract class IMChatConsole extends CTabItem {
                     sendFileInternal(file);
                 } catch (Exception e) {
                     IMPlugin.getDefault().log("发送文件失败", e);
-                    error(String.format("发送文件失败：%s(%s)", file));
+                    error(String.format("发送文件失败：%s(%s)", file, e.getMessage()));
                 } finally {
                     uploadLock = false;
                 }

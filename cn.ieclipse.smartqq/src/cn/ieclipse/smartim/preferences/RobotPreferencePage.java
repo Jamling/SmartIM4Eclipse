@@ -28,6 +28,9 @@ public class RobotPreferencePage extends FieldEditorPreferencePage
             
     public static final String FRIEND_REPLY_ANY = IMPlugin.PLUGIN_ID
             + ".friend.reply.any"; //$NON-NLS-1$
+    
+    public static final String ROBOT_EMPTY = IMPlugin.PLUGIN_ID
+            + ".robot.empty"; //$NON-NLS-1$
             
     public RobotPreferencePage() {
         super(GRID);
@@ -50,6 +53,8 @@ public class RobotPreferencePage extends FieldEditorPreferencePage
                 Messages.RobotPreferencePage_reply_member,
                 getFieldEditorParent()));
         addField(new BooleanFieldEditor(FRIEND_REPLY_ANY, Messages.RobotPreferencePage_reply_friend,
+                getFieldEditorParent()));
+        addField(new StringFieldEditor(ROBOT_EMPTY, Messages.RobotPreferencePage_robot_empty,
                 getFieldEditorParent()));
     }
     

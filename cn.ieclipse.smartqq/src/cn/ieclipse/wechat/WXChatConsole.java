@@ -56,21 +56,9 @@ public class WXChatConsole extends IMChatConsole {
     }
     
     @Override
-    public void post(String msg) {
-        WechatClient client = getClient();
-        if (client.isLogin() && contact != null) {
-            WechatMessage m = client.createMessage(0, msg, contact);
-            client.sendMessage(m, contact);
-        }
-        else {
-            error("发送失败，客户端异常（可能已断开连接或找不到联系人）");
-        }
+    public WechatClient getClient() {
+        return (WechatClient) IMClientFactory.getInstance().getWechatClient();
     }
-    
-    // @Override
-    // public String getHistoryFile() {
-    // return EncodeUtils.getMd5(uin);
-    // }
     
     @Override
     public void loadHistory(String raw) {
@@ -81,18 +69,25 @@ public class WXChatConsole extends IMChatConsole {
         WechatMessage m = (WechatMessage) getClient().handleMessage(raw);
         AbstractFrom from = getClient().getFrom(m);
         String name = from == null ? "未知用户" : from.getName();
-        String msg = IMUtils.formatMsg(m.getTime(), name, m.getText());
+        String msg = IMUtils.formatHtmlMsg(m.getTime(), name, m.getText());
         write(msg);
-    }
-    
-    @Override
-    public WechatClient getClient() {
-        return (WechatClient) IMClientFactory.getInstance().getWechatClient();
     }
     
     @Override
     public boolean hideMyInput() {
         return false;
+    }
+    
+    @Override
+    public void post(String msg) {
+        WechatClient client = getClient();
+        if (client.isLogin() && contact != null) {
+            WechatMessage m = client.createMessage(0, msg, contact);
+            client.sendMessage(m, contact);
+        }
+        else {
+            error("发送失败，客户端异常（可能已断开连接或找不到联系人）");
+        }
     }
     
     @Override
@@ -172,7 +167,7 @@ public class WXChatConsole extends IMChatConsole {
             String msg = IMUtils.formatHtmlMsg(true, false,
                     System.currentTimeMillis(), name, m.text);
             insertDocument(msg);
-            IMHistoryManager.getInstance().save(client, getUin(), msg);
+            IMHistoryManager.getInstance().save(client, getHistoryFile(), msg);
         }
     }
 }

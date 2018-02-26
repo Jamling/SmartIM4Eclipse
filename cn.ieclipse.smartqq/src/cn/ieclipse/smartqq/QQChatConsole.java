@@ -8,7 +8,6 @@ import org.eclipse.swt.SWT;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.scienjus.smartqq.QNUploader;
-import com.scienjus.smartqq.QNUploader.UploadInfo;
 import com.scienjus.smartqq.client.SmartQQClient;
 import com.scienjus.smartqq.handler.msg.DiscussMessageHandler;
 import com.scienjus.smartqq.handler.msg.FriendMessageHandler;
@@ -67,12 +66,12 @@ public class QQChatConsole extends IMChatConsole {
         
         AbstractFrom from = getClient().parseFrom(m);
         String name = from == null ? "未知用户" : from.getName();
-        String msg = IMUtils.formatMsg(m.getTime(), name, m.getContent());
+        String msg = IMUtils.formatHtmlMsg(m.getTime(), name, m.getContent());
         write(msg);
     }
     
     public void post(final String msg) {
-        SmartQQClient client = (SmartQQClient) getClient();
+        SmartQQClient client = getClient();
         if (this.contact != null) {
             QQMessage m = client.createMessage(msg, contact);
             client.sendMessage(m, this.contact);
@@ -97,7 +96,7 @@ public class QQChatConsole extends IMChatConsole {
     
     public void sendFileInternal(final String file) throws Exception {
         final File f = new File(file);
-        if (f.length() > (1 << 10)) {
+        if (f.length() > (1 << 18)) {
             write(String.format("%s 上传中，请稍候……", f.getName()));
         }
         QNUploader uploader = IMPlugin.getDefault().getUploader();
@@ -113,7 +112,7 @@ public class QQChatConsole extends IMChatConsole {
             ak = "";
             sk = "";
         }
-        UploadInfo info = uploader.upload(qq, f, ak, sk, bucket, null);
+        QNUploader.UploadInfo info = uploader.upload(qq, f, ak, sk, bucket, null);
         String url = info.getUrl(domain, ts);
         
         String msg = String.format("来自SmartQQ的文件: %s (大小%s), 点击链接%s 查看",

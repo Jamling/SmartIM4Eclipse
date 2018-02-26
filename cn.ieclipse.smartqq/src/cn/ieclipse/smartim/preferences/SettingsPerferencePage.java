@@ -53,6 +53,9 @@ public class SettingsPerferencePage extends FieldEditorPreferencePage
     
     public static final String HIDE_MY_INPUT = IMPlugin.PLUGIN_ID
             + ".hide.myinput"; //$NON-NLS-1$
+    
+    public static final String LOG_HISTORY = IMPlugin.PLUGIN_ID
+            + ".log.history"; //$NON-NLS-1$
             
     public SettingsPerferencePage() {
         super(FLAT);
@@ -82,6 +85,9 @@ public class SettingsPerferencePage extends FieldEditorPreferencePage
                 getFieldEditorParent()));
         addField(new BooleanFieldEditor(HIDE_MY_INPUT,
                 Messages.SettingsPerferencePage_hide_my_input,
+                getFieldEditorParent()));
+        addField(new BooleanFieldEditor(LOG_HISTORY,
+                Messages.SettingsPerferencePage_log_history,
                 getFieldEditorParent()));
     }
     

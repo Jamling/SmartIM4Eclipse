@@ -26,6 +26,7 @@ public class IMContactDoubleClicker implements IDoubleClickListener {
             if (obj instanceof AbstractContact) {
                 ((AbstractContact) obj).clearUnRead();
             }
+            fView.doUpdateContacts(0);
             click(obj);
         }
     }

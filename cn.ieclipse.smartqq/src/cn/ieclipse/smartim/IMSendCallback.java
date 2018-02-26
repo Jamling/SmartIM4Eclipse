@@ -75,7 +75,7 @@ public class IMSendCallback implements SendCallback {
         }
         else {
             IMPlugin.getDefault()
-                    .log(String.format("发送到%s的信息（%s）", targetId, s), t);
+                    .log(String.format("发送到%s的信息（%s）", targetId, msg), t);
             Notifications.notify("发送失败", String.format("%s 发送失败！%s", s, code));
         }
     }

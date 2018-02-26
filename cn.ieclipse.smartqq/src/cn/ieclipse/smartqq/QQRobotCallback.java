@@ -195,6 +195,14 @@ public class QQRobotCallback extends IMRobotCallback {
     }
     
     private String getReply(String text, IContact contact, String groupId) {
+        if (StringUtils.isEmpty(text)) {
+            String reply = IMPlugin.getDefault().getPreferenceStore()
+                    .getString(RobotPreferencePage.ROBOT_EMPTY);
+            if (!StringUtils.isEmpty(reply)) {
+                return reply;
+            }
+            return null;
+        }
         Map<String, Object> params = getParams(text, contact, groupId);
         if (params != null) {
             return getTuringReply(TURING_API_V2, params);

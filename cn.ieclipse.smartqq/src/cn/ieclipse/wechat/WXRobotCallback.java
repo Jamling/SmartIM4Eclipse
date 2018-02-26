@@ -13,6 +13,7 @@ import cn.ieclipse.smartim.model.IContact;
 import cn.ieclipse.smartim.model.impl.AbstractFrom;
 import cn.ieclipse.smartim.model.impl.AbstractMessage;
 import cn.ieclipse.smartim.preferences.RobotPreferencePage;
+import cn.ieclipse.util.EncodeUtils;
 import cn.ieclipse.util.StringUtils;
 import io.github.biezhi.wechat.api.WechatClient;
 import io.github.biezhi.wechat.model.Contact;
@@ -199,6 +200,14 @@ public class WXRobotCallback extends IMRobotCallback {
     }
     
     private String getReply(String text, Contact contact, String groupId) {
+        if (StringUtils.isEmpty(text)) {
+            String reply = IMPlugin.getDefault().getPreferenceStore()
+                    .getString(RobotPreferencePage.ROBOT_EMPTY);
+            if (!StringUtils.isEmpty(reply)) {
+                return reply;
+            }
+            return null;
+        }
         Map<String, Object> params = getParams(text, contact, groupId);
         if (params != null) {
             return getTuringReply(TURING_API_V2, params);
@@ -240,7 +249,7 @@ public class WXRobotCallback extends IMRobotCallback {
             String log = IMUtils.formatHtmlMyMsg(System.currentTimeMillis(),
                     name, message);
             IMHistoryManager.getInstance().save(client,
-                    from.getContact().getUin(), log);
+                    EncodeUtils.getMd5(from.getContact().getName()), log);
         }
     }
     
