@@ -24,16 +24,16 @@ Intellij IDEA上的插件请移步这里: https://github.com/Jamling/SmartQQ4Int
 
 **SmartQQ官方协议不支持收发图片和文件，扩展的文件收发由[第三方实现](http://api.ieclipse.cn/smartqq)**
 
-|Feature           |Origin     | Eclipse    | IntelliJ    |
+|Feature           |Swing      | Eclipse    | IntelliJ    |
 | ---------------- |:---------:|:----------:|:-----------:|
-| 文本消息          | yes       |          X | X         |
-| 聊天记录          | yes       |          Y | X         |
-| 消息提醒          | O         |          Y | X         |
-| 表情              | yes (系统表情)|   X| X |
-| 图灵QQ机器人        | X       |          yes | X|
-| [发送文件](http://api.ieclipse.cn/smartqq/)        | X       |          yes | O 不支工程文件快捷发送|
-| 消息群发        | X       |          yes | X|
-| 代码评审        | X       |          yes | X|
+| 文本消息          | Y         |          Y | Y           |
+| 聊天记录          | Y         |          Y | Y           |
+| 消息提醒          | N         |          Y | O           |
+| 接收表情          | O         |   Y        |           X |
+| 图灵机器人        | Y         |          Y |           X |
+| 发送文件          | Y         |          Y |           Y |
+| 消息群发          | Y         |          Y |            Y|
+| 代码评审          | X         |          Y |            Y|
 
 ## 安装
 
