@@ -186,7 +186,7 @@ public abstract class IMContactView extends ViewPart implements IShowInTarget {
         manager.add(broadcast);
         manager.add(settings);
         if (testAction != null) {
-             manager.add(testAction);
+            // manager.add(testAction);
         }
         // drillDownAdapter.addNavigationActions(manager);
     }
@@ -313,6 +313,26 @@ public abstract class IMContactView extends ViewPart implements IShowInTarget {
         });
     }
     
+    public boolean isCurrent(final IMChatConsole console) {
+        if (console != null && tabbedChat instanceof ClosableTabHost) {
+            if (console == ((ClosableTabHost) tabbedChat).getCurrentItem()) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean isCurrent(final IContact contact) {
+        if (contact != null && tabbedChat instanceof ClosableTabHost) {
+            IMChatConsole console = ((ClosableTabHost) tabbedChat)
+                    .getCurrentItem();
+            if (console != null) {
+                return contact.getUin().equals(console.getUin());
+            }
+        }
+        return false;
+    }
+    
     public IMChatConsole findConsole(IContact contact, boolean add) {
         return findConsoleById(contact.getUin(), add);
     }
@@ -339,6 +359,7 @@ public abstract class IMContactView extends ViewPart implements IShowInTarget {
             console = createConsoleUI(contact);
             tabbedChat.setSelection(console);
         }
+        console.clearUnread();
         return console;
     }
     

@@ -32,9 +32,9 @@ import icons.SmartIcons;
  * @date 2017年8月22日
  *       
  */
-public class ProjectFileAction extends SendFileAction {
+public class SendProjectFileAction extends SendFileAction {
     
-    public ProjectFileAction(IMChatConsole console) {
+    public SendProjectFileAction(IMChatConsole console) {
         super(console);
         setText("Send Project File");
         setToolTipText(

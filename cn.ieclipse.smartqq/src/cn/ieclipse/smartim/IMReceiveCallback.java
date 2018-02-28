@@ -44,24 +44,24 @@ public abstract class IMReceiveCallback implements ReceiveCallback {
             } catch (Exception e) {
                 IMPlugin.getDefault().log("", e);
             }
-            if (hide) {
+            if (hide || fContactView.isCurrent(contact)) {
                 // don't notify
             }
             else {
                 CharSequence content = getNotifyContent(message, from);
-                Notifications.notify(fContactView, from.getContact(),
-                        from.getContact().getName(), content);
+                Notifications.notify(fContactView, contact,
+                        contact.getName(), content);
             }
         }
         
         IMChatConsole console = fContactView
-                .findConsoleById(from.getContact().getUin(), false);
+                .findConsoleById(contact.getUin(), false);
         if (console != null) {
             lastConsole = console;
             console.write(msg);
             fContactView.highlight(console);
         }
-        else {
+        if (!fContactView.isCurrent(console)) {
             if (contact != null) {
                 contact.increaceUnRead();
             }

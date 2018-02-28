@@ -17,6 +17,7 @@ import cn.ieclipse.smartim.views.IMContactView;
 
 public class ClosableTabHost extends CTabFolder {
     IMContactView imPanel;
+    IMChatConsole currentItem;
     
     /**
      * Create the composite.
@@ -43,6 +44,7 @@ public class ClosableTabHost extends CTabFolder {
                     IMChatConsole item = (IMChatConsole) e.item;
                     item.setImage(item.IMG_NORMAL);
                     item.clearUnread();
+                    currentItem = item;
                 }
             }
         });
@@ -51,6 +53,20 @@ public class ClosableTabHost extends CTabFolder {
     @Override
     protected void checkSubclass() {
         // Disable the check that prevents subclassing of SWT components
+    }
+    
+    @Override
+    public void setSelection(int index) {
+        super.setSelection(index);
+        if (index >= 0 && index < getItemCount()) {
+            if (getItem(index) instanceof IMChatConsole) {
+                currentItem = (IMChatConsole) getItem(index);
+            }
+        }
+    }
+    
+    public IMChatConsole getCurrentItem() {
+        return currentItem;
     }
     
     public void bling(int index, String name) {

@@ -88,6 +88,14 @@ public class IMUtils {
                 || raw.startsWith("<div");
     }
     
+    public static String formatHtmlMsg(String msg, boolean encodeHtml) {
+        // TODO only replace the non-html tag space;
+        String m = encodeHtml(msg).replace(" ", "&nbsp;").replaceAll("\r?\n",
+                "<br/>");
+        String content = encodeHtml ? autoLink(autoReviewLink(m)) : m;
+        return content;
+    }
+    
     public static String formatHtmlMsg(long time, String name,
             CharSequence msg) {
         return formatHtmlMsg(false, true, time, name, msg.toString());
@@ -98,14 +106,12 @@ public class IMUtils {
         return formatHtmlMsg(true, true, time, name, msg.toString());
     }
     
-    public static String formatHtmlMsg(boolean my, boolean encodeHtml, 
+    public static String formatHtmlMsg(boolean my, boolean encodeHtml,
             long time, String name, String msg) {
         String t = new SimpleDateFormat("HH:mm:ss").format(time);
-        String clz = my ? "my" : "";
-        String content = encodeHtml ? autoLink(autoReviewLink(encodeHtml(msg))) : msg;
-        return String.format(
-                "<div class=\"%s\"><span class=\"time\">%s</span> <a href=\"user://%s\">%s</a>: %s</div>",
-                clz, t, name, name, content);
+        String clz = my ? "sender my" : "sender";
+        String content = formatHtmlMsg(msg, encodeHtml);
+        return String.format(DIV_ROW_FORMAT, clz, t, name, name, content);
     }
     
     private static String autoReviewLink(String input) {
@@ -126,7 +132,8 @@ public class IMUtils {
     }
     
     private static String autoLink(String input) {
-        Pattern p = Patterns.WEB_URL; //Pattern.compile(LINK_REGEX, Pattern.MULTILINE);
+        Pattern p = Patterns.WEB_URL; // Pattern.compile(LINK_REGEX,
+                                      // Pattern.MULTILINE);
         Matcher m = p.matcher(input);
         
         List<String> groups = new ArrayList<>();
@@ -160,9 +167,13 @@ public class IMUtils {
                 }
                 sb.delete(pos, offset + e);
                 String ng = g;
-                if (IMG_EXTS.indexOf(FileUtils.getExtension(g).toLowerCase()) >= 0) {
-                    ng = String.format("<a href=\"%s\"><img src=\"%s\" alt=\"%s\" border=\"0\"/></a>", g, g, g);
-                } else {
+                if (IMG_EXTS.indexOf(
+                        FileUtils.getExtension(g).toLowerCase()) >= 0) {
+                    ng = String.format(
+                            "<a href=\"%s\"><img src=\"%s\" alt=\"%s\" border=\"0\"/></a>",
+                            g, g, g);
+                }
+                else {
                     ng = String.format("<a href=\"%s\">%s</a>", g, g);
                 }
                 sb.insert(pos, ng);
@@ -173,7 +184,12 @@ public class IMUtils {
         return input;
     }
     
-    public static final List<String> IMG_EXTS = Arrays.asList("png", "jpg", "gif", "webp");
+    public static final String DIV_SENDER_FORMAT = "<div class=\"%s\"><span class=\"time\">%s</span> <a href=\"user://%s\">%s</a>: </div>";
+    public static final String DIV_CONTENT_FORMAT = "<div class=\"content\">%s</div>";
+    public static final String DIV_ROW_FORMAT = String.format("<div>%s%s</div>",
+            DIV_SENDER_FORMAT, DIV_CONTENT_FORMAT);
+    public static final List<String> IMG_EXTS = Arrays.asList("png", "jpg",
+            "gif", "webp");
     public static final String CODE_REGEX = "Code: [\\S ]+:[\\d]+ ?";
     public static final String LINK_REGEX = "(https?|ftp|file)://(([\\w-~]+).)+([\\w-~\\/])+(((?!\\.)(\\S))+(\\.\\w+(\\?(\\w+=\\S&?)*)?)?)?";
 }

@@ -5,7 +5,6 @@ import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
 import cn.ieclipse.smartim.model.IContact;
-import cn.ieclipse.smartim.model.impl.AbstractContact;
 
 public class IMContactDoubleClicker implements IDoubleClickListener {
     
@@ -23,10 +22,10 @@ public class IMContactDoubleClicker implements IDoubleClickListener {
         IStructuredSelection isel = (IStructuredSelection) event.getSelection();
         Object obj = isel.getFirstElement();
         if (obj != null) {
-            if (obj instanceof AbstractContact) {
-                ((AbstractContact) obj).clearUnRead();
-            }
-            fView.doUpdateContacts(0);
+            // if (obj instanceof AbstractContact) {
+            // ((AbstractContact) obj).clearUnRead();
+            // }
+            // fView.doUpdateContacts(0);
             click(obj);
         }
     }

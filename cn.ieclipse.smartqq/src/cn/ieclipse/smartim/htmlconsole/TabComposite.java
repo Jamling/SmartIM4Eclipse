@@ -15,7 +15,6 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.graphics.Point;
@@ -153,13 +152,7 @@ public class TabComposite extends Composite {
                 System.out.println(event);
             }
         });
-        browser.addMouseListener(new MouseAdapter() {
-            public void mouseDown(MouseEvent event) {
-                if (event.button == 3)
-                    browser.execute(
-                            "document.oncontextmenu = function() {return false;}");
-            }
-        });
+        
         browser.addMouseMoveListener(new MouseMoveListener() {
             @Override
             public void mouseMove(MouseEvent e) {
@@ -175,6 +168,7 @@ public class TabComposite extends Composite {
                 text.forceFocus();
             }
         });
+        new HistoryOperation(browser, console, text);
     }
     
     private void resize(boolean auto) {
@@ -199,7 +193,7 @@ public class TabComposite extends Composite {
                 e.doit = false;
                 String input = text.getText();
                 if (console != null && !input.isEmpty()) {
-                    console.send(input.trim());
+                    console.send(input);
                 }
                 text.setText("");
             }
@@ -232,7 +226,7 @@ public class TabComposite extends Composite {
                 e.doit = false;
                 String input = text.getText();
                 if (!input.isEmpty()) {
-                    addHistory(input.trim(), true);
+                    addHistory(input, true);
                 }
                 text.setText("");
             }
@@ -291,7 +285,7 @@ public class TabComposite extends Composite {
         }
     }
     
-    public void addHistory(String msg, boolean scrollLock) {
+    public void addHistory(final String msg, boolean scrollLock) {
         if (msg == null) {
             return;
         }
@@ -299,7 +293,8 @@ public class TabComposite extends Composite {
             checkBrowser();
         }
         // System.out.println("prepared:" + prepared);
-        String text = msg.replace("'", "&apos;").replaceAll("\r?\n", "");
+        String text = msg.replace("'", "&apos;");// .replaceAll("\r?\n",
+                                                 // "<br>");
         final StringBuilder sb = new StringBuilder();
         sb.append("add_log('");
         sb.append(text);
@@ -312,22 +307,30 @@ public class TabComposite extends Composite {
         IMPlugin.runOnUI(new Runnable() {
             @Override
             public void run() {
-                appendHistory(sb.toString());
+                appendHistory(sb.toString(), msg);
             }
         });
     }
     
-    public void appendHistory(String text) {
+    public void appendHistory(String text, String msg) {
         if (!browser.execute(text)) {
             if (!browser.execute(
                     "add_log('<div class=\"error\">添加到聊天记录失败，可能是因为消息中包含某些特殊字符引</div>', true)")) {
-                IMPlugin.getDefault().log("SmartQQ无法写入聊天日志");
+                IMPlugin.getDefault().log("添加聊天记录 " + msg + " 失败");
             }
         }
     }
     
     public void clearHistory() {
         browser.execute("clear_log()");
+    }
+    
+    public void doPaste() {
+        addHistory("paste", true);
+    }
+    
+    public void doCopy() {
+    
     }
     
     public static void main(String[] args) {

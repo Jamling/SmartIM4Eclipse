@@ -59,7 +59,7 @@ public class IMChatConsolePageParticipant implements IConsolePageParticipant {
         //action = new SendFileAction((IMChatConsole) console);
         // actionBars.getToolBarManager().appendToGroup(group, action);
         actionBars.getMenuManager().add(action);
-        //action = new ProjectFileAction((IMChatConsole) console);
+        //action = new SendProjectFileAction((IMChatConsole) console);
         // actionBars.getToolBarManager().appendToGroup(group, action);
         actionBars.getMenuManager().add(action);
         

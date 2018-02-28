@@ -61,6 +61,9 @@ public class SmartIcons {
     public static ImageDescriptor lock = IconLoader.getIcon("/icons/lock_co.png");
     public static ImageDescriptor clear = IconLoader.getIcon("/icons/clear_co.png");
     
+    public static ImageDescriptor paste = IconLoader.getShare(ISharedImages.IMG_TOOL_PASTE);
+    public static ImageDescriptor copy = IconLoader.getShare(ISharedImages.IMG_TOOL_COPY);
+    
     public static void main(String[] args) {
         System.out.println(group);
     }

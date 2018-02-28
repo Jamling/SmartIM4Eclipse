@@ -15,7 +15,7 @@ import cn.ieclipse.smartim.IMHistoryManager;
 import cn.ieclipse.smartim.IMPlugin;
 import cn.ieclipse.smartim.SmartClient;
 import cn.ieclipse.smartim.actions.ClearHistoryAction;
-import cn.ieclipse.smartim.actions.ProjectFileAction;
+import cn.ieclipse.smartim.actions.SendProjectFileAction;
 import cn.ieclipse.smartim.actions.ScrollLockAction;
 import cn.ieclipse.smartim.actions.SendFileAction;
 import cn.ieclipse.smartim.actions.SendImageAction;
@@ -111,6 +111,7 @@ public abstract class IMChatConsole extends CTabItem {
     public void clearUnread() {
         if (contact != null && contact instanceof AbstractContact) {
             ((AbstractContact) contact).clearUnRead();
+            imPanel.notifyUpdateContacts(0, true);
         }
     }
     
@@ -208,7 +209,7 @@ public abstract class IMChatConsole extends CTabItem {
         ToolBarManager manager = new ToolBarManager(toolBar);
         manager.add(new SendImageAction(this));
         manager.add(new SendFileAction(this));
-        manager.add(new ProjectFileAction(this));
+        manager.add(new SendProjectFileAction(this));
         manager.add(new ClearHistoryAction(this));
         manager.add(new ScrollLockAction(this));
         manager.update(true);

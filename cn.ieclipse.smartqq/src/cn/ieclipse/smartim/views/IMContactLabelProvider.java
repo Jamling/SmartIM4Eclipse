@@ -35,7 +35,11 @@ public abstract class IMContactLabelProvider extends LabelProvider {
         if (obj instanceof AbstractContact) {
             AbstractContact c = (AbstractContact) obj;
             if (c.getUnread() > 0) {
-                int ch = Math.min(c.getUnread(), 9) + (int) '0';
+                // int ch = Math.min(c.getUnread(), 9) + (int) '0';
+                int ch = c.getUnread() + (int) '0';
+                if (c.getUnread() > 9) {
+                    ch = '?';
+                }
                 return LetterImageFactory.create((char) ch, SWT.COLOR_RED);
             }
         }

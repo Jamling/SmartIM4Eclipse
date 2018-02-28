@@ -1,5 +1,8 @@
 package cn.ieclipse.smartim.common;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTError;
@@ -77,11 +80,25 @@ public class LetterImageFactory {
         public static final int SHAPE_CIRCLE = 1;
         public static final int SHAPE_RECTANGE = 2;
         
+        public static Map<String, ImageData> caches = new HashMap<>();
+        
         public Product(char letter, int color, int shape, int bgColor) {
             this.mLetter = Character.toUpperCase(letter);
             this.mColor = color;
             this.mShape = shape;
             this.mBgColor = bgColor;
+        }
+        
+        public String getKey() {
+            StringBuilder sb = new StringBuilder();
+            sb.append(mLetter);
+            sb.append(' ');
+            sb.append(mColor);
+            sb.append(' ');
+            sb.append(mShape);
+            sb.append(' ');
+            sb.append(mBgColor);
+            return sb.toString();
         }
         
         public Product(char letter, int color, int shape) {
@@ -93,6 +110,11 @@ public class LetterImageFactory {
         }
         
         public ImageData getImageData() {
+            String key = getKey();
+            ImageData cache = caches.get(key);
+            if (cache != null) {
+                return cache;
+            }
             Display display = Display.getCurrent();
             if (display == null) {
                 return null;
@@ -168,6 +190,7 @@ public class LetterImageFactory {
             int backgroundPixel = data.palette.getPixel(bgColor.getRGB());
             data.transparentPixel = backgroundPixel;
             bgColor.dispose();
+            caches.put(key, data);
             return data;
         }
     }
