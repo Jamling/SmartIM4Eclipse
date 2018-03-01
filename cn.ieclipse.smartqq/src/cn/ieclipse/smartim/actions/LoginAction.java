@@ -48,6 +48,7 @@ public class LoginAction extends IMPanelAction {
                         "您已处于登录状态，确定要重新登录吗？");
             }
             if (ok) {
+                fContactView.close();
                 LoginDialog dialog = new LoginDialog(shell);
                 dialog.setClient(fContactView.getClient());
                 dialog.open();

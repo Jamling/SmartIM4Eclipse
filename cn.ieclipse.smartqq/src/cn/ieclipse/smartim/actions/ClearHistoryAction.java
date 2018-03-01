@@ -15,7 +15,7 @@
  */
 package cn.ieclipse.smartim.actions;
 
-import cn.ieclipse.smartim.htmlconsole.IMChatConsole;
+import cn.ieclipse.smartim.console.IMChatConsole;
 import icons.SmartIcons;
 
 /**

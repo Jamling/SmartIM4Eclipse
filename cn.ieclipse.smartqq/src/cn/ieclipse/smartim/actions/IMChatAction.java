@@ -17,7 +17,7 @@ package cn.ieclipse.smartim.actions;
 
 import org.eclipse.jface.action.Action;
 
-import cn.ieclipse.smartim.htmlconsole.IMChatConsole;
+import cn.ieclipse.smartim.console.IMChatConsole;
 
 /**
  * 类/接口描述

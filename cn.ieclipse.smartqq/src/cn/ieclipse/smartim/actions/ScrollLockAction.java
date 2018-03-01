@@ -2,7 +2,7 @@ package cn.ieclipse.smartim.actions;
 
 import org.eclipse.jface.action.Action;
 
-import cn.ieclipse.smartim.htmlconsole.IMChatConsole;
+import cn.ieclipse.smartim.console.IMChatConsole;
 import icons.SmartIcons;
 
 public class ScrollLockAction extends IMChatAction {

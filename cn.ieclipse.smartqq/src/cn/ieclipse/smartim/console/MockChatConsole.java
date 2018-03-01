@@ -1,4 +1,4 @@
-package cn.ieclipse.smartim.htmlconsole;
+package cn.ieclipse.smartim.console;
 
 import org.eclipse.swt.SWT;
 

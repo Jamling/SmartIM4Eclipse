@@ -2,7 +2,7 @@ package cn.ieclipse.smartim;
 
 import cn.ieclipse.smartim.callback.ReceiveCallback;
 import cn.ieclipse.smartim.common.Notifications;
-import cn.ieclipse.smartim.htmlconsole.IMChatConsole;
+import cn.ieclipse.smartim.console.IMChatConsole;
 import cn.ieclipse.smartim.model.impl.AbstractContact;
 import cn.ieclipse.smartim.model.impl.AbstractFrom;
 import cn.ieclipse.smartim.model.impl.AbstractMessage;

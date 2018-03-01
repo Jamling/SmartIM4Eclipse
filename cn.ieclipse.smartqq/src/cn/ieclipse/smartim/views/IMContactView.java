@@ -27,6 +27,7 @@ import org.eclipse.ui.part.IShowInTarget;
 import org.eclipse.ui.part.ShowInContext;
 import org.eclipse.ui.part.ViewPart;
 
+import cn.ieclipse.smartim.IMHistoryManager;
 import cn.ieclipse.smartim.IMPlugin;
 import cn.ieclipse.smartim.IMRobotCallback;
 import cn.ieclipse.smartim.IMSendCallback;
@@ -40,8 +41,8 @@ import cn.ieclipse.smartim.actions.ToggleContactsAction;
 import cn.ieclipse.smartim.callback.ModificationCallback;
 import cn.ieclipse.smartim.callback.ReceiveCallback;
 import cn.ieclipse.smartim.common.IDEUtils;
-import cn.ieclipse.smartim.htmlconsole.ClosableTabHost;
-import cn.ieclipse.smartim.htmlconsole.IMChatConsole;
+import cn.ieclipse.smartim.console.ClosableTabHost;
+import cn.ieclipse.smartim.console.IMChatConsole;
 import cn.ieclipse.smartim.model.IContact;
 import cn.ieclipse.smartim.preferences.SettingsPerferencePage;
 
@@ -376,6 +377,7 @@ public abstract class IMContactView extends ViewPart implements IShowInTarget {
                 item.dispose();
             }
         }
+        IMHistoryManager.getInstance().flush();
     }
     
     public java.util.List<IMChatConsole> getConsoleList() {

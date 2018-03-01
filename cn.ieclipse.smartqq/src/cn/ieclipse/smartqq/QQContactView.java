@@ -118,7 +118,7 @@ public class QQContactView extends IMContactView {
     }
 
     @Override
-    public cn.ieclipse.smartim.htmlconsole.IMChatConsole createConsoleUI(
+    public cn.ieclipse.smartim.console.IMChatConsole createConsoleUI(
             IContact contact) {
         return new QQChatConsole(contact, this);
     }

@@ -18,7 +18,7 @@ package cn.ieclipse.smartim.actions;
 import com.scienjus.smartqq.model.Friend;
 
 import cn.ieclipse.smartim.common.IMUtils;
-import cn.ieclipse.smartim.htmlconsole.MockChatConsole;
+import cn.ieclipse.smartim.console.MockChatConsole;
 import cn.ieclipse.smartim.views.IMContactView;
 import icons.SmartIcons;
 

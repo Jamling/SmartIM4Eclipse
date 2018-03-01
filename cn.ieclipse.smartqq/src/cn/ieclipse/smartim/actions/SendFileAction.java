@@ -18,7 +18,7 @@ package cn.ieclipse.smartim.actions;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 
-import cn.ieclipse.smartim.htmlconsole.IMChatConsole;
+import cn.ieclipse.smartim.console.IMChatConsole;
 import icons.SmartIcons;
 
 /**

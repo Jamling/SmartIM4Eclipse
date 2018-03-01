@@ -18,9 +18,9 @@ package cn.ieclipse.smartim;
 import cn.ieclipse.smartim.callback.SendCallback;
 import cn.ieclipse.smartim.common.IMUtils;
 import cn.ieclipse.smartim.common.Notifications;
+import cn.ieclipse.smartim.console.IMChatConsole;
 import cn.ieclipse.smartim.exception.HttpException;
 import cn.ieclipse.smartim.exception.LogicException;
-import cn.ieclipse.smartim.htmlconsole.IMChatConsole;
 import cn.ieclipse.smartim.views.IMContactView;
 
 /**

@@ -43,7 +43,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.wb.swt.SWTResourceManager;
 
-import cn.ieclipse.smartim.htmlconsole.IMChatConsole;
+import cn.ieclipse.smartim.console.IMChatConsole;
 import cn.ieclipse.smartim.views.IMContactView;
 import cn.ieclipse.smartqq.QQContactView;
 import cn.ieclipse.wechat.WXContactView;
