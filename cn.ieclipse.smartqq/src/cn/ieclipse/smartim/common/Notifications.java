@@ -174,8 +174,7 @@ public class Notifications extends Shell {
     private IMContactView fContactView;
     private IContact target;
     
-    private void setTarget(IMContactView fContactView,
-            IContact target) {
+    private void setTarget(IMContactView fContactView, IContact target) {
         this.fContactView = fContactView;
         this.target = target;
     }
@@ -196,14 +195,7 @@ public class Notifications extends Shell {
     }
     
     public static void notify(final String title, final CharSequence text) {
-        IMPlugin.runOnUI(new Runnable() {
-            @Override
-            public void run() {
-                Notifications n = getInstance(null);
-                n.setTarget(null, null);
-                n.setMessage(title, text);
-            }
-        });
+        notify(null, null, title, text);
     }
     
     public static void notify(final IMContactView contactView,
@@ -212,9 +204,13 @@ public class Notifications extends Shell {
         IMPlugin.runOnUI(new Runnable() {
             @Override
             public void run() {
-                Notifications n = getInstance(null);
-                n.setTarget(contactView, target);
-                n.setMessage(title, text);
+                try {
+                    Notifications n = getInstance(null);
+                    n.setTarget(contactView, target);
+                    n.setMessage(title, text);
+                } catch (Exception e) {
+                    IMPlugin.getDefault().log("弹出通知窗口异常", e);
+                }
             }
         });
     }

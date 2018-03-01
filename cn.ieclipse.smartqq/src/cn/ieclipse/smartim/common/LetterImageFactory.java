@@ -17,10 +17,18 @@ import org.eclipse.swt.widgets.Display;
 
 public class LetterImageFactory {
     
+    private static Map<String, Image> cachedImages = new HashMap<>();
+    
     public static Image create(char letter, int color, int shape, int bg) {
         if (Display.getCurrent() != null) {
             Product p = new Product(letter, color, shape, bg);
+            String key = p.getKey();
+            Image cache = cachedImages.get(key);
+            if (cache != null) {
+                return cache;
+            }
             Image image = new Image(Display.getCurrent(), p.getImageData());
+            cachedImages.put(key, image);
             return image;
         }
         return null;
@@ -80,8 +88,6 @@ public class LetterImageFactory {
         public static final int SHAPE_CIRCLE = 1;
         public static final int SHAPE_RECTANGE = 2;
         
-        public static Map<String, ImageData> caches = new HashMap<>();
-        
         public Product(char letter, int color, int shape, int bgColor) {
             this.mLetter = Character.toUpperCase(letter);
             this.mColor = color;
@@ -110,11 +116,6 @@ public class LetterImageFactory {
         }
         
         public ImageData getImageData() {
-            String key = getKey();
-            ImageData cache = caches.get(key);
-            if (cache != null) {
-                return cache;
-            }
             Display display = Display.getCurrent();
             if (display == null) {
                 return null;
@@ -190,7 +191,6 @@ public class LetterImageFactory {
             int backgroundPixel = data.palette.getPixel(bgColor.getRGB());
             data.transparentPixel = backgroundPixel;
             bgColor.dispose();
-            caches.put(key, data);
             return data;
         }
     }
