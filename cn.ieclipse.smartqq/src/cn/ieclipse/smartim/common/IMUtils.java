@@ -165,6 +165,13 @@ public class IMUtils {
                         continue;
                     }
                 }
+                String rg = UCS_REGEX.matcher(g).replaceAll("$1");
+                String ucs = "";
+                if (g.length() > rg.length()) {
+                    ucs = g.substring(rg.length());
+                    g = rg;
+                    e = e - ucs.length();
+                }
                 sb.delete(pos, offset + e);
                 String ng = g;
                 if (IMG_EXTS.indexOf(
@@ -192,4 +199,16 @@ public class IMUtils {
             "gif", "webp");
     public static final String CODE_REGEX = "Code: [\\S ]+:[\\d]+ ?";
     public static final String LINK_REGEX = "(https?|ftp|file)://(([\\w-~]+).)+([\\w-~\\/])+(((?!\\.)(\\S))+(\\.\\w+(\\?(\\w+=\\S&?)*)?)?)?";
+    public static final String UCS_CHAR = "[" + "\u00A0-\uD7FF"
+            + "\uF900-\uFDCF" + "\uFDF0-\uFFEF" + "\uD800\uDC00-\uD83F\uDFFD"
+            + "\uD840\uDC00-\uD87F\uDFFD" + "\uD880\uDC00-\uD8BF\uDFFD"
+            + "\uD8C0\uDC00-\uD8FF\uDFFD" + "\uD900\uDC00-\uD93F\uDFFD"
+            + "\uD940\uDC00-\uD97F\uDFFD" + "\uD980\uDC00-\uD9BF\uDFFD"
+            + "\uD9C0\uDC00-\uD9FF\uDFFD" + "\uDA00\uDC00-\uDA3F\uDFFD"
+            + "\uDA40\uDC00-\uDA7F\uDFFD" + "\uDA80\uDC00-\uDABF\uDFFD"
+            + "\uDAC0\uDC00-\uDAFF\uDFFD" + "\uDB00\uDC00-\uDB3F\uDFFD"
+            + "\uDB44\uDC00-\uDB7F\uDFFD"
+            + "&&[^\u00A0[\u2000-\u200A]\u2028\u2029\u202F\u3000]]";
+    public static final Pattern UCS_REGEX = Pattern
+            .compile("(.+?)(" + UCS_CHAR + "+$)");
 }
