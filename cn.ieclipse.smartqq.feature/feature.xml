@@ -2,7 +2,7 @@
 <feature
       id="cn.ieclipse.smartqq.feature"
       label="SmartQQ Feature"
-      version="3.0.4.qualifier"
+      version="3.1.0.qualifier"
       provider-name="ieclipse.cn"
       plugin="cn.ieclipse.smartqq">
 
@@ -38,6 +38,7 @@
       <import plugin="ch.qos.logback.core"/>
       <import plugin="org.eclipse.ui.browser"/>
       <import plugin="cn.ieclipse.pde.explorer" version="4.1.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.workbench"/>
    </requires>
 
    <plugin

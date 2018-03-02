@@ -84,7 +84,7 @@ public class IMHistoryManager {
                     fs.flush();
                 }
             }
+            stores.clear();
         }
-        stores.clear();
     }
 }

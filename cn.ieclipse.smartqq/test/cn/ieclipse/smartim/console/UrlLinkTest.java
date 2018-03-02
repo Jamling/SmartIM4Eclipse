@@ -11,6 +11,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import cn.ieclipse.smartim.common.IMUtils;
 import cn.ieclipse.util.Patterns;
 
 public class UrlLinkTest {
@@ -40,7 +41,7 @@ public class UrlLinkTest {
                 System.out.println(url);
                 assertTrue("Matches", true);
                 
-                String chstr = "(.+?)(" + UCS_CHAR + "+$)";
+                String chstr = "(.+?)(" + IMUtils.UCS_CHAR + "+$)";
                 System.out.println(url.replaceAll(chstr, "$1"));
             }
             else {
@@ -48,15 +49,4 @@ public class UrlLinkTest {
             }
         }
     }
-    
-    public static final String UCS_CHAR = "[" + "\u00A0-\uD7FF"
-            + "\uF900-\uFDCF" + "\uFDF0-\uFFEF" + "\uD800\uDC00-\uD83F\uDFFD"
-            + "\uD840\uDC00-\uD87F\uDFFD" + "\uD880\uDC00-\uD8BF\uDFFD"
-            + "\uD8C0\uDC00-\uD8FF\uDFFD" + "\uD900\uDC00-\uD93F\uDFFD"
-            + "\uD940\uDC00-\uD97F\uDFFD" + "\uD980\uDC00-\uD9BF\uDFFD"
-            + "\uD9C0\uDC00-\uD9FF\uDFFD" + "\uDA00\uDC00-\uDA3F\uDFFD"
-            + "\uDA40\uDC00-\uDA7F\uDFFD" + "\uDA80\uDC00-\uDABF\uDFFD"
-            + "\uDAC0\uDC00-\uDAFF\uDFFD" + "\uDB00\uDC00-\uDB3F\uDFFD"
-            + "\uDB44\uDC00-\uDB7F\uDFFD"
-            + "&&[^\u00A0[\u2000-\u200A]\u2028\u2029\u202F\u3000]]";
 }

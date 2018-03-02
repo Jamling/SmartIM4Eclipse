@@ -26,50 +26,6 @@
       </view>
    </extension>
    <extension
-         point="org.eclipse.ui.console.consolePageParticipants">
-      <consolePageParticipant
-            class="cn.ieclipse.smartim.console.IMChatConsolePageParticipant"
-            id="cn.ieclipse.smartqq.consolePageParticipant1">
-         <enablement>
-            <instanceof
-                  value="cn.ieclipse.smartim.console.IMChatConsole">
-            </instanceof></enablement>
-      </consolePageParticipant>
-   </extension>
-   <extension
-         point="org.eclipse.ui.console.consolePatternMatchListeners">
-      <consolePatternMatchListener
-            class="cn.ieclipse.smartim.console.SenderMatchDelegate"
-            flags="Pattern.MULTILINE"
-            id="cn.ieclipse.smartqq.consolePatternMatchListener1"
-            regex="^\d{2}:\d{2}:\d{2} [^:]+: ">
-         <enablement>
-            <instanceof
-                  value="cn.ieclipse.smartim.console.IMChatConsole">
-            </instanceof></enablement>
-      </consolePatternMatchListener>
-      <consolePatternMatchListener
-            class="cn.ieclipse.smartim.console.UrlMatchDelegate"
-            id="cn.ieclipse.smartqq.consolePatternMatchListener2"
-            regex="(https?|ftp|file)://[-a-zA-Z0-9+&amp;@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&amp;@#/%=~_|]">
-         <enablement>
-             <instanceof
-                  value="cn.ieclipse.smartim.console.IMChatConsole">
-            </instanceof>
-         </enablement>
-      </consolePatternMatchListener>
-      <consolePatternMatchListener
-            class="cn.ieclipse.smartim.console.ReviewMatchDelegate"
-            id="cn.ieclipse.smartqq.consolePatternMatchListener3"
-            qualifier="Code: "
-            regex="Code: [\S ]+:[\d]+ ?">
-         <enablement>
-            <instanceof
-                  value="cn.ieclipse.smartim.console.IMChatConsole">
-            </instanceof></enablement>
-      </consolePatternMatchListener>
-   </extension>
-   <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
             class="cn.ieclipse.smartim.preferences.PreferenceInitializer">
