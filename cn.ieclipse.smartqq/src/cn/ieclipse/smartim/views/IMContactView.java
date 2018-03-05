@@ -18,8 +18,6 @@ import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.TabFolder;
-import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.part.DrillDownAdapter;
@@ -69,7 +67,7 @@ public abstract class IMContactView extends ViewPart implements IShowInTarget {
     protected boolean updateContactsOnlyFocus = false;
     
     protected SashForm sashForm;
-    protected TabFolder tabFolder;
+    protected CTabFolder tabFolder;
     protected CTabFolder tabbedChat;
     
     protected String viewId;
@@ -91,11 +89,16 @@ public abstract class IMContactView extends ViewPart implements IShowInTarget {
         contributeToActionBars();
         
         sashForm = new SashForm(parent, SWT.SMOOTH);
-        tabFolder = new TabFolder(sashForm, SWT.NONE);
+        tabFolder = new CTabFolder(sashForm, SWT.NONE);
+        tabFolder.setBorderVisible(true);
+        tabFolder.setBackgroundMode(SWT.INHERIT_FORCE);
         tabbedChat = new ClosableTabHost(sashForm);
+        tabbedChat.setBorderVisible(true);
+        tabbedChat.setBackgroundMode(SWT.INHERIT_FORCE);
         
-        sashForm.setBackground(
-                IMPlugin.getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
+//        sashForm.setBackground(
+//                IMPlugin.getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
+//        tabFolder.setBackground(sashForm.getBackground());
         sashForm.setWeights(new int[] { 4, 10 });
         sashForm.setSashWidth(6);
     }
@@ -229,8 +232,8 @@ public abstract class IMContactView extends ViewPart implements IShowInTarget {
         return false;
     }
     
-    protected TreeViewer createTab(String name, TabFolder tabFolder) {
-        TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
+    protected TreeViewer createTab(String name, CTabFolder tabFolder) {
+        CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
         tabItem.setText(name);
         Composite composite = new Composite(tabFolder, SWT.NONE);
         tabItem.setControl(composite);

@@ -2,15 +2,12 @@ package cn.ieclipse.smartim.console;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
-import org.eclipse.swt.custom.CTabFolder2Adapter;
-import org.eclipse.swt.custom.CTabFolderEvent;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.wb.swt.SWTResourceManager;
 
 import cn.ieclipse.smartim.IMPlugin;
 import cn.ieclipse.smartim.views.IMContactView;
@@ -30,13 +27,7 @@ public class ClosableTabHost extends CTabFolder {
         setUnselectedImageVisible(true);
         setUnselectedCloseVisible(false);
         // setSimple(false);
-        setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-        addCTabFolder2Listener(new CTabFolder2Adapter() {
-            @Override
-            public void showList(CTabFolderEvent event) {
-            
-            }
-        });
+        // setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
         addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {

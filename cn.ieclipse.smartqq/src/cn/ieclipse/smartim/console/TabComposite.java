@@ -17,6 +17,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseMoveListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -29,6 +30,7 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import cn.ieclipse.smartim.IMPlugin;
+import cn.ieclipse.smartim.common.IDEUtils;
 import cn.ieclipse.smartim.preferences.HotKeyFieldEditor;
 import cn.ieclipse.smartim.preferences.HotKeyPreferencePage;
 import cn.ieclipse.util.StringUtils;
@@ -44,7 +46,6 @@ public class TabComposite extends Composite {
     
     public TabComposite(IMChatConsole console) {
         this(console.getParent());
-        this.console = console;
         new HistoryOperation(browser, console, text);
     }
     
@@ -99,9 +100,9 @@ public class TabComposite extends Composite {
         sashForm.setWeights(new int[] { 100, 1 });
         sashForm.pack();
         sashForm.layout();
-        sashForm.setBackground(
-                SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-        setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+//        sashForm.setBackground(
+//                SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+//        setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
         
         text.addKeyListener(inputListener);
         text.setBackground(
@@ -127,6 +128,12 @@ public class TabComposite extends Composite {
             @Override
             public void completed(ProgressEvent event) {
                 prepared = true;
+                Color bg = IDEUtils.getEditorBack();
+                String bgs = IDEUtils.getHtmlColor(bg);
+                Color fg = IDEUtils.getEditorFore();
+                String fgs = IDEUtils.getHtmlColor(fg);
+                browser.execute(
+                        String.format("init_color('%s', '%s')", fgs, bgs));
             }
             
             @Override

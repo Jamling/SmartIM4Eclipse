@@ -17,7 +17,7 @@
    div.error {color: red;}
    .sender {float: left;}
    .sender a {font-weight: bold;}
-   .content {display: inline-block;}
+   .content {display: inline-block; white-space: pre; word-wrap:break-word; padding-left: 4px;}
   </style>
   <script>
   function add_log(text, end) {
@@ -35,6 +35,11 @@
   function scrollToEnd() {
     var h = $(document).height() - $(window).height();
     $(document).scrollTop(h); 
+  }
+  
+  function init_color(fg, bg) {
+    $('body').css('background-color', bg);
+    $('body').css('color', fg);
   }
   $(document).ready(function() {
 	try
