@@ -37,6 +37,15 @@ Intellij IDEA上的插件请移步这里: https://github.com/Jamling/SmartQQ4Int
 
 ## 安装
 
+从3.0开始，本插件依赖于[Eclipse Explorer插件]，如果安装时提示缺失[Eclipse Explorer]插件
+```
+Cannot complete the install because one or more required items could not be found.
+Software being installed: SmartQQ Feature 3.1.0.201803020925 (cn.ieclipse.smartqq.feature.feature.group 3.1.0.201803020925)
+Missing requirement: SmartQQ Feature 3.1.0.201803020925 (cn.ieclipse.smartqq.feature.feature.group 3.1.0.201803020925)
+requires 'cn.ieclipse.pde.explorer 4.1.0' but it could not be found
+```
+请先安装[Eclipse Explorer]插件或手动添加http://dl.ieclipse.cn/updates更新站点后再安装SmartQQ
+
 ### Eclipse Marketplace
 
 1. 点击Eclipse->Help->Eclipse Marketplace...打开eclipse插件市场
@@ -95,3 +104,5 @@ Intellij IDEA上的插件请移步这里: https://github.com/Jamling/SmartQQ4Int
 任何问题包括建议均可以在[Issue](https://github.com/Jamling/SmartQQ4Eclipse/issues)中提交
 
 如果为Issue，建议带上eclipse版本及本插件版本信息（可以在Preference->SmartQQ中查看并复制版本信息）
+
+[Eclipse Explorer](https://github.com/Jamling/eclipse-explorer)
