@@ -64,6 +64,7 @@ public class WXContactView extends IMContactView {
         ftvFriend = createTab("Chats", tabFolder);
         ftvGroup = createTab("Contacts", tabFolder);
         ftvPublic = createTab("Publics", tabFolder);
+        tabFolder.setSelection(0);
         initTrees(ftvFriend, ftvGroup, ftvPublic);
     }
     

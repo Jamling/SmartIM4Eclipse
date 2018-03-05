@@ -46,6 +46,7 @@ public class TabComposite extends Composite {
     
     public TabComposite(IMChatConsole console) {
         this(console.getParent());
+        this.console = console;
         new HistoryOperation(browser, console, text);
     }
     
