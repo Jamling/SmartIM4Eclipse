@@ -15,10 +15,10 @@ import cn.ieclipse.smartim.IMHistoryManager;
 import cn.ieclipse.smartim.IMPlugin;
 import cn.ieclipse.smartim.SmartClient;
 import cn.ieclipse.smartim.actions.ClearHistoryAction;
-import cn.ieclipse.smartim.actions.SendProjectFileAction;
 import cn.ieclipse.smartim.actions.ScrollLockAction;
 import cn.ieclipse.smartim.actions.SendFileAction;
 import cn.ieclipse.smartim.actions.SendImageAction;
+import cn.ieclipse.smartim.actions.SendProjectFileAction;
 import cn.ieclipse.smartim.common.IDEUtils;
 import cn.ieclipse.smartim.common.IMUtils;
 import cn.ieclipse.smartim.dialogs.OpenFileDialog;
@@ -91,7 +91,9 @@ public abstract class IMChatConsole extends CTabItem {
         if (client != null) {
             List<String> ms = IMHistoryManager.getInstance().load(client,
                     getHistoryFile());
-            for (String raw : ms) {
+            int size = ms.size();
+            for (int i = 0; i < size; i++) {
+                String raw = ms.get(i);
                 if (!IMUtils.isEmpty(raw)) {
                     try {
                         loadHistory(raw);

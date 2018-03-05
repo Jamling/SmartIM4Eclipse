@@ -90,8 +90,8 @@ public class IMUtils {
     
     public static String formatHtmlMsg(String msg, boolean encodeHtml) {
         // TODO only replace the non-html tag space;
-        String m = encodeHtml(msg).replace(" ", "&nbsp;").replaceAll("\r?\n",
-                "<br/>");
+        String m = encodeHtml(msg);
+        m = m.replaceAll("\r?\n", "<br/>");
         String content = encodeHtml ? autoLink(autoReviewLink(m)) : m;
         return content;
     }
@@ -151,6 +151,17 @@ public class IMUtils {
                 int s = starts.get(i);
                 int e = ends.get(i);
                 String g = groups.get(i);
+                String http = null;
+                if (!g.matches(Patterns.PROTOCOL)) {
+                    boolean f = g.startsWith("www.") || g.endsWith(".com")
+                            || g.endsWith(".cn");
+                    if (!f) {
+                        continue;
+                    }
+                    else {
+                        http = "http://";
+                    }
+                }
                 
                 int pos = offset + s;
                 if (pos > 2) {
@@ -173,15 +184,16 @@ public class IMUtils {
                     e = e - ucs.length();
                 }
                 sb.delete(pos, offset + e);
+                String link = http == null ? g : http + g;
                 String ng = g;
                 if (IMG_EXTS.indexOf(
                         FileUtils.getExtension(g).toLowerCase()) >= 0) {
                     ng = String.format(
                             "<a href=\"%s\"><img src=\"%s\" alt=\"%s\" border=\"0\"/></a>",
-                            g, g, g);
+                            link, link, g);
                 }
                 else {
-                    ng = String.format("<a href=\"%s\">%s</a>", g, g);
+                    ng = String.format("<a href=\"%s\">%s</a>", link, g);
                 }
                 sb.insert(pos, ng);
                 offset += ng.length() - g.length();
