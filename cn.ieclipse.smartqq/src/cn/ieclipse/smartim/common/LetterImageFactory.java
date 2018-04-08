@@ -14,6 +14,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 public class LetterImageFactory {
     
@@ -136,12 +137,12 @@ public class LetterImageFactory {
             int w = mWidth - mBorderWidth;
             int h = mHeight - mBorderWidth;
             
-            Color bgColor = display.getSystemColor(this.mBgColor);
+            Color bgColor = SWTResourceManager.getColor(this.mBgColor);
             
             gc.setBackground(bgColor);
             gc.fillRectangle(0, 0, w, h);
             
-            // gc.setBackground(display.getSystemColor(SWT.COLOR_WHITE));
+            // gc.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
             // if (this.mShape == SHAPE_CIRCLE) {
             // gc.fillOval(0, 0, w, h);
             // }
@@ -149,7 +150,7 @@ public class LetterImageFactory {
             // gc.fillRoundRectangle(0, 0, w, h, mRadius, mRadius);
             // }
             
-            gc.setForeground(display.getSystemColor(mColor));
+            gc.setForeground(SWTResourceManager.getColor(mColor));
             gc.setLineWidth(mBorderWidth);
             if (this.mShape == SHAPE_CIRCLE) {
                 gc.drawOval(0, 0, w, h);
@@ -158,18 +159,17 @@ public class LetterImageFactory {
                 gc.drawRoundRectangle(0, 0, w, h, mRadius, mRadius);
             }
             else {
-                
+            
             }
             
             Font font = display.getSystemFont();
-            FontData[] fds = font.getFontData();
-            fds[0].setStyle(SWT.BOLD);
-            
-            fds[0].setHeight((int) (864.0D / display.getDPI().y));
-            
-            font = new Font(display, fds);
+            // FontData[] fds = font.getFontData();
+            // fds[0].setStyle();
+            // fds[0].setHeight();
+            int height = (int) (864.0D / display.getDPI().y);
+            font = SWTResourceManager.getFont("Arial", height, SWT.BOLD);
             gc.setFont(font);
-            gc.setForeground(display.getSystemColor(this.mColor));
+            gc.setForeground(SWTResourceManager.getColor(this.mColor));
             
             int ofx = 1;
             int ofy = -1;
@@ -194,4 +194,5 @@ public class LetterImageFactory {
             return data;
         }
     }
+    
 }

@@ -48,6 +48,7 @@ public class QQContactView extends IMContactView {
         ftvFriend = createTab("Friends", tabFolder);
         ftvGroup = createTab("Groups", tabFolder);
         ftvDiscuss = createTab("Discuss", tabFolder);
+        tabFolder.setSelection(0);
         
         initTrees(ftvRecent, ftvFriend, ftvGroup, ftvDiscuss);
     }

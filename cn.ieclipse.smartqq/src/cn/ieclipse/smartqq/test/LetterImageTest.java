@@ -39,7 +39,7 @@ public class LetterImageTest extends Shell {
     public LetterImageTest(Display display) {
         super(display, SWT.SHELL_TRIM);
         setLayout(new GridLayout(20, true));
-        int start = 0xe100;
+        int start = 0x0;
         for (int i = start; i < start + 256; i++) {
             Label lblNewLabel = new Label(this, SWT.NONE);
             lblNewLabel.setImage(
