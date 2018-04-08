@@ -6,6 +6,7 @@ import java.util.Map;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTError;
+import org.eclipse.swt.SWTException;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
@@ -142,14 +143,6 @@ public class LetterImageFactory {
             gc.setBackground(bgColor);
             gc.fillRectangle(0, 0, w, h);
             
-            // gc.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-            // if (this.mShape == SHAPE_CIRCLE) {
-            // gc.fillOval(0, 0, w, h);
-            // }
-            // else if (this.mShape == SHAPE_RECTANGE) {
-            // gc.fillRoundRectangle(0, 0, w, h, mRadius, mRadius);
-            // }
-            
             gc.setForeground(SWTResourceManager.getColor(mColor));
             gc.setLineWidth(mBorderWidth);
             if (this.mShape == SHAPE_CIRCLE) {
@@ -163,12 +156,13 @@ public class LetterImageFactory {
             }
             
             Font font = display.getSystemFont();
-            // FontData[] fds = font.getFontData();
-            // fds[0].setStyle();
-            // fds[0].setHeight();
+            FontData[] fds = font.getFontData();
+            fds[0].setStyle(SWT.BOLD);
             int height = (int) (864.0D / display.getDPI().y);
-            font = SWTResourceManager.getFont("Arial", height, SWT.BOLD);
+            fds[0].setHeight(height);
+            font = new Font(display, fds);
             gc.setFont(font);
+            
             gc.setForeground(SWTResourceManager.getColor(this.mColor));
             
             int ofx = 1;
@@ -190,7 +184,7 @@ public class LetterImageFactory {
             image.dispose();
             int backgroundPixel = data.palette.getPixel(bgColor.getRGB());
             data.transparentPixel = backgroundPixel;
-            bgColor.dispose();
+            // bgColor.dispose();
             return data;
         }
     }
