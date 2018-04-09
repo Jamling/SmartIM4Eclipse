@@ -68,7 +68,7 @@ public class TabComposite extends Composite {
         
         toolBar = new ToolBar(this, SWT.FLAT | SWT.VERTICAL);
         toolBar.setBackground(SWTResourceManager
-                .getColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
+                .getColor(SWT.COLOR_WIDGET_BACKGROUND));
         toolBar.setLayoutData(
                 new GridData(SWT.CENTER, SWT.FILL, false, false, 1, 1));
                 
@@ -103,7 +103,7 @@ public class TabComposite extends Composite {
         sashForm.layout();
 //        sashForm.setBackground(
 //                SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-//        setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+        setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
         
         text.addKeyListener(inputListener);
         text.setBackground(
@@ -146,9 +146,12 @@ public class TabComposite extends Composite {
             
             @Override
             public void changing(LocationEvent event) {
+                String url = event.location;
+                if (url.startsWith("about:")) {
+                    return;
+                }
                 event.doit = false;
                 if (console != null) {
-                    String url = event.location;
                     if (url.startsWith("user://") && url.endsWith("/")) {
                         url = url.substring(0, url.length() - 1);
                     }
