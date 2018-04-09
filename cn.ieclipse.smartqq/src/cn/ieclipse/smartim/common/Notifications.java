@@ -1,5 +1,6 @@
 package cn.ieclipse.smartim.common;
 
+import java.lang.reflect.Method;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -32,18 +33,15 @@ public class Notifications extends Shell {
     public static void main(String args[]) {
         try {
             final Display display = Display.getDefault();
-            new Thread() {
+            Notifications.getInstance(new Shell(display)).setMock(true)
+                    .setMessage(null, "test");
+            IMPlugin.runOnUI(new Runnable() {
+                
+                @Override
                 public void run() {
-                    IMPlugin.runOnUI(new Runnable() {
-                        
-                        @Override
-                        public void run() {
-                            Notifications.getInstance(new Shell(display))
-                                    .setMessage(null, "test");
-                        }
-                    });
-                };
-            }.start();
+                    System.out.println("UI Thread");
+                }
+            });
             if (!display.readAndDispatch()) {
                 display.sleep();
             }
@@ -64,9 +62,17 @@ public class Notifications extends Shell {
     public Notifications(Display display) {
         super(display, SWT.ON_TOP | SWT.CLOSE | SWT.TITLE);
         try {
-            org.eclipse.swt.internal.win32.OS.SetWindowPos(this.handle,
-                    org.eclipse.swt.internal.win32.OS.HWND_TOPMOST, 0, 0, 0, 0,
-                    SWT.NULL);
+            Class<?> clazz = Class.forName("org.eclipse.swt.internal.win32.OS");
+            if (clazz != null) {
+                long top = clazz.getField("HWND_TOPMOST").getLong(null);
+                Method m = clazz.getMethod("SetWindowPos", long.class,
+                        long.class, int.class, int.class, int.class, int.class,
+                        int.class);
+                m.invoke(null, this.handle, top, 0, 0, 0, 0, 0);
+                // org.eclipse.swt.internal.win32.OS.SetWindowPos(this.handle,
+                // org.eclipse.swt.internal.win32.OS.HWND_TOPMOST, 0, 0, 0,
+                // 0, SWT.NULL);
+            }
         } catch (Exception e) {
             // do nothing
         }
@@ -127,17 +133,23 @@ public class Notifications extends Shell {
         // Disable the check that prevents subclassing of SWT components
     }
     
+    private Notifications setMock(boolean mock) {
+        this.mock = mock;
+        return this;
+    }
+    
     public void setMessage(final String title, final CharSequence text) {
-        final boolean enable = IMPlugin.getDefault().getPreferenceStore()
-                .getBoolean(SettingsPerferencePage.NOTIFY_ENABLE);
-        final int dismiss = IMPlugin.getDefault().getPreferenceStore()
-                .getInt(SettingsPerferencePage.NOTIFY_DISMISS);
+        final boolean enable = mock ? true
+                : IMPlugin.getDefault().getPreferenceStore()
+                        .getBoolean(SettingsPerferencePage.NOTIFY_ENABLE);
+        final int dismiss = mock ? 5
+                : IMPlugin.getDefault().getPreferenceStore()
+                        .getInt(SettingsPerferencePage.NOTIFY_DISMISS);
         if (!enable) {
             return;
         }
         
         doSetMessage(title, text);
-        // int dismiss = 5;
         if (dismiss > 0) {
             long delay = dismiss * 1000;
             if (timer != null) {
@@ -173,6 +185,7 @@ public class Notifications extends Shell {
     
     private IMContactView fContactView;
     private IContact target;
+    private boolean mock;
     
     private void setTarget(IMContactView fContactView, IContact target) {
         this.fContactView = fContactView;
