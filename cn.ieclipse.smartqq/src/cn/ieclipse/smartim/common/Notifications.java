@@ -1,12 +1,8 @@
 package cn.ieclipse.smartim.common;
 
-import java.awt.Insets;
-import java.awt.Toolkit;
 import java.lang.reflect.Method;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import javax.swing.JFrame;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.SWT;
@@ -40,9 +36,9 @@ public class Notifications extends Shell {
     public static void main(String args[]) {
         try {
             final Display display = Display.getDefault();
-//            Notifications.getInstance(new Shell(display)).setMock(true)
-//                    .setMessage(null, "test");
-//            Notifications.notify("title", "message");
+            // Notifications.getInstance(new Shell(display)).setMock(true)
+            // .setMessage(null, "test");
+            // Notifications.notify("title", "message");
             Notifications instance = new Notifications(display);
             instance.open();
             instance.layout();
@@ -69,7 +65,7 @@ public class Notifications extends Shell {
      * @wbp.parser.constructor
      */
     public Notifications(Display display) {
-	this(display, SWT.ON_TOP | SWT.CLOSE | SWT.TITLE);
+        this(display, SWT.ON_TOP | SWT.CLOSE | SWT.TITLE);
     }
     
     /**
@@ -107,18 +103,19 @@ public class Notifications extends Shell {
         setSize(300, 150);
         
         setLayout(new GridLayout(2, false));
-        if (Platform.OS_LINUX.equals(Platform.getOS()))
-        {
+        if (Platform.OS_LINUX.equals(Platform.getOS())) {
             fIcon = new Label(this, SWT.NONE);
-            fIcon.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-            fIcon.setImage(SWTResourceManager.getImage(org.eclipse.ui.IWorkbench.class, 
-        	    "/icons/full/etool16/delete_edit.png"));
+            fIcon.setLayoutData(
+                    new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+            fIcon.setImage(
+                    SWTResourceManager.getImage(org.eclipse.ui.IWorkbench.class,
+                            "/icons/full/etool16/delete_edit.png"));
             fIcon.addMouseListener(new MouseAdapter() {
-        	@Override
-        	public void mouseDown(MouseEvent e) {
-        	    setVisible(false);
-        	}
-	    });
+                @Override
+                public void mouseDown(MouseEvent e) {
+                    setVisible(false);
+                }
+            });
             
             fTitle = new Label(this, SWT.NONE);
             fTitle.setText("通知");
@@ -157,10 +154,13 @@ public class Notifications extends Shell {
             }
         });
         
-        Insets sd = Toolkit.getDefaultToolkit().getScreenInsets(
-        	new JFrame().getGraphicsConfiguration());
+        
         Rectangle screen = Display.getDefault().getClientArea();
-        screen.height = screen.height - sd.bottom;
+        if (Platform.OS_LINUX.equals(Platform.getOS())) {
+            java.awt.Insets sd = java.awt.Toolkit.getDefaultToolkit()
+                    .getScreenInsets(new java.awt.Frame().getGraphicsConfiguration());
+            screen.height = screen.height - sd.bottom;
+        }
         ta = new TranslateAnimation(screen.width, screen.width - getSize().x,
                 screen.height, screen.height - getSize().y).setTarget(this)
                         .setDuration(300);
@@ -219,7 +219,7 @@ public class Notifications extends Shell {
         if (title != null) {
             this.setText(title);
             if (fTitle != null) {
-        	fTitle.setText(title);
+                fTitle.setText(title);
             }
         }
         this.fText.setText(text == null ? "" : text.toString());

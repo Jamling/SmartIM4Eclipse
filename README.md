@@ -101,8 +101,14 @@ requires 'cn.ieclipse.pde.explorer 4.1.0' but it could not be found
 
 ## 问题提交
 
+提交问题前，请参考[常见问题](https://github.com/Jamling/SmartIM/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98)
+
 任何问题包括建议均可以在[Issue](https://github.com/Jamling/SmartQQ4Eclipse/issues)中提交
 
 如果为Issue，建议带上eclipse版本及本插件版本信息（可以在Preference->SmartQQ中查看并复制版本信息）
+
+## 开发
+
+如果您对本项目感兴趣，请fork本项目，源代码下载完成之后，会有编译错误，需要将依赖的smartim-core等三个工程从build path中移除，并将libs下的core-x.x.x.jar, smartqq-x.x.x.jar, wechat.x.x.x.jar添加到build path.
 
 [Eclipse Explorer]: https://github.com/Jamling/eclipse-explorer
