@@ -31,6 +31,7 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 import cn.ieclipse.smartim.IMPlugin;
 import cn.ieclipse.smartim.common.IDEUtils;
+import cn.ieclipse.smartim.common.IMUtils;
 import cn.ieclipse.smartim.preferences.HotKeyFieldEditor;
 import cn.ieclipse.smartim.preferences.HotKeyPreferencePage;
 import cn.ieclipse.util.StringUtils;
@@ -327,7 +328,13 @@ public class TabComposite extends Composite {
         if (!browser.execute(text)) {
             if (!browser.execute(
                     "add_log('<div class=\"error\">添加到聊天记录失败，可能是因为消息中包含某些特殊字符引</div>', true)")) {
-                IMPlugin.getDefault().log("添加聊天记录 " + msg + " 失败");
+                String plain = msg;
+                try {
+                    plain = IMUtils.HTML_TAG_REGEX.matcher(msg).replaceAll("");
+                } catch (Exception e) {
+                    
+                }
+                IMPlugin.getDefault().warn("添加聊天记录 " + plain + " 失败");
             }
         }
     }

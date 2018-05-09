@@ -223,4 +223,6 @@ public class IMUtils {
             + "&&[^\u00A0[\u2000-\u200A]\u2028\u2029\u202F\u3000]]";
     public static final Pattern UCS_REGEX = Pattern
             .compile("(.+?)(" + UCS_CHAR + "+$)");
+    public static final Pattern HTML_TAG_REGEX = Pattern
+            .compile("<[^>]+>", Pattern.MULTILINE);
 }

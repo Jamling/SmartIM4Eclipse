@@ -120,6 +120,11 @@ public class IMPlugin extends AbstractUIPlugin {
         log(msg, null);
     }
     
+    public void warn(String msg) {
+        IStatus info = new Status(IStatus.WARNING, IMPlugin.PLUGIN_ID, msg);
+        getLog().log(info);
+    }
+    
     public static void runOnUI(Runnable runnable) {
         Display display = Display.getDefault();
         if (display != null) {
