@@ -23,10 +23,14 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -77,7 +81,7 @@ public class ReviewDialog extends Dialog {
      * @param parent
      */
     @Override
-    protected Control createDialogArea(Composite parent) {
+    protected Control createDialogArea(final Composite parent) {
         Composite container = (Composite) super.createDialogArea(parent);
         container.setLayout(new GridLayout(2, false));
         
@@ -98,19 +102,32 @@ public class ReviewDialog extends Dialog {
         
         styledText = new StyledText(container,
                 SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
-        styledText.setLayoutData(
-                new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+        GridData gd_styledText = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+        gd_styledText.minimumHeight = 100;
+        styledText.setLayoutData(gd_styledText);
                 
         initData();
         
         Label lblNewLabel_2 = new Label(container, SWT.NONE);
         lblNewLabel_2.setText("Send to");
         
-        Composite composite = new Composite(container, SWT.NONE);
+        final ScrolledComposite scrolledComposite = new ScrolledComposite(container, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+        scrolledComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+        scrolledComposite.setExpandHorizontal(true);
+        scrolledComposite.setExpandVertical(true);
+        
+        Composite composite = new Composite(scrolledComposite, SWT.NONE);
         composite.setLayout(new FillLayout(SWT.VERTICAL));
-        composite.setLayoutData(
-                new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
         createSendTarget(composite);
+        scrolledComposite.setContent(composite);
+        // scrolledComposite.setMinSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+        scrolledComposite.addControlListener(new ControlAdapter() {  
+            public void controlResized(ControlEvent e) {  
+                Rectangle r = scrolledComposite.getClientArea();  
+                scrolledComposite.setMinSize(parent.computeSize(r.width,  
+                        SWT.DEFAULT));  
+            }  
+        });
         
         return container;
     }
