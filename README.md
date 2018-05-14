@@ -29,11 +29,11 @@ Intellij IDEA上的插件请移步这里: https://github.com/Jamling/SmartQQ4Int
 | 文本消息          | Y         |          Y | Y           |
 | 聊天记录          | Y         |          Y | Y           |
 | 消息提醒          | N         |          Y | O           |
-| 接收表情          | O         |   Y        |           X |
+| 接收表情          | O         |          Y |           X |
 | 图灵机器人        | Y         |          Y |           X |
 | 发送文件          | Y         |          Y |           Y |
-| 消息群发          | Y         |          Y |            Y|
-| 代码评审          | X         |          Y |            Y|
+| 消息群发          | Y         |          Y |           Y |
+| 代码评审          | X         |          Y |           Y |
 
 ## 安装
 

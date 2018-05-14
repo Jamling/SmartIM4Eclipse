@@ -68,8 +68,8 @@ public class TabComposite extends Composite {
         setLayout(gridLayout);
         
         toolBar = new ToolBar(this, SWT.FLAT | SWT.VERTICAL);
-        toolBar.setBackground(SWTResourceManager
-                .getColor(SWT.COLOR_WIDGET_BACKGROUND));
+        toolBar.setBackground(
+                SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
         toolBar.setLayoutData(
                 new GridData(SWT.CENTER, SWT.FILL, false, false, 1, 1));
                 
@@ -102,8 +102,8 @@ public class TabComposite extends Composite {
         sashForm.setWeights(new int[] { 100, 1 });
         sashForm.pack();
         sashForm.layout();
-//        sashForm.setBackground(
-//                SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+        // sashForm.setBackground(
+        // SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
         setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
         
         text.addKeyListener(inputListener);
@@ -332,9 +332,10 @@ public class TabComposite extends Composite {
                 try {
                     plain = IMUtils.HTML_TAG_REGEX.matcher(msg).replaceAll("");
                 } catch (Exception e) {
-                    
+                
                 }
-                IMPlugin.getDefault().warn("添加聊天记录 " + plain + " 失败");
+                IMPlugin.getDefault().warn("添加聊天记录 " + plain + " 失败，估计您的浏览器内核（"
+                        + browser.getBrowserType() + "）太低，请尝试升级浏览器后再试");
             }
         }
     }
