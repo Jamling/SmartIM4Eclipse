@@ -58,4 +58,11 @@ public class WXContactLabelProvider extends IMContactLabelProvider {
         }
         return null;
     }
+    
+    public String getText(Object obj) {
+        if (obj instanceof Contact) {
+            return WXUtils.getPureName(((Contact) obj).getName());
+        }
+        return super.getText(obj);
+    }
 }

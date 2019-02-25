@@ -47,10 +47,12 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.wb.swt.SWTResourceManager;
 
+import cn.ieclipse.smartim.common.IMUtils;
 import cn.ieclipse.smartim.console.IMChatConsole;
 import cn.ieclipse.smartim.views.IMContactView;
 import cn.ieclipse.smartqq.QQContactView;
 import cn.ieclipse.wechat.WXContactView;
+import cn.ieclipse.wechat.WXUtils;
 
 /**
  * 类/接口描述
@@ -198,7 +200,11 @@ public class ReviewDialog extends Dialog {
         String msg = String.format("%s(Reviews: %s)", text.getText(),
                 styledText.getText());
         for (IMChatConsole console : consoles) {
-            console.send(msg);
+            // console.send(msg);
+            String name = console.getClient().getAccount().getName();
+            String msg2 = WXUtils.formatHtmlOutgoing(name, IMUtils.autoReviewLink(msg), false);
+            console.sendWithoutPost(msg2, true);
+            console.post(msg);
         }
         super.okPressed();
     }

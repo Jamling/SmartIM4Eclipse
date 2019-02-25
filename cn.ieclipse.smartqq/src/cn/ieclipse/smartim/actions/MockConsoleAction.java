@@ -20,6 +20,9 @@ import com.scienjus.smartqq.model.Friend;
 import cn.ieclipse.smartim.common.IMUtils;
 import cn.ieclipse.smartim.console.MockChatConsole;
 import cn.ieclipse.smartim.views.IMContactView;
+import cn.ieclipse.wechat.WXChatConsole;
+import cn.ieclipse.wechat.WXChatConsoleMock;
+import cn.ieclipse.wechat.WXContactView;
 import icons.SmartIcons;
 
 /**
@@ -43,11 +46,14 @@ public class MockConsoleAction extends IMPanelAction {
         Friend f = new Friend();
         f.setUserId(System.currentTimeMillis());
         f.setMarkname("Test" + System.currentTimeMillis());
-        MockChatConsole console = new MockChatConsole(f, fContactView);
+        MockChatConsole console = null;
+        if (fContactView instanceof WXContactView) {
+            console = new WXChatConsoleMock(f, fContactView);
+        } else {
+            console =new MockChatConsole(f, fContactView);
+        }
+        console.initMockMsg();
         fContactView.getTabbedChat().setSelection(console);
         fContactView.randBling();
-        String msg = IMUtils.formatHtmlMsg(System.currentTimeMillis(), "明月",
-                "我的未来不是梦http://www.baidu.com咕咕");
-        console.write(msg);
     }
 }

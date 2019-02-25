@@ -1,5 +1,6 @@
 package cn.ieclipse.smartim.console;
 
+import java.io.File;
 import java.util.List;
 
 import org.eclipse.jface.action.ToolBarManager;
@@ -27,6 +28,7 @@ import cn.ieclipse.smartim.model.impl.AbstractContact;
 import cn.ieclipse.smartim.views.IMContactView;
 import cn.ieclipse.util.BareBonesBrowserLaunch;
 import cn.ieclipse.util.EncodeUtils;
+import cn.ieclipse.util.StringUtils;
 
 /**
  * Created by Jamling on 2017/7/1.
@@ -71,6 +73,14 @@ public abstract class IMChatConsole extends CTabItem {
     
     public abstract void post(final String msg);
     
+    public File getHistoryDir() {
+        if (getClient() != null) {
+            return getClient().getWorkDir(IMHistoryManager.HISTORY_NAME);
+        }
+        String dir = IMPlugin.getDefault().getStateDir().getAbsolutePath();
+        return new File(dir, IMHistoryManager.HISTORY_NAME);
+    }
+    
     public String getHistoryFile() {
         return EncodeUtils.getMd5(contact.getName());
     }
@@ -89,7 +99,7 @@ public abstract class IMChatConsole extends CTabItem {
     public void loadHistories() {
         SmartClient client = getClient();
         if (client != null) {
-            List<String> ms = IMHistoryManager.getInstance().load(client,
+            List<String> ms = IMHistoryManager.getInstance().load(getHistoryDir(),
                     getHistoryFile());
             int size = ms.size();
             for (int i = 0; i < size; i++) {
@@ -106,7 +116,7 @@ public abstract class IMChatConsole extends CTabItem {
     }
     
     public void clearHistories() {
-        IMHistoryManager.getInstance().clear(getClient(), getHistoryFile());
+        IMHistoryManager.getInstance().clear(getHistoryDir(), getHistoryFile());
         composite.clearHistory();
     }
     
@@ -139,11 +149,35 @@ public abstract class IMChatConsole extends CTabItem {
             return;
         }
         String name = client.getAccount().getName();
-        String msg = IMUtils.formatHtmlMyMsg(System.currentTimeMillis(), name,
-                input);
+        String msg = formatInput(name, input);
         if (!hideMyInput()) {
             insertDocument(msg);
-            IMHistoryManager.getInstance().save(client, getHistoryFile(), msg);
+            IMHistoryManager.getInstance().save(getHistoryDir(), getHistoryFile(), msg);
+        }
+        new Thread() {
+            @Override
+            public void run() {
+                post(input);
+            }
+        }.start();
+    }
+    
+    public void sendWithoutPost(final String msg, boolean raw) {
+        if (!hideMyInput()) {
+            String name = getClient().getAccount().getName();
+            insertDocument(raw ? msg : formatInput(name, msg));
+            IMHistoryManager.getInstance().save(getHistoryDir(), getHistoryFile(), msg);
+        }
+    }
+    
+    public void send(final String input, final String msg) {
+        SmartClient client = getClient();
+        if (!checkClient(client)) {
+            return;
+        }
+        if (!hideMyInput()) {
+            insertDocument(msg);
+            IMHistoryManager.getInstance().save(getHistoryDir(), getHistoryFile(), msg);
         }
         new Thread() {
             @Override
@@ -171,6 +205,14 @@ public abstract class IMChatConsole extends CTabItem {
     
     protected void sendFileInternal(final String file) throws Exception {
     
+    }
+    protected String encodeInput(String input) {
+        return StringUtils.encodeXml(input);
+    }
+    // 组装成我输入的历史记录，并显示在聊天窗口中
+    protected String formatInput(String name, String msg) {
+        return IMUtils.formatHtmlMyMsg(System.currentTimeMillis(), name,
+                msg);
     }
     
     public void error(Throwable e) {
@@ -229,7 +271,9 @@ public abstract class IMChatConsole extends CTabItem {
     }
     
     protected void initHistoryWidget() {
-    
+        if (!StringUtils.isEmpty(imPanel.getWelcome())) {
+            insertDocument(imPanel.getWelcome());
+        }
     }
     
     protected boolean hyperlinkActivated(String desc) {

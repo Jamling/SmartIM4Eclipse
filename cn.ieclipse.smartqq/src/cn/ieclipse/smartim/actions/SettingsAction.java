@@ -34,8 +34,8 @@ import icons.SmartIcons;
  * @date 2017年6月20日
  *       
  */
-public class SettingAction extends IMPanelAction {
-    public SettingAction(IMContactView contactView) {
+public class SettingsAction extends IMPanelAction {
+    public SettingsAction(IMContactView contactView) {
         super(contactView);
         setText("Settings");
         setToolTipText("Settings & Helps");

@@ -22,6 +22,7 @@ import cn.ieclipse.smartim.IMClientFactory;
 import cn.ieclipse.smartim.IMPlugin;
 import cn.ieclipse.smartim.IMSendCallback;
 import cn.ieclipse.smartim.console.IMChatConsole;
+import cn.ieclipse.smartim.handler.MessageInterceptor;
 import cn.ieclipse.smartim.model.IContact;
 import cn.ieclipse.smartim.views.IMContactDoubleClicker;
 import cn.ieclipse.smartim.views.IMContactView;
@@ -44,7 +45,8 @@ public class WXContactView extends IMContactView {
     private TreeViewer ftvFriend;
     private TreeViewer ftvGroup;
     private TreeViewer ftvPublic;
-    private WXModificationCallback modificationCallback;
+    private WXModificationCallback modificationCallback; 
+    private MessageInterceptor interceptor;
     
     public WXContactView() {
         viewId = ID;
@@ -56,6 +58,8 @@ public class WXContactView extends IMContactView {
         robotCallback = new WXRobotCallback(this);
         sendCallback = new IMSendCallback(this);
         modificationCallback = new WXModificationCallback(this);
+        interceptor = new WXMessageInterceptor();
+        loadWelcome("wechat");
     }
     
     @Override
@@ -79,6 +83,7 @@ public class WXContactView extends IMContactView {
                 client.setSendCallback(sendCallback);
                 client.addReceiveCallback(robotCallback);
                 client.setModificationCallbacdk(modificationCallback);
+                client.addMessageInterceptor(interceptor);
                 client.start();
             } catch (Exception e) {
                 IMPlugin.getDefault().log("微信初始化失败", e);
@@ -133,6 +138,7 @@ public class WXContactView extends IMContactView {
     
     @Override
     public IMChatConsole createConsoleUI(IContact contact) {
-        return new WXChatConsole(contact, this);
+        WXChatConsole console = new WXChatConsole(contact, this);
+        return console;
     }
 }

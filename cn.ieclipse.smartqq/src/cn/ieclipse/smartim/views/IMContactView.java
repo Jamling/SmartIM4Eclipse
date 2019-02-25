@@ -34,11 +34,12 @@ import cn.ieclipse.smartim.actions.BroadcastAction;
 import cn.ieclipse.smartim.actions.DisconnectAction;
 import cn.ieclipse.smartim.actions.LoginAction;
 import cn.ieclipse.smartim.actions.MockConsoleAction;
-import cn.ieclipse.smartim.actions.SettingAction;
+import cn.ieclipse.smartim.actions.SettingsAction;
 import cn.ieclipse.smartim.actions.ToggleContactsAction;
 import cn.ieclipse.smartim.callback.ModificationCallback;
 import cn.ieclipse.smartim.callback.ReceiveCallback;
 import cn.ieclipse.smartim.common.IDEUtils;
+import cn.ieclipse.smartim.common.RestUtils;
 import cn.ieclipse.smartim.console.ClosableTabHost;
 import cn.ieclipse.smartim.console.IMChatConsole;
 import cn.ieclipse.smartim.model.IContact;
@@ -197,7 +198,7 @@ public abstract class IMContactView extends ViewPart implements IShowInTarget {
     
     protected void makeActions() {
         login = new LoginAction(this);
-        settings = new SettingAction(this);
+        settings = new SettingsAction(this);
         exit = new DisconnectAction(this);
         toggleLeft = new ToggleContactsAction(this);
         broadcast = new BroadcastAction(this);
@@ -395,5 +396,22 @@ public abstract class IMContactView extends ViewPart implements IShowInTarget {
             }
         }
         return list;
+    }
+    
+    private String welcome;
+    public void loadWelcome(final String im) {
+        new Thread() {
+            @Override
+            public void run() {
+                welcome = RestUtils.getWelcome(im);
+            }
+        }.start();
+    }
+    
+    public String getWelcome() {
+        if (welcome == null) {
+            return "";
+        }
+        return welcome;
     }
 }

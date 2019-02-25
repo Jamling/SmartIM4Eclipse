@@ -33,6 +33,7 @@ import cn.ieclipse.smartim.views.IMContactView;
 import cn.ieclipse.util.FileUtils;
 import cn.ieclipse.util.StringUtils;
 import io.github.biezhi.wechat.api.WechatClient;
+import io.github.biezhi.wechat.model.Contact;
 import io.github.biezhi.wechat.model.UploadInfo;
 import io.github.biezhi.wechat.model.WechatMessage;
 
@@ -53,6 +54,9 @@ public class WXChatConsole extends IMChatConsole {
             IMG_SELECTED = LetterImageFactory.create(ch, SWT.COLOR_RED);
             setImage(IMG_NORMAL);
         }
+        if (target instanceof Contact) {
+            setText(WXUtils.getPureName(target.getName()));
+        }
     }
     
     @Override
@@ -66,11 +70,15 @@ public class WXChatConsole extends IMChatConsole {
             write(raw);
             return;
         }
+        // unreachable code
         WechatMessage m = (WechatMessage) getClient().handleMessage(raw);
         AbstractFrom from = getClient().getFrom(m);
-        String name = from == null ? "未知用户" : from.getName();
-        String msg = IMUtils.formatHtmlMsg(m.getTime(), name, m.getText());
-        write(msg);
+        write(WXUtils.formatHtmlIncoming(m, from));
+    }
+    
+     @Override
+    protected String formatInput(String name, String input) {
+        return WXUtils.formatHtmlOutgoing(name, input, true);
     }
     
     @Override
@@ -164,10 +172,9 @@ public class WXChatConsole extends IMChatConsole {
         
         if (!hideMyInput()) {
             String name = client.getAccount().getName();
-            String msg = IMUtils.formatHtmlMsg(true, false,
-                    System.currentTimeMillis(), name, m.text);
+            String msg = WXUtils.formatHtmlOutgoing(name, m.text, false);
             insertDocument(msg);
-            IMHistoryManager.getInstance().save(client, getHistoryFile(), msg);
+            IMHistoryManager.getInstance().save(getHistoryDir(), getHistoryFile(), msg);
         }
     }
 }

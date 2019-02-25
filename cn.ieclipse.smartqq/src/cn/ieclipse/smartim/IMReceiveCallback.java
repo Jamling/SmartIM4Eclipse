@@ -30,8 +30,8 @@ public abstract class IMReceiveCallback implements ReceiveCallback {
         SmartClient client = fContactView.getClient();
         String msg = getMsgContent(message, from);
         if (!unknown) {
-            IMHistoryManager.getInstance().save(client,
-                    EncodeUtils.getMd5(contact.getName()), msg);
+            String hf = EncodeUtils.getMd5(from.getContact().getName());
+            IMHistoryManager.getInstance().save(client.getWorkDir(IMHistoryManager.HISTORY_NAME), hf, msg);
         }
         
         if (notify) {

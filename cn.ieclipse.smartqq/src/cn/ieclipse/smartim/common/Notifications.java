@@ -21,7 +21,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import cn.ieclipse.smartim.IMPlugin;
-import cn.ieclipse.smartim.actions.SettingAction;
+import cn.ieclipse.smartim.actions.SettingsAction;
 import cn.ieclipse.smartim.model.IContact;
 import cn.ieclipse.smartim.preferences.SettingsPerferencePage;
 import cn.ieclipse.smartim.views.IMContactView;
@@ -134,7 +134,7 @@ public class Notifications extends Shell {
         fSettings.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
-                SettingAction.open(SettingsPerferencePage.class.getName());
+                SettingsAction.open(SettingsPerferencePage.class.getName());
             }
         });
         

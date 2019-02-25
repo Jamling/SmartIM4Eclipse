@@ -36,6 +36,7 @@ public class QQContactView extends IMContactView {
         receiveCallback = new QQReceiveCallback(this);
         robotCallback = new QQRobotCallback(this);
         sendCallback = new IMSendCallback(this);
+        loadWelcome("qq");
     }
     
     /**
