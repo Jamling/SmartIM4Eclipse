@@ -36,7 +36,7 @@
       <page
             class="cn.ieclipse.smartim.preferences.SmartQQPreferencePage"
             id="cn.ieclipse.smartim.preferences.SmartQQPreferencePage"
-            name="SmartQQ">
+            name="SmartIM">
       </page>
       <page
             category="cn.ieclipse.smartim.preferences.SmartQQPreferencePage"

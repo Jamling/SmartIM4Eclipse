@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="cn.ieclipse.smartqq.feature"
-      label="SmartQQ"
-      version="3.3.0.qualifier"
+      label="SmartIM"
+      version="3.4.0.qualifier"
       provider-name="ieclipse.cn"
       plugin="cn.ieclipse.smartqq">
 
