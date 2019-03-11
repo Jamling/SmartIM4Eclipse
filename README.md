@@ -2,13 +2,13 @@
 [![Eclipse Marketplace](https://img.shields.io/eclipse-marketplace/v/SmartQQ.svg)](https://marketplace.eclipse.org/content/smartqq)
 [![Eclipse Marketplace](https://img.shields.io/eclipse-marketplace/dt/SmartQQ.svg)](https://marketplace.eclipse.org/content/smartqq)
 
-## SmartQQ4Eclipse
+## SmartIM4Eclipse (原SmartQQ4Eclipse)
 
-![screenshot](https://raw.githubusercontent.com/Jamling/SmartQQ4Eclipse/master/screenshot.gif)
+![screenshot](https://raw.githubusercontent.com/Jamling/SmartIM4Eclipse/master/screenshot.gif)
 
-Eclipse上的SmartQQ/微信插件，防Boss利器，让你可以在eclipse中使用QQ/微信进行聊天
+Eclipse上的SmartIM插件，防Boss利器，让你可以在eclipse中使用QQ/微信进行聊天
 
-Intellij IDEA上的插件请移步这里: https://github.com/Jamling/SmartQQ4IntelliJ, 支持所有的Intellij IDE哦，包含Android Studio, WebStrom等
+Intellij IDEA上的插件请移步这里: https://github.com/Jamling/SmartIM4IntelliJ, 支持所有的Intellij IDE哦，包含Android Studio, WebStrom等
 
 ## 功能
 
@@ -28,9 +28,9 @@ Intellij IDEA上的插件请移步这里: https://github.com/Jamling/SmartQQ4Int
 | ---------------- |:---------:|:----------:|:-----------:|
 | 文本消息          | Y         |          Y | Y           |
 | 聊天记录          | Y         |          Y | Y           |
-| 消息提醒          | N         |          Y | O           |
+| 消息提醒          | O         |          Y | O           |
 | 接收表情          | O         |          Y |           X |
-| 图灵机器人        | Y         |          Y |           X |
+| 图灵机器人        | Y         |          Y |           Y |
 | 发送文件          | Y         |          Y |           Y |
 | 消息群发          | Y         |          Y |           Y |
 | 代码评审          | X         |          Y |           Y |
@@ -49,7 +49,7 @@ requires 'cn.ieclipse.pde.explorer 4.1.0' but it could not be found
 ### Eclipse Marketplace
 
 1. 点击Eclipse->Help->Eclipse Marketplace...打开eclipse插件市场
-2. 输入SmartQQ搜索
+2. 输入SmartIM搜索
 3. 点击Install安装
 
 **推荐使用Eclipse Martplace安装**
@@ -58,7 +58,7 @@ requires 'cn.ieclipse.pde.explorer 4.1.0' but it could not be found
 
 1. 点击Eclipse->Help->Install New Software...搜索插件
 2. 在Work with后面的输入框中输入http://dl.ieclipse.cn/updates/ 并回车
-3. 选中SmartQQ，并取消勾选"Contact all update site during install to find required software"
+3. 选中SmartIM，并取消勾选"Contact all update site during install to find required software"
 4. 点击底部Next按钮继续安装
 
 ## 使用
@@ -103,9 +103,9 @@ requires 'cn.ieclipse.pde.explorer 4.1.0' but it could not be found
 
 提交问题前，请参考[常见问题](https://github.com/Jamling/SmartIM/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98)
 
-任何问题包括建议均可以在[Issue](https://github.com/Jamling/SmartQQ4Eclipse/issues)中提交
+任何问题包括建议均可以在[Issue](https://github.com/Jamling/SmartIM4Eclipse/issues)中提交
 
-如果为Issue，建议带上eclipse版本及本插件版本信息（可以在Preference->SmartQQ中查看并复制版本信息）
+如果为Issue，建议带上eclipse版本及本插件版本信息（可以在Preference->SmartIM中查看并复制版本信息）
 
 ## 开发
 
